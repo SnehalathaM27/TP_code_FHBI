@@ -118,7 +118,7 @@ public class NewDesign_EmulateProcess {
 	
 	//Method to clcik on emulate user option
 	public void clickOnEmulmateUserOption() {
-		driver.findElement(By.xpath("//span[text()='Emulate User']")).click();
+		driver.findElement(By.xpath("//span[text()='Emulate']")).click();
 		
 	}
 	
@@ -2453,6 +2453,8 @@ public class NewDesign_EmulateProcess {
 		            + approvalDaysNumber + " nights/days");
 		    }
 		}
+	   
+	   
 
 
 	  

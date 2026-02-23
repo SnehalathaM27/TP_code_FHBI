@@ -231,7 +231,15 @@
 
                               <!--New design Hotels and buses-->
     
-           <!--class name="NewDesign_Hotels.TCND_1_verifyHotelsSearch1"/-->
+           <!--class name="NewDesign_Hotels.TCND_1_verifyHotelsSearch1"/>
+           
+           <class name="NewDesign_Hotels.TCND_2_GetHotelResponseBody"/-->
+           
+           <!--class name="NewDesign_Hotels_Flights.TCNDFL_3_GetOnewayFlightsResponseBody"/-->
+            <class name="NewDesign_Hotels_Flights.TCNDFL_4_GetRoundTrip_Combined_FlightsResponseBody"/>
+
+           
+           
                         
                         
                     <!--class name="NewDesign_Trips.TCNDTR_1_CreateTripsForHotels"/>
@@ -244,6 +252,32 @@
             <class name="Implementation.Imp_2_Xpheno_TravelPolicyTestingForHeadGrade"/>
                 <class name="Implementation.Imp_3_Xpheno_TravelPolicyTestingwithDelAndMumbaiLoc"/>
  <class name="Implementation.Imp_4_Xpheno_TravelPolicyTestingwithUdipiLoc"/-->
+ 
+<!--class name="PhilipsCorp_Travel_Testing.Ph_1_Philips_Trips_HotelsFlights_Domestic_GradesndDates_Before7days"/>
+ <class name="PhilipsCorp_Travel_Testing.Ph_2_Philips_Trips_Hotels_International_GradesndDates_Before15days"/>
+ <class name="PhilipsCorp_Travel_Testing.Ph_3_Philips_Trips_Hotels_Domestic_GradesndDates_After7days"/>
+ <class name="PhilipsCorp_Travel_Testing.Ph_4_Philips_Trips_Hotels_International_GradesndDates_After15days"/>
+ <class name="PhilipsCorp_Travel_Testing.Ph_5_Philips_Trips_Hotels_Domestic_BasedOnAmt"/>
+ <class name="PhilipsCorp_Travel_Testing.Ph_6_Philips_Trips_Hotels_International_BasedOnAmt"/>
+ <class name="PhilipsCorp_Travel_Testing.Ph_7_Philips_NF_Hotels_Domestic_Before7days"/>
+ <class name="PhilipsCorp_Travel_Testing.Ph_8_Philips_NF_Hotels_Domestic_After7Days"/>
+ <class name="PhilipsCorp_Travel_Testing.Ph_9_Philips_NF_Hotels_International_Before15days"/>
+ <class name="PhilipsCorp_Travel_Testing.Ph_10_Philips_NF_Hotels_International_After15days"/>
+ <class name="PhilipsCorp_Travel_Testing.Ph_11_Philips_NF_Hotels_Domestic_BasedOnAmt"/>
+ <class name="PhilipsCorp_Travel_Testing.Ph_12_Philips_NF_Hotels_International_BasedOnAmt"/>
+  <class name="PhilipsCorp_TSravel_Testing.Ph_13_Philips_Trips_Flights_Oneway_Domestic_Before7days"/>
+   <class name="PhilipsCorp_Travel_Testing.Ph_14_Philips_Trips_Flights_oneway_Domestic__After7days"/>
+    <class name="PhilipsCorp_Travel_Testing.Ph_15_Philips_Trips_Flights_Oneway_International_Before15days"/>
+    <class name="PhilipsCorp_Travel_Testing.Ph_16_Philips_Trips_Flights_Oneway_International_After15days"/>
+    <class name="PhilipsCorp_Travel_Testing.Ph_17_Philips_Trips_Flights_RoundTrip_International_Individual_Before15days"/>
+    <class name="PhilipsCorp_Travel_Testing.Ph_18_Philips_Trips_Flights_RoundTrip_International_Individual_After15days"/>
+    <class name="PhilipsCorp_Travel_Testing.Ph_19_Philips_Trips_Flights_RoundTrip_International_Combined_Before15days"/>
+    <class name="PhilipsCorp_Travel_Testing.Ph_20_Philips_NF_Flights_Domestic_RoundTrip_Before7days"/>
+     <class name="PhilipsCorp_Travel_Testing.Ph_21_Philips_NF_Flights_Domestic_RoundTrip_After7days"/>
+     <class name="PhilipsCorp_Travel_Testing.Ph_22_Philips_NF_Flights_International_RoundTrip_Individual_Before15days"/>
+     <class name="PhilipsCorp_Travel_Testing.Ph_23_Philips_NF_Flights_International_RoundTrip_Individual_After15days"/>
+ <class name="PhilipsCorp_Travel_Testing.Ph_24_Philips_NF_Flights_International_RoundTrip_Combined_After15days"/>
+ <class name="PhilipsCorp_Travel_Testing.Ph_25_Philips_NF_Flights_International_RoundTrip_Combined_Before15days"/-->
 
 
      </classes>
@@ -256,12 +290,12 @@
    <test name="test3">
    <parameter name="browser" value="chrome"/>
     <classes>
-<class name="NewDesign_Buses.TCNDBUNEW_2"/>
+<!--class name="NewDesign_Buses.TCNDBUNEW_2"/>
 <class name="NewDesign_Buses.TCNDBUNEW_3"/>
 <class name="NewDesign_Buses.TCNDBUNEW_4"/>
 
  <class name="NewDesign_Hotels.TCNDNEW_2"/>
-  <class name="NewDesign_Hotels.TCNDNEW_3"/>
+  <class name="NewDesign_Hotels.TCNDNEW_3"/-->
 
 
      </classes>

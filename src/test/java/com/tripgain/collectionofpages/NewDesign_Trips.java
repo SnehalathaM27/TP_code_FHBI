@@ -272,45 +272,100 @@ public class NewDesign_Trips {
 		 
 		
 			 //Method to select journey date
-			 @FindBy(xpath = "(//input[contains(@class,'custom_datepicker_input')])[1]")
-			    WebElement selectjourdate;
+//			 @FindBy(xpath = "(//input[contains(@class,'custom_datepicker_input')])[1]")
+//			    WebElement selectjourdate;
+//			 
+//			 public String selectJourneyDate(String day, String MonthandYear) {
+//				    JavascriptExecutor js = (JavascriptExecutor) driver;
+//				    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+//				    js.executeScript("document.body.style.zoom='80%'");
+//				    wait.until(ExpectedConditions.elementToBeClickable(selectjourdate)).click();
+//
+//				    By monthYearHeader = By.xpath("//div[contains(@class,'MuiGrid2-root MuiGrid2-direction-xs-row MuiGrid2-grid-lg-12 css-19gnu0v')]//span");
+//				    wait.until(ExpectedConditions.visibilityOfElementLocated(monthYearHeader));
+//
+//				    String currentMonthYear = driver.findElement(monthYearHeader).getText();
+//
+//				    if (currentMonthYear.equals(MonthandYear)) {
+//				        By dayLocator = By.xpath("//div[contains(@class, 'react-datepicker__day') and not(contains(@class, 'outside-month')) and not(contains(@class, 'disabled'))]//span[@class='day' and text()='" + day + "']");
+//				       // wait.until(ExpectedConditions.elementToBeClickable(dayLocator)).click();
+//				        WebElement dayElement = wait.until(ExpectedConditions.elementToBeClickable(dayLocator));
+//				        try {
+//				            dayElement.click();
+//				        } catch (Exception e) {
+//				            js.executeScript("arguments[0].click();", dayElement);
+//				        }
+//
+//				    } else {
+//				        while (!currentMonthYear.equals(MonthandYear)) {
+//				            driver.findElement(By.xpath("(//button[contains(@class,'nav-arrow')])[2]")).click();
+//				            wait.until(ExpectedConditions.textToBe(monthYearHeader, MonthandYear));
+//				            currentMonthYear = driver.findElement(monthYearHeader).getText();
+//				        }
+//				        By dayLocator = By.xpath("//div[contains(@class, 'react-datepicker__day') and not(contains(@class, 'outside-month')) and not(contains(@class, 'disabled'))]//span[@class='day' and text()='" + day + "']");
+//				        wait.until(ExpectedConditions.elementToBeClickable(dayLocator)).click();
+//				    }
+//
+//				    js.executeScript("document.body.style.zoom='100%'");
+//
+//				    String rawDate = day + " " + MonthandYear;  // e.g., "13 August 2025"
+//				    return normalizeDate(rawDate);    	
+//				    }
 			 
-			 public String selectJourneyDate(String day, String MonthandYear) {
-				    JavascriptExecutor js = (JavascriptExecutor) driver;
-				    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-				    js.executeScript("document.body.style.zoom='80%'");
-				    wait.until(ExpectedConditions.elementToBeClickable(selectjourdate)).click();
+			 @FindBy(xpath = "(//input[contains(@class,'custom_datepicker_input')])[1]")
+			 WebElement selectjourdate;
 
-				    By monthYearHeader = By.xpath("//div[contains(@class,'MuiGrid2-root MuiGrid2-direction-xs-row MuiGrid2-grid-lg-12 css-19gnu0v')]//span");
-				    wait.until(ExpectedConditions.visibilityOfElementLocated(monthYearHeader));
+			 public String selectJourneyDate(String day, String MonthandYear) throws InterruptedException {
+			     JavascriptExecutor js = (JavascriptExecutor) driver;
+			     WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+			     
+			     // Zoom out
+			     js.executeScript("document.body.style.zoom='80%'");
+			     
+			     // FIX: Use JavaScript click to bypass blocking element
+			     try {
+			         wait.until(ExpectedConditions.elementToBeClickable(selectjourdate));
+			         js.executeScript("arguments[0].click();", selectjourdate);
+			     } catch (Exception e) {
+			         js.executeScript("arguments[0].click();", selectjourdate);
+			     }
 
-				    String currentMonthYear = driver.findElement(monthYearHeader).getText();
+			     By monthYearHeader = By.xpath("//div[contains(@class,'MuiGrid2-root MuiGrid2-direction-xs-row MuiGrid2-grid-lg-12 css-19gnu0v')]//span");
+			     wait.until(ExpectedConditions.visibilityOfElementLocated(monthYearHeader));
 
-				    if (currentMonthYear.equals(MonthandYear)) {
-				        By dayLocator = By.xpath("//div[contains(@class, 'react-datepicker__day') and not(contains(@class, 'outside-month')) and not(contains(@class, 'disabled'))]//span[@class='day' and text()='" + day + "']");
-				       // wait.until(ExpectedConditions.elementToBeClickable(dayLocator)).click();
-				        WebElement dayElement = wait.until(ExpectedConditions.elementToBeClickable(dayLocator));
-				        try {
-				            dayElement.click();
-				        } catch (Exception e) {
-				            js.executeScript("arguments[0].click();", dayElement);
-				        }
+			     String currentMonthYear = driver.findElement(monthYearHeader).getText();
 
-				    } else {
-				        while (!currentMonthYear.equals(MonthandYear)) {
-				            driver.findElement(By.xpath("(//button[contains(@class,'nav-arrow')])[2]")).click();
-				            wait.until(ExpectedConditions.textToBe(monthYearHeader, MonthandYear));
-				            currentMonthYear = driver.findElement(monthYearHeader).getText();
-				        }
-				        By dayLocator = By.xpath("//div[contains(@class, 'react-datepicker__day') and not(contains(@class, 'outside-month')) and not(contains(@class, 'disabled'))]//span[@class='day' and text()='" + day + "']");
-				        wait.until(ExpectedConditions.elementToBeClickable(dayLocator)).click();
-				    }
+			     if (currentMonthYear.equals(MonthandYear)) {
+			         By dayLocator = By.xpath("//div[contains(@class, 'react-datepicker__day') and not(contains(@class, 'outside-month')) and not(contains(@class, 'disabled'))]//span[@class='day' and text()='" + day + "']");
+			         WebElement dayElement = wait.until(ExpectedConditions.presenceOfElementLocated(dayLocator));
+			         
+			         // Scroll to the day element
+			         js.executeScript("arguments[0].scrollIntoView(true);", dayElement);
+			         Thread.sleep(500);
+			         
+			         // Click using JavaScript
+			         js.executeScript("arguments[0].click();", dayElement);
 
-				    js.executeScript("document.body.style.zoom='100%'");
+			     } else {
+			         while (!currentMonthYear.equals(MonthandYear)) {
+			             driver.findElement(By.xpath("(//button[contains(@class,'nav-arrow')])[2]")).click();
+			             wait.until(ExpectedConditions.textToBe(monthYearHeader, MonthandYear));
+			             currentMonthYear = driver.findElement(monthYearHeader).getText();
+			         }
+			         By dayLocator = By.xpath("//div[contains(@class, 'react-datepicker__day') and not(contains(@class, 'outside-month')) and not(contains(@class, 'disabled'))]//span[@class='day' and text()='" + day + "']");
+			         WebElement dayElement = wait.until(ExpectedConditions.presenceOfElementLocated(dayLocator));
+			         
+			         // Scroll and click using JavaScript
+			         js.executeScript("arguments[0].scrollIntoView(true);", dayElement);
+			         Thread.sleep(500);
+			         js.executeScript("arguments[0].click();", dayElement);
+			     }
 
-				    String rawDate = day + " " + MonthandYear;  // e.g., "13 August 2025"
-				    return normalizeDate(rawDate);    	
-				    }
+			     js.executeScript("document.body.style.zoom='100%'");
+
+			     String rawDate = day + " " + MonthandYear;
+			     return normalizeDate(rawDate);    	
+			 }
 
 			   public String normalizeDate(String rawDate) {
 		 		    // Remove ordinal suffixes: st, nd, rd, th
@@ -489,7 +544,7 @@ public class NewDesign_Trips {
 			 	       }
 			 	   }
 			 	   public String[] getTripIdFromPopup(Log log) {
-			 		    String tripid = driver.findElement(By.xpath("//div[contains(@class,' tg-typography tg-typography_subtitle-7  tg-typography_text-info')]")).getText();
+			 		    String tripid = driver.findElement(By.xpath("//div[text()='Trip Created Successfully!']/following-sibling::div")).getText();
 			 	        System.out.println("tripid from popup : " + tripid);
 		 		        log.ReportEvent("INFO", "Tripid : " + tripid);
 
@@ -497,7 +552,7 @@ public class NewDesign_Trips {
 			 		}	
 			 	   
 			 	  public String[] getTripIdFromTripDetailsPage(Log log) {
-			 		    String tripid = driver.findElement(By.xpath("//div[contains(@class,' tg-typography tg-typography_ fs-12 fw-500 d-flex gap-2 tg-typography_text-info')]")).getText();
+			 		    String tripid = driver.findElement(By.xpath("//span[text()='Trip ID ']/following-sibling::div")).getText();
 			 	        System.out.println("tripid from Nextpage : " + tripid);
 			 		    log.ReportEvent("INFO", "tripid :"+ tripid);
 
@@ -579,24 +634,32 @@ public class NewDesign_Trips {
 			 		}
  
 			 	//Method to clcik on services to search  
-			 	public void clickOnServiceByText(String serviceName,Log log) {
-			 	    try {
-			 	        String xpath = "//div[contains(concat(' ', normalize-space(@class), ' '), ' tg-typography_ triplayout_service-tab ')]//div[contains(@class,'tg-start')][normalize-space(text())='" + serviceName + "']";
-			 	        WebElement serviceElement = driver.findElement(By.xpath(xpath));
-			 	        serviceElement.click();
-			 	        System.out.println("Clicked on service: " + serviceName);
-				        log.ReportEvent("InFO", "Clicked on service: "+ serviceName);
+			 	public void clickOnServiceByText(String serviceName, Log log) {
+				    try {
+				        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+				        
+				        // XPATH: Find service ONLY under Selected Services section
+				        String xpath = "//div[text()='Selected Services']/following::div[contains(@class,'triplayout_service-tab')]//div[contains(@class,'tg-start') and contains(.,'" + serviceName + "')]";
+				        
+				        WebElement serviceElement = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(xpath)));
+				        
+				        // Scroll and click
+				        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", serviceElement);
+				        Thread.sleep(500);
+				        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", serviceElement);
+				        
+				        System.out.println("✅ Clicked on service: " + serviceName + " from Selected Services");
+				        log.ReportEvent("PASS", "Clicked on service: " + serviceName + " from Selected Services");
 
-			 	    } catch (NoSuchElementException e) {
-			 	        System.out.println("Service not found: " + serviceName);
-			 	    } catch (Exception e) {
-			 	        System.out.println("Error while clicking on service '" + serviceName + "': " + e.getMessage());
-			 	    }
-			 	}
+				    } catch (Exception e) {
+				        System.out.println("❌ Failed to click service '" + serviceName + "': " + e.getMessage());
+				        log.ReportEvent("FAIL", "Failed to click service: " + e.getMessage());
+				    }
+				}
 
 			 	
 
-				 @FindBy(xpath = "//div[text()='Search Location or Property']/following-sibling::div/input")
+				 @FindBy(xpath = "//label[normalize-space()='Search Location or Property']/ancestor::div[contains(@class,'app-async-select')]//input")
 				   private WebElement enterHotelLocation;
 
 				 public String enterLocationForHotelsOndetailsPg(String location) throws TimeoutException {
@@ -1746,6 +1809,11 @@ public class NewDesign_Trips {
 				    }
 				}
 		
+				
+				//Method to click on past data booking 
+				public void clcikOnPastDatedBooking() {
+					driver.findElement(By.xpath("(//span[@class='tg-checkbox-box primary'])[1]")).click();
+				}
 				
 }
 

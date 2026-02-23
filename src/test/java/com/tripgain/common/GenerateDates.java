@@ -75,73 +75,99 @@ import java.util.Locale;
 
 public class GenerateDates {
 
-    public static String[] GenerateDatesToSelectFlights() {
-        LocalDate today = LocalDate.now();
+	public static String[] GenerateDatesToSelectFlights() {
+	    LocalDate today = LocalDate.now();
 
-        // Your existing date logic
-        LocalDate futureDate = today.plusDays(8); // selected date
-        LocalDate returnFutureDate = today.plusDays(9); // 1-day gap return date (e.g., 8–9)
-        LocalDate inPolicyFlights = today.plusDays(10);
-        LocalDate diffdateFlights = today.plusDays(15);
-        LocalDate outOfPolicyFlights = today.plusDays(12);
-        LocalDate after15daysFlights = today.plusDays(20);
+	    // Your existing date logic
+	    LocalDate futureDate = today.plusDays(8); // selected date
+	    LocalDate returnFutureDate = today.plusDays(9); // 1-day gap return date (e.g., 8–9)
+	    LocalDate inPolicyFlights = today.plusDays(10);
+	    LocalDate diffdateFlights = today.plusDays(15);
+	    LocalDate outOfPolicyFlights = today.plusDays(12);
+	    LocalDate after15daysFlights = today.plusDays(20);
 
-        // Get day names and details
-        String dayOfWeekShort = returnFutureDate.getDayOfWeek()
-                .getDisplayName(java.time.format.TextStyle.SHORT, Locale.ENGLISH);
+	    // ✅ New dynamic selection dates
+	    LocalDate selectAfter7Days = today.plusDays(8);  // 8th day from today
+	    LocalDate selectAfter15Days = today.plusDays(16); // 16th day from today
 
-        // Convert to day values
-        String fromDate = String.valueOf(futureDate.getDayOfMonth());
-        String returnDate = String.valueOf(returnFutureDate.getDayOfMonth());
-        String inPolicyDate = String.valueOf(inPolicyFlights.getDayOfMonth());
-        String diffdateFlightsDate = String.valueOf(diffdateFlights.getDayOfMonth());
-        String outOfPolicyDate = String.valueOf(outOfPolicyFlights.getDayOfMonth());
-        String after15daysFlightsDate = String.valueOf(after15daysFlights.getDayOfMonth());
+	    // Get day names and details
+	    String dayOfWeekShort = returnFutureDate.getDayOfWeek()
+	            .getDisplayName(java.time.format.TextStyle.SHORT, Locale.ENGLISH);
 
-        // Month and Year details
-        String month = futureDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
-        String fromYear = String.valueOf(futureDate.getYear());
+	    // Convert to day values
+	    String fromDate = String.valueOf(futureDate.getDayOfMonth());
+	    String returnDate = String.valueOf(returnFutureDate.getDayOfMonth());
+	    String inPolicyDate = String.valueOf(inPolicyFlights.getDayOfMonth());
+	    String diffdateFlightsDate = String.valueOf(diffdateFlights.getDayOfMonth());
+	    String outOfPolicyDate = String.valueOf(outOfPolicyFlights.getDayOfMonth());
+	    String after15daysFlightsDate = String.valueOf(after15daysFlights.getDayOfMonth());
 
-        String returnMonth = returnFutureDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
-        String returnYears = String.valueOf(returnFutureDate.getYear());
+	    // ✅ New selection days
+	    String selectAfter7DaysDate = String.valueOf(selectAfter7Days.getDayOfMonth());
+	    String selectAfter15DaysDate = String.valueOf(selectAfter15Days.getDayOfMonth());
 
-        String inPolicyMonth = inPolicyFlights.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
-        String inPolicyYears = String.valueOf(inPolicyFlights.getYear());
+	    // Month and Year details
+	    String month = futureDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+	    String fromYear = String.valueOf(futureDate.getYear());
 
-        String diffdateFlightsMonth = diffdateFlights.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
-        String diffdateFlightsYears = String.valueOf(diffdateFlights.getYear());
+	    String returnMonth = returnFutureDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+	    String returnYears = String.valueOf(returnFutureDate.getYear());
 
-        String outOfPolicyMonth = outOfPolicyFlights.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
-        String outOfPolicyYears = String.valueOf(outOfPolicyFlights.getYear());
+	    String inPolicyMonth = inPolicyFlights.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+	    String inPolicyYears = String.valueOf(inPolicyFlights.getYear());
 
-        String after15daysFlightsMonth = after15daysFlights.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
-        String after15daysFlightsYears = String.valueOf(after15daysFlights.getYear());
+	    String diffdateFlightsMonth = diffdateFlights.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+	    String diffdateFlightsYears = String.valueOf(diffdateFlights.getYear());
 
-        // Month-Year combinations
-        String fromMonthYear = month + " " + fromYear;
-        String returnMonthYear = returnMonth + " " + returnYears;
-        String inPolicyMonthYear = inPolicyMonth + " " + inPolicyYears;
-        String outOfPolicyMonthYear = outOfPolicyMonth + " " + outOfPolicyYears;
-        String returnafter15daysFlightsMonthYear = after15daysFlightsMonth + " " + after15daysFlightsYears;
+	    String outOfPolicyMonth = outOfPolicyFlights.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+	    String outOfPolicyYears = String.valueOf(outOfPolicyFlights.getYear());
 
-        // Print for reference
-        System.out.println("Selected Date: " + fromDate + " " + fromMonthYear);
-        System.out.println("Return Date (1-day gap): " + returnDate + " " + returnMonthYear);
+	    String after15daysFlightsMonth = after15daysFlights.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
+	    String after15daysFlightsYears = String.valueOf(after15daysFlights.getYear());
 
-        return new String[] {
-            fromDate,                       // Departure date
-            returnDate,                     // Return date (1-day gap)
-            fromMonthYear,                  // Departure Month-Year
-            returnMonthYear,                // Return Month-Year
-            month, fromYear, returnMonth, returnYears,
-            dayOfWeekShort,
-            inPolicyDate, inPolicyMonthYear,
-            outOfPolicyDate, outOfPolicyMonthYear,
-            diffdateFlightsDate,
-            after15daysFlightsDate,
-            returnafter15daysFlightsMonthYear
-        };
-    }
+	    // ✅ New selection month-year
+	    String selectAfter7DaysMonthYear = selectAfter7Days.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH)
+	                                        + " " + selectAfter7Days.getYear();
+	    String selectAfter15DaysMonthYear = selectAfter15Days.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH)
+	                                         + " " + selectAfter15Days.getYear();
+
+	    // Month-Year combinations
+	    String fromMonthYear = month + " " + fromYear;
+	    String returnMonthYear = returnMonth + " " + returnYears;
+	    String inPolicyMonthYear = inPolicyMonth + " " + inPolicyYears;
+	    String outOfPolicyMonthYear = outOfPolicyMonth + " " + outOfPolicyYears;
+	    String returnafter15daysFlightsMonthYear = after15daysFlightsMonth + " " + after15daysFlightsYears;
+
+	    // Print for reference
+	    System.out.println("Selected Date: " + fromDate + " " + fromMonthYear);
+	    System.out.println("Return Date (1-day gap): " + returnDate + " " + returnMonthYear);
+	    System.out.println("Select After 7 Days: " + selectAfter7DaysDate + " " + selectAfter7DaysMonthYear);
+	    System.out.println("Select After 15 Days: " + selectAfter15DaysDate + " " + selectAfter15DaysMonthYear);
+
+	    return new String[] {
+	        fromDate,                       // Departure date
+	        returnDate,                     // Return date (1-day gap)
+	        fromMonthYear,                  // Departure Month-Year
+	        returnMonthYear,                // Return Month-Year
+	        month, 
+	        fromYear,
+	        returnMonth, 
+	        returnYears,
+	        dayOfWeekShort,
+	        inPolicyDate, inPolicyMonthYear,
+	        outOfPolicyDate, outOfPolicyMonthYear,
+	        diffdateFlightsDate,
+	        after15daysFlightsDate,
+	        returnafter15daysFlightsMonthYear,
+	        // ✅ New selection dates
+	        selectAfter7DaysDate,
+	        selectAfter7DaysMonthYear,
+	        selectAfter15DaysDate,
+	        selectAfter15DaysMonthYear
+	    };
+	}
+
+    
 
     // Example test
     public static void main(String[] args) {

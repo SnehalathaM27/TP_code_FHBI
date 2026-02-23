@@ -215,6 +215,7 @@ try {
 		//get all the hotel details from the selected hotel card
 			String[] hotelDetails = NewDesignHotelsResultsPage.selectHotelAndGetDetails(2, Log);
 			
+			
 			//get all the details from desc page 
 			String[] hotelAddressFromDesc = NewDesignHotels_DescPage.getAddressFromDescPg();
 			String[] hotelAmenitiesFromDesc = NewDesignHotels_DescPage.getAmenitiesFromDescPg();

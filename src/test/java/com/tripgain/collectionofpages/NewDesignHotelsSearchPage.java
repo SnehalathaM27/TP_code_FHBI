@@ -64,39 +64,38 @@ public class NewDesignHotelsSearchPage {
 //	    }
 //	}
 	
-	public void enterDestinationForHotels(String city,Log Log) {
+	public void enterDestinationForHotels(String city, Log Log) {
 	    try {
-	        // Optional: adjust zoom
-	        JavascriptExecutor js = (JavascriptExecutor) driver;
-	        js.executeScript("document.body.style.zoom='80%'");
+	        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
-	        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(70));
 	        WebElement searchField = wait.until(ExpectedConditions.elementToBeClickable(
-	            By.xpath("//*[contains(@class,'tg-async-select__input')]//input")));
+	                By.xpath("//*[contains(@class,'tg-async-select__input')]//input")));
 
+	        searchField.click();
 	        searchField.clear();
 	        searchField.sendKeys(city);
-	        Thread.sleep(1000);
 
-	        List<WebElement> listOfProperty = wait.until(
-	            ExpectedConditions.visibilityOfAllElementsLocatedBy(
-	                By.xpath("//*[contains(@id,'react-select') and contains(@id,'option-0')]"))
-	        );
+	        // ✅ Wait until dropdown options appear
+	        List<WebElement> options = wait.until(
+	                ExpectedConditions.presenceOfAllElementsLocatedBy(
+	                        By.xpath("//div[contains(@id,'react-select') and contains(@id,'option')]")));
 
-	        if (!listOfProperty.isEmpty()) {
-	            Thread.sleep(2000);
-	            WebElement firstOption = listOfProperty.get(0);
-	            String selectedLocation = firstOption.getText();
-	            firstOption.click();
-	            Thread.sleep(1000);
+	        // ✅ Click first VISIBLE option using JS (most reliable)
+	        WebElement firstOption = options.get(0);
 
-	            // Log the selected location
-	            Log.ReportEvent("PASS", "Selected Location: " + selectedLocation);
-	        } else {
-	            Log.ReportEvent("FAIL", "No options found in the dropdown.");
-	        }
+	        String selectedLocation = firstOption.getText();
+
+	        ((JavascriptExecutor) driver)
+	                .executeScript("arguments[0].scrollIntoView(true);", firstOption);
+
+	        ((JavascriptExecutor) driver)
+	                .executeScript("arguments[0].click();", firstOption);
+
+	        Log.ReportEvent("PASS", "Selected Location: " + selectedLocation);
+
 	    } catch (Exception e) {
-	        Log.ReportEvent("ERROR", "Failed to select a location: " + e.getMessage());
+	        Log.ReportEvent("FAIL", "Failed to select location: " + e.getMessage());
+	        e.printStackTrace();
 	    }
 	}
 

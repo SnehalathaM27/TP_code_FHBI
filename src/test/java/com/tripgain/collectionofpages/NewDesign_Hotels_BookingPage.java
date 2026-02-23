@@ -665,6 +665,31 @@ public class NewDesign_Hotels_BookingPage {
 				    // Enter the new last name
 				    name.sendKeys(lastName);
 				}
+				
+
+				public void enterEmailForHotels(String email) throws InterruptedException {
+				    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+				    WebElement name = wait.until(ExpectedConditions.elementToBeClickable(
+				        By.xpath("//input[@class='tg-hb-email']")));
+				    
+				    // Click to focus
+				    name.click();
+				    
+				    // Clear the input using JavaScript
+				    JavascriptExecutor js = (JavascriptExecutor) driver;
+				    js.executeScript("arguments[0].value = '';", name);
+				    
+				    // Small pause to let the clearing reflect
+				    Thread.sleep(500);
+				    
+				    // Additional clear by Ctrl+A + Backspace (in case JS didn't fully clear)
+				    name.sendKeys(Keys.chord(Keys.CONTROL, "a"));
+				    name.sendKeys(Keys.BACK_SPACE);
+				    
+				    // Enter the new last name
+				    name.sendKeys(email);
+				}
+
 
 
 				

@@ -175,12 +175,12 @@ NewDesign_Emulate_Process.waitUntilApproverScreenDisplay(Log, screenShots);
 	        
 	        //select grade ----------------------
 	        String[] selectedGradeFromDropdown = Implementation_Corporate_Travellers_Page.clickOnSelectGrade(grade, Log);
-	        Implementation_Corporate_Travellers_Page.clickOnSelectGender(gender, Log);
+	    //    Implementation_Corporate_Travellers_Page.clickOnSelectGender(gender, Log);
 
 	        Implementation_Corporate_Travellers_Page.clickOnSaveBtn();
 	        Thread.sleep(3000);
 
-	        Implementation_Corporate_Travellers_Page.emulateAfterSelectedGrade();
+	        NewDesign_Emulate_Process.clickOnEmulmateUserOption();
 	        String[] TravellerProfileGrade = Implementation_Corporate_Travellers_Page.clickOnTravellerProfile();
 	        Implementation_Corporate_Travellers_Page.validateGradesFromSelectedToTravellerProfile(selectedGradeFromDropdown, TravellerProfileGrade, Log, screenShots);
 	        
@@ -501,7 +501,7 @@ NewDesignHotels_DescPage.goToTop();
 					NewDesignTrips.clickOnAwaitingApproval();
 					
 					NewDesignTrips.clickOnsearchTripsInAwaitingApprovalPg(TripIdFromNextPage, Log, screenShots);
-					NewDesign_Awaiting_ApprovalScreen.getApproverIdFromAwaitingPg(Log);
+					// ---need to be use imp			NewDesign_Awaiting_ApprovalScreen.getApproverIdFromAwaitingPg(Log);
 					
 
 			//		NewDesignTrips.clickOnsearchForCreateTripsInAwaitingApprovalPg(TripIdFromNextPage[0], Log, screenShots);
@@ -612,7 +612,7 @@ NewDesignHotels_DescPage.goToTop();
 									
 									NewDesignTrips.clickOnAwaitingApproval();
 									NewDesignTrips.clickOnsearchTripsInAwaitingApprovalPg(TripIdFromNextPage, Log, screenShots);
-									NewDesign_Awaiting_ApprovalScreen.getApproverIdFromAwaitingPg(Log);
+									// ---need to be use imp			NewDesign_Awaiting_ApprovalScreen.getApproverIdFromAwaitingPg(Log);
 									
 
 							//		NewDesignTrips.clickOnsearchForCreateTripsInAwaitingApprovalPg(TripIdFromNextPage[0], Log, screenShots);
@@ -724,7 +724,7 @@ NewDesignHotels_DescPage.goToTop();
 								        NewDesignTrips.clcikOnTrips();
 								     								
 										NewDesignTrips.clickOnAwaitingApproval();
-										NewDesign_Awaiting_ApprovalScreen.getApproverIdFromAwaitingPg(Log);
+										// ---need to be use imp			NewDesign_Awaiting_ApprovalScreen.getApproverIdFromAwaitingPg(Log);
 										
 
 									//	NewDesignTrips.clickOnsearchForCreateTripsInAwaitingApprovalPg(TripIdFromNextPage[0], Log, screenShots);

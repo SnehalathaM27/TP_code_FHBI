@@ -1,0 +1,408 @@
+{
+  "HotelDetailsResponse" : {
+    "detailsid" : "tripgainlive_TG21772_1770375423363_ef2bbc33-fd38-4910-9e46-874531eec4b4",
+    "detailsresponseid" : "tripgainlive_TG21772_1770375423363_ef2bbc33-fd38-4910-9e46-874531eec4b4",
+    "wsstatus" : {
+      "moreinfo" : "",
+      "statuscode" : 200,
+      "status" : "",
+      "message" : "",
+      "responsedata" : ""
+    },
+    "hotelrecommendation" : {
+      "rqid" : "tripgainlive_TG21772_1770375423363_ef2bbc33-fd38-4910-9e46-874531eec4b4",
+      "hid" : "",
+      "uniqid" : "",
+      "giataid" : "",
+      "baseid" : "",
+      "ismapped" : false,
+      "ismastermapped" : false,
+      "hc" : 76796483,
+      "hn" : "Bunkie Zone",
+      "hthumb" : "https://pix8.agoda.net/hotelImages/76796483/0/3c2c6d69c483cb628b81a7b8d8599963.jpg?ce=2&s=312x",
+      "hd" : "",
+      "ha" : "",
+      "addr" : "666, 28th Main Rd, BTM 2nd Stage, Kuvempu Nagar, Stage 2, BTM Layout   Bangalore",
+      "hphone" : "",
+      "hemail" : "",
+      "tghscore" : 1,
+      "isreco" : true,
+      "domint" : "domestic",
+      "cnos" : [ "" ],
+      "ct" : "Bangalore",
+      "st" : "",
+      "cn" : "India",
+      "lat" : 12.916258811950684,
+      "lon" : 77.61492156982422,
+      "sr" : 3,
+      "tar" : "4.3-41",
+      "supid" : "",
+      "mp" : 528.9250334219557,
+      "mxp" : 528.9250334219557,
+      "iata" : "",
+      "disiata" : "",
+      "desc" : "Experience an abundance of unparalleled facilities and features at Bunkie Zone.Share your photos and respond to emails at your convenience, thanks to the free Wi-Fi internet access offered by hotel.Visitors can take advantage of the accessible parking options directly at the hotel. Room amenities feature daily housekeeping, allowing you to unwind and make the most of your visit. The hotel maintains a completely smoke-free zone, providing a breathable atmosphere.Smoking is limited to specified smoking zones.",
+      "ams" : [ {
+        "HotelAmenity" : [ {
+          "id" : "",
+          "name" : "TERRACE",
+          "type" : ""
+        }, {
+          "id" : "",
+          "name" : "WHEELCHAIR ACCESSIBLE â€“ NO",
+          "type" : ""
+        }, {
+          "id" : "",
+          "name" : "FREE WIFI",
+          "type" : ""
+        }, {
+          "id" : "",
+          "name" : "AIR CONDITIONING",
+          "type" : ""
+        }, {
+          "id" : "",
+          "name" : "TELEVISION",
+          "type" : ""
+        }, {
+          "id" : "",
+          "name" : "Food delivery",
+          "type" : "Facility"
+        }, {
+          "id" : "",
+          "name" : "Smoking area",
+          "type" : "Facility"
+        }, {
+          "id" : "",
+          "name" : "Free Wi-Fi in all rooms!",
+          "type" : "Facility"
+        }, {
+          "id" : "",
+          "name" : "CCTV in common areas",
+          "type" : "Facility"
+        }, {
+          "id" : "",
+          "name" : "Mirrored room",
+          "type" : "Facility"
+        }, {
+          "id" : "",
+          "name" : "Smoke-free property",
+          "type" : "Facility"
+        }, {
+          "id" : "",
+          "name" : "Daily housekeeping",
+          "type" : "Facility"
+        }, {
+          "id" : "",
+          "name" : "Tamil",
+          "type" : "Facility"
+        }, {
+          "id" : "",
+          "name" : "Shared lounge/TV area",
+          "type" : "Facility"
+        }, {
+          "id" : "",
+          "name" : "Non-smoking rooms",
+          "type" : "Facility"
+        }, {
+          "id" : "",
+          "name" : "English",
+          "type" : "Facility"
+        }, {
+          "id" : "",
+          "name" : "Terrace",
+          "type" : "Facility"
+        }, {
+          "id" : "",
+          "name" : "Daily disinfection in common areas",
+          "type" : "Facility"
+        }, {
+          "id" : "",
+          "name" : "Car park [on-site]",
+          "type" : "Facility"
+        }, {
+          "id" : "",
+          "name" : "Couple's room",
+          "type" : "Facility"
+        }, {
+          "id" : "",
+          "name" : "Hindi",
+          "type" : "Facility"
+        }, {
+          "id" : "",
+          "name" : "Internet",
+          "type" : "Facility"
+        }, {
+          "id" : "",
+          "name" : "CCTV outside property",
+          "type" : "Facility"
+        } ]
+      } ],
+      "resrc" : 1,
+      "cnx" : "",
+      "meal" : "",
+      "chkin" : "",
+      "chkout" : "",
+      "chain" : "",
+      "orcur" : "",
+      "enc" : "",
+      "paytype" : "prepaid",
+      "ptype" : "Hotel",
+      "nbtoday" : 0,
+      "lbdt" : "",
+      "nlnow" : 0,
+      "dist" : "",
+      "distfrom" : "",
+      "policyid" : "TP20379",
+      "policyaction" : "allowed",
+      "policyviolationreason" : "",
+      "isApprovalRequired" : true,
+      "recoscore" : 1,
+      "hlts" : [ "" ],
+      "rms" : [ {
+        "HotelRoom" : [ {
+          "hid" : "",
+          "baseid" : "",
+          "rid" : "eyJyb29tSWQiOjExODc1OTQ5MTAsImJsb2NrSWQiOiJ2MV9DZ0V0RU13Q0dpZ0tIVEl3TWpZdE1ESXRNVFJVTURBNk1EQTZNREF1TURBd0t6QTNPakF3RUFFWTN3d29BVGdCSWdJSUFRXHUwMDNkXHUwMDNkX0NpY0l2SXJLN0FnUUFoaW9pTTNIQVNBT0tONnhpUlF3QWtvTE1VUXhNREJRWHpFd01GQlFtQVVTQWdnQkdnUW9BakFCSWdRSUFoZ0MiLCJyb29tTmFtZSI6IkRvcm1pdG9yeSBHdWVzdCBSb29tIEZvciBNZW4iLCJwYXJlbnRSb29tTmFtZSI6IkRvcm1pdG9yeSBHdWVzdCBSb29tIEZvciBNZW4iLCJ0cmFuc2xhdGVkUm9vbU5hbWUiOiJEb3JtaXRvcnkgR3Vlc3QgUm9vbSBGb3IgTWVuIiwiYmxvY2tJZEJhY2t1cCI6IjgzMWViMmNlLTg4YWQtOTc4My02NDVkLTZiN2Q3YmYyYmIxZSIsInBhcmVudFJvb21JZCI6MTE4NzU5NDkxMCwicmF0ZVBsYW5JZCI6MjEwNDg0MzEsImZyZWVXaWZpIjp0cnVlLCJyZW1haW5pbmdSb29tcyI6MTAsIm5vcm1hbEJlZGRpbmciOjEsImV4dHJhQmVkcyI6MCwiZnJlZUJyZWFrZmFzdCI6ZmFsc2UsImZyZWVDYW5jZWxsYXRpb24iOnRydWUsInRvdGFsUGF5bWVudCI6eyJleGNsdXNpdmUiOjUuNTgsImluY2x1c2l2ZSI6NS44NiwidGF4IjowLjI4LCJmZWVzIjowLjAsImVzdGltYXRlZENvbW1pc3Npb24iOjAuMH0sInJvb21UeXBlTm90R3VhcmFudGVlZCI6ZmFsc2UsInBheW1lbnRNb2RlbCI6Ik1lcmNoYW50IiwiYm9va1dpdGhvdXRDcmVkaXRDYXJkIjp0cnVlLCJkbWNJZCI6MCwicmF0ZSI6eyJjdXJyZW5jeSI6IlVTRCIsImV4Y2x1c2l2ZSI6NS41OCwiaW5jbHVzaXZlIjo1Ljg2LCJ0YXgiOjAuMjgsImZlZXMiOjAuMCwibWV0aG9kIjoiUFJQTiJ9LCJwZXJSb29tUGVyTmlnaHRSYXRlIjp7ImN1cnJlbmN5IjoiVVNEIiwiZXhjbHVzaXZlIjo1LjU4LCJpbmNsdXNpdmUiOjUuODYsInRheCI6MC4yOCwiZmVlcyI6MC4wfSwiZGFpbHlSYXRlIjpbeyJkYXRlIjoiMjAyNi0wMi0xNCIsImV4Y2x1c2l2ZSI6NS41OCwiaW5jbHVzaXZlIjo1Ljg2LCJ0YXgiOjAuMjgsImZlZXMiOjAuMCwicHJvY2Vzc2luZ0ZlZSI6MC4wLCJtZXRob2QiOiJQTiJ9XSwicHJvbW90aW9uRGV0YWlsIjp7InByb21vdGlvbklkIjoyMDkyOTc5NDAsImNvZGVFbGlnaWJsZSI6ZmFsc2UsImRlc2NyaXB0aW9uIjoiTGltaXRlZCBUaW1lIE9mZmVyLiBQcmljZSBpbmNsdWRlcyAyMCUgZGlzY291bnQhIiwic2F2aW5nQW1vdW50IjoxLjYyfSwicHJvcGVydHlOYW1lIjoiQnVua2llIFpvbmUiLCJzdXJjaGFyZ2VzIjpbXSwidGF4QnJlYWtkb3duIjpbeyJpZCI6IjIxMiIsInR5cGVWYWx1ZSI6IlRheCIsInRheERlc2NyaXB0aW9uIjoiR3JhZHVhdGVkIHRheCAoUGF5IHRvIGdvdikiLCJ0cmFuc2xhdGVkVGF4RGVzY3JpcHRpb24iOiJHcmFkdWF0ZWQgdGF4IChQYXkgdG8gZ292KSIsIm1ldGhvZCI6IlBSUE4iLCJjdXJyZW5jeSI6IlVTRCIsImJhc2UiOiJOIiwidGF4YWJsZSI6Ik4iLCJwZXJjZW50Ijo1LjAsImFtb3VudCI6MC4yOH0seyJpZCI6IjIiLCJ0eXBlVmFsdWUiOiJGZWUiLCJ0YXhEZXNjcmlwdGlvbiI6IkZlZSIsInRyYW5zbGF0ZWRUYXhEZXNjcmlwdGlvbiI6IkZlZSIsIm1ldGhvZCI6IlBCIiwiY3VycmVuY3kiOiJVU0QiLCJiYXNlIjoiTiIsInRheGFibGUiOiJOIiwicGVyY2VudCI6MC4wLCJhbW91bnQiOjAuMH1dLCJjYW5jZWxsYXRpb25Qb2xpY3kiOnsiY29kZSI6IjFEMTAwUF8xMDBQIiwiY2FuY2VsbGF0aW9uVGV4dCI6IlN0YXkgZmxleGlibGUhIENhbmNlbCBmb3IgZnJlZSBiZWZvcmUgMjAyNi0wMi0xM+KAiyBBbnkgY2FuY2VsbGF0aW9uIHJlY2VpdmVkIHdpdGhpbiAxIGRheSBwcmlvciB0byB0aGUgYXJyaXZhbCBkYXRlIHdpbGwgYmUgY2hhcmdlZCBmb3IgdGhlIGVudGlyZSBzdGF5LiBGYWlsdXJlIHRvIGFycml2ZSBhdCB5b3VyIGhvdGVsIG9yIHByb3BlcnR5IHdpbGwgYmUgdHJlYXRlZCBhcyBhIE5vLVNob3cgYW5kIHdpbGwgaW5jdXIgYSBjaGFyZ2Ugb2YgMTAwJSBvZiB0aGUgYm9va2luZyB2YWx1ZSAoSG90ZWwgcG9saWN5KS4iLCJ0cmFuc2xhdGVkQ2FuY2VsbGF0aW9uVGV4dCI6IlN0YXkgZmxleGlibGUhIENhbmNlbCBmb3IgZnJlZSBiZWZvcmUgMjAyNi0wMi0xM+KAiyBBbnkgY2FuY2VsbGF0aW9uIHJlY2VpdmVkIHdpdGhpbiAxIGRheSBwcmlvciB0byB0aGUgYXJyaXZhbCBkYXRlIHdpbGwgYmUgY2hhcmdlZCBmb3IgdGhlIGVudGlyZSBzdGF5LiBGYWlsdXJlIHRvIGFycml2ZSBhdCB5b3VyIGhvdGVsIG9yIHByb3BlcnR5IHdpbGwgYmUgdHJlYXRlZCBhcyBhIE5vLVNob3cgYW5kIHdpbGwgaW5jdXIgYSBjaGFyZ2Ugb2YgMTAwJSBvZiB0aGUgYm9va2luZyB2YWx1ZSAoSG90ZWwgcG9saWN5KS4iLCJwYXJhbWV0ZXIiOlt7ImRheXMiOjIsImNoYXJnZSI6IlAiLCJ2YWx1ZSI6MC4wfSx7ImRheXMiOjEsImNoYXJnZSI6IlAiLCJ2YWx1ZSI6MTAwLjB9LHsiZGF5cyI6MCwiY2hhcmdlIjoiUCIsInZhbHVlIjoxMDAuMH1dLCJkYXRlIjpbeyJiZWZvcmUiOiIyMDI2LTAyLTEzVDAwOjAwOjAwIiwicmF0ZSI6eyJleGNsdXNpdmUiOjAuMCwiaW5jbHVzaXZlIjowLjAsInRheCI6MC4wLCJmZWVzIjowLjB9fSx7ImJlZm9yZSI6IjIwMjYtMDItMTRUMDA6MDA6MDAiLCJyYXRlIjp7ImV4Y2x1c2l2ZSI6NS41OCwiaW5jbHVzaXZlIjo1Ljg2LCJ0YXgiOjAuMjgsImZlZXMiOjAuMH19LHsib253YXJkIjoiMjAyNi0wMi0xNFQwMDowMDowMCIsInJhdGUiOnsiZXhjbHVzaXZlIjo1LjU4LCJpbmNsdXNpdmUiOjUuODYsInRheCI6MC4yOCwiZmVlcyI6MC4wfX1dfSwiYmVuZWZpdHMiOlt7ImlkIjo2LCJiZW5lZml0TmFtZSI6IlBhcmtpbmciLCJ0cmFuc2xhdGVkQmVuZWZpdE5hbWUiOiJQYXJraW5nIn0seyJpZCI6OTUsImJlbmVmaXROYW1lIjoiRnJlZSBXaUZpIiwidHJhbnNsYXRlZEJlbmVmaXROYW1lIjoiRnJlZSBXaUZpIn1dLCJzZWFyY2hJZCI6IjY1ODE3MDM3ODE1MzIzMDAwMCIsInByb3BJZCI6Ijc2Nzk2NDgzIn0=",
+          "rmcode" : "",
+          "rmname" : "Dormitory Guest Room For Men",
+          "rtcode" : "658170378153230000^^^^1187594910",
+          "rmdesc" : "",
+          "meals" : "ROOM ONLY",
+          "price" : 0,
+          "faretype" : "normal",
+          "hc" : 76796483,
+          "ofs" : 95,
+          "isPostpaid" : false,
+          "rmimgs" : [ "" ],
+          "rmams" : [ {
+            "HotelAmenity" : [ {
+              "id" : "",
+              "name" : "Parking",
+              "type" : "roombenefit"
+            }, {
+              "id" : "",
+              "name" : "Free WiFi",
+              "type" : "roombenefit"
+            } ]
+          } ],
+          "fares" : [ {
+            "HotelRoomFare" : {
+              "rmid" : 21048431,
+              "rtcode" : "658170378153230000^^^^1187594910",
+              "supname" : "Agoda",
+              "supid" : "",
+              "supenc" : "",
+              "datakey" : "sr-6d01b558-e426-4b6f-bc2e-abfa5ed8772b#_#hd-7d4cf74b-f193-4eca-adbb-511b39d73e67",
+              "bf" : 503.6521649308042,
+              "tx" : 25.272868491151467,
+              "fbrk" : "",
+              "totnet" : 528.9250334219557,
+              "totorig" : 5.86,
+              "hc" : 0,
+              "cur" : "INR",
+              "orcur" : "USD",
+              "curconv" : 90.26024461125523,
+              "pubfr" : 0,
+              "promo" : "",
+              "rewards" : 0,
+              "policyaction" : "allowed",
+              "policyid" : "TP20379",
+              "policyviolationreason" : "",
+              "inpolicy" : true,
+              "suppcomm" : 0,
+              "additionalTax" : [ "" ]
+            }
+          } ],
+          "formattedPolicy" : [ {
+            "com.nexpense.vobs.HotelFormattedPoilicy" : [ {
+              "fromDate" : "2026-02-06T16:28:26.871",
+              "toDate" : "2026-02-13T00:00:00",
+              "penaltyType" : "percentage",
+              "penaltyValue" : 0
+            }, {
+              "fromDate" : "2026-02-13T00:00:00",
+              "toDate" : "2026-02-14T00:00:00",
+              "penaltyType" : "percentage",
+              "penaltyValue" : 100
+            }, {
+              "fromDate" : "2026-02-14T00:00:00",
+              "toDate" : "2026-02-15T00:00:00",
+              "penaltyType" : "percentage",
+              "penaltyValue" : 100
+            } ]
+          } ],
+          "cancelation_deadline" : "2026-02-13T00:00:00",
+          "isnonrefundable" : false,
+          "policies" : [ {
+            "string" : "Stay flexible! Cancel for free before 2026-02-13â€‹ Any cancellation received within 1 day prior to the arrival date will be charged for the entire stay. Failure to arrive at your hotel or property will be treated as a No-Show and will incur a charge of 100% of the booking value (Hotel policy)."
+          } ],
+          "supplierid" : 95,
+          "isrecommended" : false
+        }, {
+          "hid" : "",
+          "baseid" : "",
+          "rid" : "eyJyb29tSWQiOjExODc2MDA1NzgsImJsb2NrSWQiOiJ2MV9DZ0V0RU13Q0dpZ0tIVEl3TWpZdE1ESXRNVFJVTURBNk1EQTZNREF1TURBd0t6QTNPakF3RUFFWTN3d29BVGdCSWdJSUFRXHUwMDNkXHUwMDNkX0NpY0loT1BLN0FnUUFoaW9pTTNIQVNBT0tONnhpUlF3QWtvTE1VUXhNREJRWHpFd01GQlFtQVVTQWdnQkdnUW9BakFCSWdRSUFoZ0MiLCJyb29tTmFtZSI6IkRvcm1pdG9yeSAoTWl4IGdlbmRlcikgZm9yIDIgUGVvcGxlIiwicGFyZW50Um9vbU5hbWUiOiJEb3JtaXRvcnkgKE1peCBnZW5kZXIpIGZvciAyIFBlb3BsZSIsInRyYW5zbGF0ZWRSb29tTmFtZSI6IkRvcm1pdG9yeSAoTWl4IGdlbmRlcikgZm9yIDIgUGVvcGxlIiwiYmxvY2tJZEJhY2t1cCI6ImU3MmRlOGI4LTVlMzAtOTMzYy1kOWY3LTBlYWJiZjc3NzJiYSIsInBhcmVudFJvb21JZCI6MTE4NzYwMDU3OCwicmF0ZVBsYW5JZCI6MjEwNDg0MzEsImZyZWVXaWZpIjp0cnVlLCJyZW1haW5pbmdSb29tcyI6NSwibm9ybWFsQmVkZGluZyI6MSwiZXh0cmFCZWRzIjowLCJmcmVlQnJlYWtmYXN0IjpmYWxzZSwiZnJlZUNhbmNlbGxhdGlvbiI6dHJ1ZSwidG90YWxQYXltZW50Ijp7ImV4Y2x1c2l2ZSI6Ni41LCJpbmNsdXNpdmUiOjYuODMsInRheCI6MC4zMywiZmVlcyI6MC4wLCJlc3RpbWF0ZWRDb21taXNzaW9uIjowLjB9LCJyb29tVHlwZU5vdEd1YXJhbnRlZWQiOmZhbHNlLCJwYXltZW50TW9kZWwiOiJNZXJjaGFudCIsImJvb2tXaXRob3V0Q3JlZGl0Q2FyZCI6dHJ1ZSwiZG1jSWQiOjAsInJhdGUiOnsiY3VycmVuY3kiOiJVU0QiLCJleGNsdXNpdmUiOjYuNSwiaW5jbHVzaXZlIjo2LjgzLCJ0YXgiOjAuMzMsImZlZXMiOjAuMCwibWV0aG9kIjoiUFJQTiJ9LCJwZXJSb29tUGVyTmlnaHRSYXRlIjp7ImN1cnJlbmN5IjoiVVNEIiwiZXhjbHVzaXZlIjo2LjUsImluY2x1c2l2ZSI6Ni44MywidGF4IjowLjMzLCJmZWVzIjowLjB9LCJkYWlseVJhdGUiOlt7ImRhdGUiOiIyMDI2LTAyLTE0IiwiZXhjbHVzaXZlIjo2LjUsImluY2x1c2l2ZSI6Ni44MywidGF4IjowLjMzLCJmZWVzIjowLjAsInByb2Nlc3NpbmdGZWUiOjAuMCwibWV0aG9kIjoiUE4ifV0sInByb21vdGlvbkRldGFpbCI6eyJwcm9tb3Rpb25JZCI6MjA5Mjk3OTQwLCJjb2RlRWxpZ2libGUiOmZhbHNlLCJkZXNjcmlwdGlvbiI6IkxpbWl0ZWQgVGltZSBPZmZlci4gUHJpY2UgaW5jbHVkZXMgMjAlIGRpc2NvdW50ISIsInNhdmluZ0Ftb3VudCI6MS44OH0sInByb3BlcnR5TmFtZSI6IkJ1bmtpZSBab25lIiwic3VyY2hhcmdlcyI6W10sInRheEJyZWFrZG93biI6W3siaWQiOiIyMTIiLCJ0eXBlVmFsdWUiOiJUYXgiLCJ0YXhEZXNjcmlwdGlvbiI6IkdyYWR1YXRlZCB0YXggKFBheSB0byBnb3YpIiwidHJhbnNsYXRlZFRheERlc2NyaXB0aW9uIjoiR3JhZHVhdGVkIHRheCAoUGF5IHRvIGdvdikiLCJtZXRob2QiOiJQUlBOIiwiY3VycmVuY3kiOiJVU0QiLCJiYXNlIjoiTiIsInRheGFibGUiOiJOIiwicGVyY2VudCI6NS4wLCJhbW91bnQiOjAuMzN9LHsiaWQiOiIyIiwidHlwZVZhbHVlIjoiRmVlIiwidGF4RGVzY3JpcHRpb24iOiJGZWUiLCJ0cmFuc2xhdGVkVGF4RGVzY3JpcHRpb24iOiJGZWUiLCJtZXRob2QiOiJQQiIsImN1cnJlbmN5IjoiVVNEIiwiYmFzZSI6Ik4iLCJ0YXhhYmxlIjoiTiIsInBlcmNlbnQiOjAuMCwiYW1vdW50IjowLjB9XSwiY2FuY2VsbGF0aW9uUG9saWN5Ijp7ImNvZGUiOiIxRDEwMFBfMTAwUCIsImNhbmNlbGxhdGlvblRleHQiOiJTdGF5IGZsZXhpYmxlISBDYW5jZWwgZm9yIGZyZWUgYmVmb3JlIDIwMjYtMDItMTPigIsgQW55IGNhbmNlbGxhdGlvbiByZWNlaXZlZCB3aXRoaW4gMSBkYXkgcHJpb3IgdG8gdGhlIGFycml2YWwgZGF0ZSB3aWxsIGJlIGNoYXJnZWQgZm9yIHRoZSBlbnRpcmUgc3RheS4gRmFpbHVyZSB0byBhcnJpdmUgYXQgeW91ciBob3RlbCBvciBwcm9wZXJ0eSB3aWxsIGJlIHRyZWF0ZWQgYXMgYSBOby1TaG93IGFuZCB3aWxsIGluY3VyIGEgY2hhcmdlIG9mIDEwMCUgb2YgdGhlIGJvb2tpbmcgdmFsdWUgKEhvdGVsIHBvbGljeSkuIiwidHJhbnNsYXRlZENhbmNlbGxhdGlvblRleHQiOiJTdGF5IGZsZXhpYmxlISBDYW5jZWwgZm9yIGZyZWUgYmVmb3JlIDIwMjYtMDItMTPigIsgQW55IGNhbmNlbGxhdGlvbiByZWNlaXZlZCB3aXRoaW4gMSBkYXkgcHJpb3IgdG8gdGhlIGFycml2YWwgZGF0ZSB3aWxsIGJlIGNoYXJnZWQgZm9yIHRoZSBlbnRpcmUgc3RheS4gRmFpbHVyZSB0byBhcnJpdmUgYXQgeW91ciBob3RlbCBvciBwcm9wZXJ0eSB3aWxsIGJlIHRyZWF0ZWQgYXMgYSBOby1TaG93IGFuZCB3aWxsIGluY3VyIGEgY2hhcmdlIG9mIDEwMCUgb2YgdGhlIGJvb2tpbmcgdmFsdWUgKEhvdGVsIHBvbGljeSkuIiwicGFyYW1ldGVyIjpbeyJkYXlzIjoyLCJjaGFyZ2UiOiJQIiwidmFsdWUiOjAuMH0seyJkYXlzIjoxLCJjaGFyZ2UiOiJQIiwidmFsdWUiOjEwMC4wfSx7ImRheXMiOjAsImNoYXJnZSI6IlAiLCJ2YWx1ZSI6MTAwLjB9XSwiZGF0ZSI6W3siYmVmb3JlIjoiMjAyNi0wMi0xM1QwMDowMDowMCIsInJhdGUiOnsiZXhjbHVzaXZlIjowLjAsImluY2x1c2l2ZSI6MC4wLCJ0YXgiOjAuMCwiZmVlcyI6MC4wfX0seyJiZWZvcmUiOiIyMDI2LTAyLTE0VDAwOjAwOjAwIiwicmF0ZSI6eyJleGNsdXNpdmUiOjYuNSwiaW5jbHVzaXZlIjo2LjgzLCJ0YXgiOjAuMzMsImZlZXMiOjAuMH19LHsib253YXJkIjoiMjAyNi0wMi0xNFQwMDowMDowMCIsInJhdGUiOnsiZXhjbHVzaXZlIjo2LjUsImluY2x1c2l2ZSI6Ni44MywidGF4IjowLjMzLCJmZWVzIjowLjB9fV19LCJiZW5lZml0cyI6W3siaWQiOjYsImJlbmVmaXROYW1lIjoiUGFya2luZyIsInRyYW5zbGF0ZWRCZW5lZml0TmFtZSI6IlBhcmtpbmcifSx7ImlkIjo5NSwiYmVuZWZpdE5hbWUiOiJGcmVlIFdpRmkiLCJ0cmFuc2xhdGVkQmVuZWZpdE5hbWUiOiJGcmVlIFdpRmkifV0sInNlYXJjaElkIjoiNjU4MTcwMzc4MTUzMjMwMDAwIiwicHJvcElkIjoiNzY3OTY0ODMifQ==",
+          "rmcode" : "",
+          "rmname" : "Dormitory (Mix gender) for 2 People",
+          "rtcode" : "658170378153230000^^^^1187600578",
+          "rmdesc" : "",
+          "meals" : "ROOM ONLY",
+          "price" : 0,
+          "faretype" : "normal",
+          "hc" : 76796483,
+          "ofs" : 95,
+          "isPostpaid" : false,
+          "rmimgs" : [ "" ],
+          "rmams" : [ {
+            "HotelAmenity" : [ {
+              "id" : "",
+              "name" : "Parking",
+              "type" : "roombenefit"
+            }, {
+              "id" : "",
+              "name" : "Free WiFi",
+              "type" : "roombenefit"
+            } ]
+          } ],
+          "fares" : [ {
+            "HotelRoomFare" : {
+              "rmid" : 21048431,
+              "rtcode" : "658170378153230000^^^^1187600578",
+              "supname" : "Agoda",
+              "supid" : "",
+              "supenc" : "",
+              "datakey" : "sr-6d01b558-e426-4b6f-bc2e-abfa5ed8772b#_#hd-7d4cf74b-f193-4eca-adbb-511b39d73e67",
+              "bf" : 586.691589973159,
+              "tx" : 29.78588072171423,
+              "fbrk" : "",
+              "totnet" : 616.4774706948732,
+              "totorig" : 6.83,
+              "hc" : 0,
+              "cur" : "INR",
+              "orcur" : "USD",
+              "curconv" : 90.26024461125523,
+              "pubfr" : 0,
+              "promo" : "",
+              "rewards" : 0,
+              "policyaction" : "allowed",
+              "policyid" : "TP20379",
+              "policyviolationreason" : "",
+              "inpolicy" : true,
+              "suppcomm" : 0,
+              "additionalTax" : [ "" ]
+            }
+          } ],
+          "formattedPolicy" : [ {
+            "com.nexpense.vobs.HotelFormattedPoilicy" : [ {
+              "fromDate" : "2026-02-06T16:28:26.872",
+              "toDate" : "2026-02-13T00:00:00",
+              "penaltyType" : "percentage",
+              "penaltyValue" : 0
+            }, {
+              "fromDate" : "2026-02-13T00:00:00",
+              "toDate" : "2026-02-14T00:00:00",
+              "penaltyType" : "percentage",
+              "penaltyValue" : 100
+            }, {
+              "fromDate" : "2026-02-14T00:00:00",
+              "toDate" : "2026-02-15T00:00:00",
+              "penaltyType" : "percentage",
+              "penaltyValue" : 100
+            } ]
+          } ],
+          "cancelation_deadline" : "2026-02-13T00:00:00",
+          "isnonrefundable" : false,
+          "policies" : [ {
+            "string" : "Stay flexible! Cancel for free before 2026-02-13â€‹ Any cancellation received within 1 day prior to the arrival date will be charged for the entire stay. Failure to arrive at your hotel or property will be treated as a No-Show and will incur a charge of 100% of the booking value (Hotel policy)."
+          } ],
+          "supplierid" : 95,
+          "isrecommended" : false
+        } ]
+      } ],
+      "tgfulfilled" : true,
+      "inpolicy" : true,
+      "rewards" : 0,
+      "atp" : 0,
+      "distancetomeetingmpoint" : 0,
+      "mastersupplier" : "hotelapigateway"
+    },
+    "hotelsearchrequest" : {
+      "nationality" : "IN",
+      "city" : "Bangalore, Karnataka, India",
+      "country" : "X",
+      "baseid" : "ChIJbU60yXAWrjsR4E9-UejD3_g",
+      "checkindate" : "2026-02-14",
+      "checkoutdate" : "2026-02-15",
+      "numrooms" : 1,
+      "lat" : 12.9715987,
+      "lon" : 77.5945627,
+      "currency" : "INR",
+      "tripid" : "",
+      "cor" : "",
+      "profileid" : 178279,
+      "datakey" : "",
+      "ispersonalbooking" : false,
+      "searchtype" : "citybased",
+      "loctype" : "geocode,locality,political",
+      "rooms" : [ {
+        "HotelRoomRequest" : {
+          "roomno" : 1,
+          "numadults" : 1,
+          "numchidren" : 0,
+          "numchildren_withoutbed" : 0,
+          "numinfants" : 0,
+          "infantagedata" : "",
+          "childagedata" : "",
+          "extrabed" : "N",
+          "roomtype" : "Double",
+          "profileids" : ""
+        }
+      } ],
+      "filter" : {
+        "ps" : 0,
+        "sr" : "",
+        "hn" : "",
+        "sb" : "PA",
+        "vr" : "",
+        "mp" : 0,
+        "mxp" : 2000000,
+        "pts" : "",
+        "ams" : [ "" ],
+        "acs" : "",
+        "adr" : "",
+        "pn" : 0,
+        "showreco" : true,
+        "lat" : -1,
+        "lon" : -1
+      },
+      "corporateid" : "TG21772",
+      "iscache" : false,
+      "channel" : "web"
+    },
+    "searchrequestid" : "",
+    "searchresponseid" : "",
+    "guestreviews" : [ "" ],
+    "guestratings" : [ {
+      "GuestRating" : {
+        "rating" : 8.6,
+        "reviews" : 41,
+        "provider" : ""
+      }
+    } ],
+    "skippedrooms" : [ "" ],
+    "providername" : "",
+    "images" : [ "" ],
+    "gstInfo" : {
+      "gstnumber" : "",
+      "gstemail" : "",
+      "gstaddress" : "",
+      "gstphone" : "",
+      "gstcompany" : "",
+      "txid" : "",
+      "addedon" : "",
+      "txtype" : "",
+      "txtime" : "",
+      "config_reference" : ""
+    }
+  }
+}

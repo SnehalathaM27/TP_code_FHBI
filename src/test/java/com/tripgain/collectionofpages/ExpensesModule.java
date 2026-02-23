@@ -175,14 +175,14 @@ Thread.sleep(4000);
 
 	        // Click the dropdown
 	        WebElement SelectVehicleDropdown = wait.until(ExpectedConditions.elementToBeClickable(
-	            By.xpath("//label[text()='Please select vehicle type.']/following-sibling::div")));
+	            By.xpath("//span[text()='Vehicle']/following-sibling::div")));
 	        SelectVehicleDropdown.click();
 	        log.ReportEvent("PASS", "Clicked on the Select Vehicle Type dropdown");
 
 	        Thread.sleep(4000);
 
 	        List<WebElement> dropdownOptions = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-	            By.xpath("//li[text()='" + vehicleName + "']")));
+	            By.xpath("//span[text()='" + vehicleName + "']")));
 
 	        if (dropdownOptions.isEmpty()) {
 	            log.ReportEvent("FAIL", "No matching vehicle type found for: " + vehicleName);
@@ -213,7 +213,7 @@ Thread.sleep(4000);
 
 
 
-  	@FindBy(xpath="//label[text()='Currency']//parent::div//parent::div//input")
+  	@FindBy(xpath="(//*[text()='Currency']//parent::div//parent::div//input)[1]")
     WebElement currencyDropDown;
 
 	//Method to click On Currency DropDown
@@ -234,7 +234,7 @@ Thread.sleep(4000);
 
 		        System.out.println(value);
 		        WebElement CurrencyValue = wait.until(ExpectedConditions.visibilityOfElementLocated(
-		                By.xpath("//div[text()='"+value+"']")
+		                By.xpath("//span[text()='"+value+"']")
 		                ));
 
 		        JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -284,7 +284,7 @@ Thread.sleep(4000);
 
 			        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 			        WebElement merchantInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
-			            By.xpath("//label[text()='Merchant Name']/following-sibling::*//input")
+			            By.xpath("//input[@name='merchant_name']")
 			        ));
 
 			        merchantInput.clear();
@@ -312,12 +312,12 @@ Thread.sleep(4000);
 			    try {
 			        log.ReportEvent("INFO", "Attempting to select payment mode: " + paymentType);
 
-				    WebElement paymentDropdown = driver.findElement(By.xpath("//label[text()='Payment Mode']/following-sibling::div[contains(@class,'MuiInputBase-root')]"));
+				    WebElement paymentDropdown = driver.findElement(By.xpath("//span[text()='Payment Mode']/following-sibling::div"));
 			        paymentDropdown.click();
 
 			        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 			        WebElement option = wait.until(ExpectedConditions.elementToBeClickable(
-			            By.xpath("//li[text()='" + paymentType + "']"))
+			            By.xpath("//span[text()='" + paymentType + "']"))
 			        );
 
 			        option.click();
@@ -325,6 +325,36 @@ Thread.sleep(4000);
 
 			    } catch (NoSuchElementException e) {
 			        log.ReportEvent("FAIL", "Payment dropdown or option '" + paymentType + "' not found on the page.");
+			        e.printStackTrace();
+			        ScreenShots.takeScreenShot1();
+
+			    } catch (Exception e) {
+			        log.ReportEvent("FAIL", "Unexpected error while selecting payment mode: " + e.getMessage());
+			        e.printStackTrace();
+			        ScreenShots.takeScreenShot1();
+
+			    }
+			}
+		 
+		 //Method to select corporate card options
+		 
+		 public void selectorporateCardOptions(String CorpCard,Log log,ScreenShots ScreenShots) throws TimeoutException {
+			    try {
+			        log.ReportEvent("INFO", "Attempting to select CorpCard : " + CorpCard);
+
+				    WebElement CorpDropdown = driver.findElement(By.xpath("//span[text()='Select Card']/following-sibling::div"));
+				    CorpDropdown.click();
+
+			        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+			        WebElement option = wait.until(ExpectedConditions.elementToBeClickable(
+			            By.xpath("//span[text()='" + CorpCard + "']"))
+			        );
+
+			        option.click();
+			        log.ReportEvent("PASS", "Successfully selected CorpCard Option: " + CorpCard);
+
+			    } catch (NoSuchElementException e) {
+			        log.ReportEvent("FAIL", "CorpCard dropdown or option '" + CorpCard + "' not found on the page.");
 			        e.printStackTrace();
 			        ScreenShots.takeScreenShot1();
 
@@ -352,8 +382,14 @@ Thread.sleep(4000);
 		 }
 		 
 		 //Method to click and upload receipt
-		 public void uploadReceipt(String filePath) throws InterruptedException {
-			    WebElement uploadInput = driver.findElement(By.xpath("//input[@type='file']"));
+		 public void uploadReceiptUnderExpense(String filePath) throws InterruptedException {
+			    WebElement uploadInput = driver.findElement(By.xpath("//input[@type='file']/following-sibling::label"));
+			    Thread.sleep(3000);
+			    uploadInput.sendKeys(filePath); 
+			}
+		 
+		 public void uploadReceiptUnderMileage(String filePath) throws InterruptedException {
+			    WebElement uploadInput = driver.findElement(By.xpath("//div[contains(@class,'upload-button')]"));
 			    Thread.sleep(3000);
 			    uploadInput.sendKeys(filePath); 
 			}
@@ -365,11 +401,11 @@ Thread.sleep(4000);
 		
 //Method to enter data on merchant name
 		 
-		 public void addComments(String comment, Log log, ScreenShots screenShots) throws TimeoutException {
+		 public void addRemarks(String comment, Log log, ScreenShots screenShots) throws TimeoutException {
 			    try {
 			        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 			        WebElement commentInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
-			            By.xpath("//label[text()='Comments']/following-sibling::div//input") 
+			            By.xpath("//input[@name='comment']") 
 			        ));
 			        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", commentInput);
 			        Thread.sleep(500);
@@ -393,7 +429,7 @@ Thread.sleep(4000);
 			}
 
 
-		 @FindBy(xpath = "//*[contains(@id,'react-select-7-input')]")
+		 @FindBy(xpath = "//label[contains(@class,'app-async-select_label')][contains(.,'From Location')]/following::input[@class='tg-async-select__input'][1]")
 	       private WebElement enterFromLocation;
 		 
 		 public void enterfrom(String location) {
@@ -505,7 +541,7 @@ Thread.sleep(4000);
 		     return dp[a.length()][b.length()];
 		 }
 		 
-		 @FindBy(xpath = "//*[contains(@id,'react-select-8-input')]")
+		 @FindBy(xpath = "//label[contains(@class,'app-async-select_label')][contains(.,'To Location')]/following::input[@class='tg-async-select__input'][1]")
 	       private WebElement enterToLocation;
 		 
 		 public void enterTo(String location) throws TimeoutException, InterruptedException {
@@ -534,8 +570,7 @@ Thread.sleep(4000);
 	        }
 
 		 @FindBy(xpath = "//label[text()='Expense Date']/following-sibling::div")
-		    WebElement datePickerInput;
-		    
+		    WebElement datePickerInput;		    
 		    
 		//Method to Select Check-In Date By Passing Two Paramenters(Date and MounthYear)
 		            public void selectDate(String day, String MonthandYear) throws InterruptedException
@@ -1055,8 +1090,385 @@ public void getReportNumberText(Log log, ScreenShots screenShots) {
 		        e.printStackTrace();
 		    }
 		}
+		
+		
+		// method to search through trip on search report fields
+		
+		public void SearchTripThroughSearchReportFieldUnderExpense(String... searchValues) {
+		    WebElement searchField = driver.findElement(
+		        By.xpath("//input[@placeholder='Search Reports']")
+		    );
 
+		    for (String value : searchValues) {
+		        searchField.clear();
+		        searchField.sendKeys(value);
+		    }
+		}
+
+		public void openExpenseReport() {
+			driver.findElement(By.xpath("//tr[@class='clickable']")).click();
+		}
+
+		
+		public void clickOnSelectCategoryValuesThroughExpenseSearchTripIdFlow(Log log,ScreenShots ScreenShots) {
+		    try {
+		        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(70));
+		        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+		        //Click the dropdown
+		        WebElement SelectCategoryDropdown = wait.until(ExpectedConditions.elementToBeClickable(
+		            By.xpath("//span[text()='Category']/following-sibling::div")));
+		        SelectCategoryDropdown.click();
+		        
+		       // log.ReportEvent("PASS", "Clicked on the Select Category dropdown");
+Thread.sleep(4000);
+		        List<WebElement> dropdownOptions = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+		            By.xpath("//*[contains(@class,'tg-select-option-label')]")));
+
+		        // Picking a random option
+		        Random rand = new Random();
+		        int index = rand.nextInt(dropdownOptions.size());
+		        WebElement selectedOption = dropdownOptions.get(index);
+		        String selectedText = selectedOption.getText();
+
+		        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", selectedOption);
+		        Thread.sleep(1000);
+
+		        try {
+		        	Thread.sleep(2000);
+		            selectedOption.click(); 
+		            log.ReportEvent("PASS", "Selected random Category : " + selectedText);
+		        } catch (ElementClickInterceptedException ex) {
+		            js.executeScript("arguments[0].click();", selectedOption);
+		            log.ReportEvent("PASS", "Selected random Category: " + selectedText);
+		        }
+
+		    } catch (Exception e) {
+		        log.ReportEvent("FAIL", "Failed to select Category. Exception: " + e.getMessage());
+	        ScreenShots.takeScreenShot1();
+
+		    }
+		}
 		    
+		
+		 @FindBy(xpath = "//*[@class='custom_datepicker_input']")
+		    WebElement datePicker;
+	
+
+		 // Method to select date (simplest version)
+		 public void selectDateThroughExpenseSearchTripIdFlow(String day) throws InterruptedException {
+		     // 1. Click on date picker to open calendar
+		     datePicker.click();
+		     Thread.sleep(2000);
+		     
+		     // 2. Click on the day directly
+		     String dayXpath = "//div[contains(@class,'react-datepicker__month-container')]//span[text()='" + day + "']";
+		     driver.findElement(By.xpath(dayXpath)).click();
+		     Thread.sleep(2000);
+		 }
+		 
+		 public void EnterAmounthroughSearchReportFieldUnderExpense(String value) {
+			    WebElement searchField = driver.findElement(
+			        By.xpath("//input[@name='total_amount']"));
+			        searchField.clear();
+			        searchField.sendKeys(value);
+			    }
 		    
-		    
+		 //Method to clcik on save expense 
+		 
+		 public void clickOnSaveExpenseButt() {
+			 driver.findElement(By.xpath("//button[text()='Save Expense']")).click();
+		 }
+		 
+		
+		 public void clickOnSaveAndAnotherButt() {
+			 driver.findElement(By.xpath("//button[text()='Save and Add Another']")).click();
+		 }
+		 
+		 public void clickOnMileageButtThroughExpenseSearchTripIdFlow() {
+			 driver.findElement(By.xpath("//button[text()='Mileage']")).click();
+		 }
+		 
+		 
+		 public void clickOnSelectCategoryValuesunderMileageThroughExpenseSearchTripIdFlow(Log log,ScreenShots ScreenShots) {
+			    try {
+			        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(70));
+			        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+			        //Click the dropdown
+			        WebElement SelectCategoryDropdown = wait.until(ExpectedConditions.elementToBeClickable(
+			            By.xpath("//span[text()='Select Category']/following-sibling::div")));
+			        SelectCategoryDropdown.click();
+			        
+			       // log.ReportEvent("PASS", "Clicked on the Select Category dropdown");
+	Thread.sleep(4000);
+			        List<WebElement> dropdownOptions = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+			            By.xpath("//*[contains(@class,'tg-select-option-label')]")));
+
+			        // Picking a random option
+			        Random rand = new Random();
+			        int index = rand.nextInt(dropdownOptions.size());
+			        WebElement selectedOption = dropdownOptions.get(index);
+			        String selectedText = selectedOption.getText();
+
+			        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", selectedOption);
+			        Thread.sleep(1000);
+
+			        try {
+			        	Thread.sleep(2000);
+			            selectedOption.click(); 
+			            log.ReportEvent("PASS", "Selected random Category : " + selectedText);
+			        } catch (ElementClickInterceptedException ex) {
+			            js.executeScript("arguments[0].click();", selectedOption);
+			            //log.ReportEvent("PASS", "Selected random Category: " + selectedText);
+			        }
+
+			    } catch (Exception e) {
+			        log.ReportEvent("FAIL", "Failed to select Category under mileage. Exception: " + e.getMessage());
+		        ScreenShots.takeScreenShot1();
+
+			    }
+			}
+		 
+		 public String[] getReportIdFromExpenseReportDetailsPg(Log log) {
+	 		    String reportid = driver.findElement(By.xpath("//span[text()='Report ID']/following-sibling::span")).getText();
+	 	        System.out.println("Report id from Expense report details page : " + reportid);
+	 		    log.ReportEvent("INFO", "reportid from Expense report details page :"+ reportid);
+
+	 		    return new String[]{reportid};
+	 		      
+	 		}
+		 
+		 public void clickOnSubmitReportBtnThroughExpenseSearchTripIdFlow() {
+			 driver.findElement(By.xpath("//button[text()='Submit Report']")).click();
+		 }
+		 
+
+		 
+		 public void clickOnSubmitBtnFromExpenseReportSubmissionWarningpopup() {
+			 driver.findElement(By.xpath("//button[text()='Submit']")).click();
+		 }
+		 
+		 
+		 public void handleExpenseReportSubmission() {
+			    try {
+			        // 1️⃣ Check if warning/violation message is displayed
+			        WebElement warningDiv = driver.findElement(
+			            By.xpath("//div[contains(@class,'tg-typography_error')]/text()[normalize-space()]")
+			        );
+
+			        if (warningDiv.isDisplayed()) {
+			            System.out.println("Warning notification is displayed: " + warningDiv.getText().trim());
+
+			            // Click checkbox inside the warning popup
+			            WebElement checkboxInWarning = driver.findElement(
+			                By.xpath("//div[text()='Expense Report Submission']//following::input[@type='checkbox']/following-sibling::span")
+			            );
+			            checkboxInWarning.click();
+
+			            // Click Submit button in warning popup
+			            clickOnSubmitBtnFromExpenseReportSubmissionWarningpopup();
+			        }
+
+			    } catch (NoSuchElementException e) {
+			        // Warning not displayed → skip popup
+			        System.out.println("No warning popup. Proceeding with normal flow.");
+
+			        // 2️⃣ Enter remarks
+			        WebElement remarksField = driver.findElement(By.xpath("//input[@name='remarks']"));
+			        remarksField.sendKeys("Automated remarks");
+
+			        // 3️⃣ Click checkbox outside popup
+			        WebElement checkbox = driver.findElement(
+			            By.xpath("//div[text()='Expense Report Submission']//following::input[@type='checkbox']/following-sibling::span")
+			        );
+			        checkbox.click();
+
+			        // 4️⃣ Click Submit
+			        clickOnSubmitBtnFromExpenseReportSubmissionWarningpopup();
+			    }
+			}
+
+		 //Method to clcik on logs button
+		 public void clcikOnLogBtn() {
+			 driver.findElement(By.xpath("//button[text()='Logs']")).click();
+		 }
+		 
+	
+		 public String getApproverEmailByIndexPresentUnderLOgs(int index) {
+		     // Fetch all email elements dynamically
+		     List<WebElement> emailElements = driver.findElements(
+		         By.xpath("//div[contains(@class,'tg-approver-email')]")
+		     );
+
+		     // Return email at index (1-based)
+		     if (index > 0 && index <= emailElements.size()) {
+		         return emailElements.get(index - 1).getText().trim();
+		     }
+
+		     // Return empty string if index is too high
+		     return "";
+		 }
+
+		 
+		 public void clcikOnExpenseVerificationPendingBtn() {
+			 driver.findElement(By.xpath("//span[text()='Expense Verification Pending']")).click();
+		 }
+		 
+		
+		 
+		 public void SearchReportUnderExpenseVerificationPending(String... reportIds) {
+
+			    WebElement searchField = driver.findElement(
+			        By.xpath("//input[@placeholder='Search Reports']"));
+
+			    for (String reportid : reportIds) {
+			        searchField.clear();
+			        searchField.sendKeys(reportid);
+			    }
+			}
+
+		
+		 public void clcikOnStatusDropdownUnderFinanceMngr(String statusDropdown,Log log,ScreenShots ScreenShots) throws TimeoutException {
+			    try {
+			      //  log.ReportEvent("INFO", "Attempting to select status Dropdown : " + statusDropdown);
+
+				    WebElement Dropdown = driver.findElement(By.xpath("//div[contains(@class,'tg-select-box__dropdown')]"));
+				    Dropdown.click();
+
+			        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+			        WebElement option = wait.until(ExpectedConditions.elementToBeClickable(
+			            By.xpath("//span[text()='" + statusDropdown + "']"))
+			        );
+
+			        option.click();
+			        log.ReportEvent("PASS", "Successfully selected status Dropdown Under Finance manager: " + statusDropdown);
+
+			    } catch (NoSuchElementException e) {
+			        log.ReportEvent("FAIL", "Status dropdown or option '" + statusDropdown + "' not found on the page.");
+			        e.printStackTrace();
+			        ScreenShots.takeScreenShot1();
+
+			    } catch (Exception e) {
+			        log.ReportEvent("FAIL", "Unexpected error while selecting status dropdown " + e.getMessage());
+			        e.printStackTrace();
+			        ScreenShots.takeScreenShot1();
+
+			    }
+			}
+
+		 
+		 public void clcikOnProcessBtnUnderExpenseVerificationPending() {
+			 driver.findElement(By.xpath("//button[text()='Process']")).click();
+		 }
+		 
+		 public String[] enterVerificationRemarksUnderExpenseVerificationPending(String comment) {
+			    WebElement remarksField = driver.findElement(By.xpath("//input[@name='reimbursementref']"));
+			    remarksField.clear();
+			    remarksField.sendKeys(comment);
+			    System.out.println("Entered comment: " + comment);
+			    return new String[]{comment};
+			}
+		 
+		 public void clcikOnSubmitBtnUnderExpenseVerificationPending() {
+			 driver.findElement(By.xpath("//button[text()='Submit']")).click();
+		 }
+		 
+		 public void clcikOnReimburseBtnUnderExpenseVerificationPending() {
+			 driver.findElement(By.xpath("//button[text()='Reimburse']")).click();
+		 }
+		
+		 public void selectBankDuringReimbursed(String bankType,Log log,ScreenShots ScreenShots) throws TimeoutException {
+			    try {
+			        log.ReportEvent("INFO", "Attempting to select payment mode: " + bankType);
+
+				    WebElement bankTypedropdown = driver.findElement(By.xpath("//div[contains(@class,'tg-select-box__indicators css-1wy0on6')]"));
+				    bankTypedropdown.click();
+
+			        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+			        WebElement option = wait.until(ExpectedConditions.elementToBeClickable(
+			            By.xpath("//span[text()='" + bankType + "']"))
+			        );
+
+			        option.click();
+			        log.ReportEvent("PASS", "Successfully selected bankType: " + bankType);
+
+			    } catch (NoSuchElementException e) {
+			        log.ReportEvent("FAIL", "bankType dropdown or option '" + bankType + "' not found on the page.");
+			        e.printStackTrace();
+			        ScreenShots.takeScreenShot1();
+
+			    } catch (Exception e) {
+			        log.ReportEvent("FAIL", "Unexpected error while selecting bankType : " + e.getMessage());
+			        e.printStackTrace();
+			        ScreenShots.takeScreenShot1();
+
+			    }
+			}
+		 
+			public String[] enterBankReferenceText(String BankRefText) {
+			    WebElement BankRef = driver.findElement(By.xpath("//input[@name='bankRef']"));
+			    BankRef.clear();
+			    BankRef.sendKeys(BankRefText);
+			    System.out.println("Entered BankRefText: " + BankRefText);
+			    return new String[]{BankRefText};
+			} 
+		 
+			public String[] enterReimbursedRemarks(String ReimRemarks) {
+			    WebElement ReimbursedRemarks = driver.findElement(By.xpath("//input[@name='reimbursementref']"));
+			    ReimbursedRemarks.clear();
+			    ReimbursedRemarks.sendKeys(ReimRemarks);
+			    System.out.println("Entered ReimbursedRemarks: " + ReimRemarks);
+			    return new String[]{ReimRemarks};
+			} 
+			
+			
+			public String[] getStatusFromExpenseReportDetailsPg(Log log) {
+			    String Status = driver.findElement(By.xpath("(//div[contains(@class,'tg-label')])[2]")).getText();
+			    System.out.println("Expense Status : " + Status);
+		        log.ReportEvent("PASS", "Expense Status : " + Status);    
+			    return new String[]{Status};
+			}	
+		 
+//			 public void handleExpenseSubmissionAfterAddingExpense() {
+//				    try {
+//				        // 1️⃣ Check if warning/violation message is displayed
+//				        WebElement warningDiv = driver.findElement(
+//				            By.xpath("//div[contains(@class,'tg-typography_error')]/text()[normalize-space()]")
+//				        );
+//
+//				        if (warningDiv.isDisplayed()) {
+//				            System.out.println("Warning notification is displayed: " + warningDiv.getText().trim());
+//
+//				            // Click checkbox inside the warning popup
+//				            WebElement checkboxInWarning = driver.findElement(
+//				                By.xpath("//div[text()='Expense Submission']//following::input[@type='checkbox']/following-sibling::span")
+//				            );
+//				            checkboxInWarning.click();
+//
+//				            // Click Submit button in warning popup
+//				            clickOnSubmitBtnFromExpenseReportSubmissionWarningpopup();
+//				        }
+//
+//				    } catch (NoSuchElementException e) {
+//				        // Warning not displayed → skip popup
+//				        System.out.println("No warning popup. Proceeding with normal flow.");
+//
+//				        // 2️⃣ Enter remarks
+//				        WebElement remarksField = driver.findElement(By.xpath("//input[@name='remarks']"));
+//				        remarksField.sendKeys("Automated remarks");
+//
+//				        // 3️⃣ Click checkbox outside popup
+//				        WebElement checkbox = driver.findElement(
+//				            By.xpath("//div[text()='Expense Report Submission']//following::input[@type='checkbox']/following-sibling::span")
+//				        );
+//				        checkbox.click();
+//
+//				        // 4️⃣ Click Submit
+//				        clickOnSubmitBtnFromExpenseReportSubmissionWarningpopup();
+//				    }
+//				}
+
+		 
+
 }
