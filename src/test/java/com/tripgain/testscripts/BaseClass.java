@@ -23,7 +23,7 @@ public class BaseClass{
 
       
 		 WebDriver driver;
-		public WebDriver launchBrowser(String browser,String url)
+		public WebDriver launchBrowser1(String browser,String url)
 		{
 			if (browser.equalsIgnoreCase("chrome")) {
 				// Set the path to the ChromeDriver executable (optional if already set in system PATH)
@@ -49,6 +49,28 @@ public class BaseClass{
 			driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
 			return driver;
 		}
+		
+		public WebDriver launchBrowser(String browser,String url)
+		{
+			if (browser.equalsIgnoreCase("chrome")) {
+				// Set the path to the ChromeDriver executable (optional if already set in system PATH)
+				driver = new ChromeDriver();
+
+			} else if (browser.equalsIgnoreCase("firefox")) {
+				// Set the path to the GeckoDriver executable (optional if already set in system PATH)
+				driver = new FirefoxDriver();
+			} else if (browser.equalsIgnoreCase("edge")) {
+				// Set the path to the EdgeDriver executable (optional if already set in system PATH)
+				driver = new EdgeDriver();
+			} else {
+				throw new IllegalArgumentException("Unsupported browser: " + browser);
+			}
+			driver.get(url);
+			driver.manage().window().maximize();
+			driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
+			return driver;
+		}
+
 
 		@AfterSuite
 		public void afterSuite() throws InterruptedException {

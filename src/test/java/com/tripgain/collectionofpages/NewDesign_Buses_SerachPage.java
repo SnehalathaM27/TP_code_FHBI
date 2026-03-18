@@ -19,160 +19,150 @@ import com.tripgain.common.ScreenShots;
 public class NewDesign_Buses_SerachPage {
 	WebDriver driver;
 
-	public NewDesign_Buses_SerachPage (WebDriver driver)
-	{
+	public NewDesign_Buses_SerachPage(WebDriver driver) {
 		PageFactory.initElements(driver, this);
-		this.driver=driver;
+		this.driver = driver;
 	}
 
+	// Method to click on hotels
 
-	//Method to click on hotels 
-	
 	public void clickOnBuses() throws InterruptedException {
 		Thread.sleep(2000);
 		driver.findElement(By.xpath("//span[text()='Bus']")).click();
 	}
 
-
-	
-	
-
-	public void enterfromLocForBuses(String city,Log Log) {
+	public void enterfromLocForBuses(String city, Log Log) {
 	    try {
-	        // Optional: adjust zoom
+	        // 1. Adjust zoom
 	        JavascriptExecutor js = (JavascriptExecutor) driver;
 	        js.executeScript("document.body.style.zoom='80%'");
 
-	        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(70));
-	        WebElement searchField = wait.until(ExpectedConditions.elementToBeClickable(
-	            By.xpath("//input[@id='from']")));
-
+	        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+	        
+	        // 2. Find and fill the search field
+	        WebElement searchField = wait.until(ExpectedConditions.elementToBeClickable(By.id("from")));
 	        searchField.clear();
 	        searchField.sendKeys(city);
-	        Thread.sleep(1000);
-
-	        List<WebElement> listOfProperty = wait.until(
-	            ExpectedConditions.visibilityOfAllElementsLocatedBy(
-	                By.xpath("(//div[contains(@class,'tg-select__option')])[1]"))
-	        );
+	        
+	        // 3. Wait for the first option to be visible
+	        // We use the specific class from your HTML: tg-select__option
+	        By firstOptionBy = By.xpath("(//div[contains(@class,'tg-select__option')])[1]");
+	        
+	        List<WebElement> listOfProperty = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(firstOptionBy));
 
 	        if (!listOfProperty.isEmpty()) {
-	            Thread.sleep(2000);
 	            WebElement firstOption = listOfProperty.get(0);
 	            String selectedLocation = firstOption.getText();
-	            firstOption.click();
-	            Thread.sleep(1000);
 
-	            // Log the selected location
+	            // 4. FORCE CLICK using JavaScript
+	            // This is necessary because of the 80% zoom and React-Select's event handling
+	            js.executeScript("arguments[0].scrollIntoView({block: 'center'});", firstOption);
+	            js.executeScript("arguments[0].click();", firstOption);
+
 	            Log.ReportEvent("PASS", "Selected from Location: " + selectedLocation);
 	        } else {
-	            Log.ReportEvent("FAIL", "No options found in the dropdown.");
+	            Log.ReportEvent("FAIL", "No options found in the dropdown for: " + city);
 	        }
 	    } catch (Exception e) {
 	        Log.ReportEvent("ERROR", "Failed to select from location: " + e.getMessage());
 	    }
 	}
-
-
 	
-	public void enterToLocForBuses(String city,Log Log) {
+	public void enterToLocForBuses(String city, Log Log) {
 	    try {
-	        // Optional: adjust zoom
+	        // 1. Adjust zoom
 	        JavascriptExecutor js = (JavascriptExecutor) driver;
 	        js.executeScript("document.body.style.zoom='80%'");
 
-	        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(70));
-	        WebElement searchField = wait.until(ExpectedConditions.elementToBeClickable(
-	            By.xpath("//input[@id='to']")));
-
+	        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+	        
+	        // 2. Find and fill the search field
+	        WebElement searchField = wait.until(ExpectedConditions.elementToBeClickable(By.id("to")));
 	        searchField.clear();
 	        searchField.sendKeys(city);
-	        Thread.sleep(1000);
-
-	        List<WebElement> listOfProperty = wait.until(
-	            ExpectedConditions.visibilityOfAllElementsLocatedBy(
-	                By.xpath("(//div[contains(@class,'tg-select__option')])[1]"))
-	        );
+	        
+	        // 3. Wait for the first option to be visible
+	        // We use the specific class from your HTML: tg-select__option
+	        By firstOptionBy = By.xpath("(//div[contains(@class,'tg-select__option')])[1]");
+	        
+	        List<WebElement> listOfProperty = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(firstOptionBy));
 
 	        if (!listOfProperty.isEmpty()) {
-	            Thread.sleep(2000);
 	            WebElement firstOption = listOfProperty.get(0);
 	            String selectedLocation = firstOption.getText();
-	            firstOption.click();
-	            Thread.sleep(1000);
 
-	            // Log the selected location
-	            Log.ReportEvent("PASS", "Selected To Location: " + selectedLocation);
+	            // 4. FORCE CLICK using JavaScript
+	            // This is necessary because of the 80% zoom and React-Select's event handling
+	            js.executeScript("arguments[0].scrollIntoView({block: 'center'});", firstOption);
+	            js.executeScript("arguments[0].click();", firstOption);
+
+	            Log.ReportEvent("PASS", "Selected to Location: " + selectedLocation);
 	        } else {
-	            Log.ReportEvent("FAIL", "No options found in the dropdown.");
+	            Log.ReportEvent("FAIL", "No options found in the dropdown for: " + city);
 	        }
 	    } catch (Exception e) {
-	        Log.ReportEvent("ERROR", "Failed to select To location: " + e.getMessage());
+	        Log.ReportEvent("ERROR", "Failed to select to location: " + e.getMessage());
 	    }
 	}
+	
+	
+	
+
 	@FindBy(xpath = "//div[@class='tg-datepicker undefined']")
 	WebElement datePickerInput;
-	
-	//Method to Select Check-In Date By Passing Two Paramenters(Date and MounthYear)
-	public void selectDate(String day, String MonthandYear,Log Log) throws InterruptedException {
-	    TestExecutionNotifier.showExecutionPopup();
 
-	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-	    datePickerInput.click();
+	// Method to Select Check-In Date By Passing Two Paramenters(Date and
+	// MounthYear)
+	public void selectDate(String day, String MonthandYear, Log Log) throws InterruptedException {
+		TestExecutionNotifier.showExecutionPopup();
 
-	    // Wait until the calendar is visible and get the current month & year
-	    wait.until(ExpectedConditions.visibilityOfElementLocated(
-	        By.xpath("//div[@class='custom-header']")
-	    ));
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+		datePickerInput.click();
 
-	    String currentMonthYear = driver.findElement(
-	        By.xpath("//div[@class='custom-header']")
-	    ).getText();
+		// Wait until the calendar is visible and get the current month & year
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='custom-header']")));
 
-	    // Loop to navigate to the desired month
-	    while (!currentMonthYear.equals(MonthandYear)) {
-	        driver.findElement(By.xpath("(//button[contains(@class,'nav-arrow')])[2]")).click();
-	        wait.until(ExpectedConditions.textToBePresentInElementLocated(
-	            By.xpath("//*[@class='custom-header']"),
-	            MonthandYear
-	        ));
+		String currentMonthYear = driver.findElement(By.xpath("//div[@class='custom-header']")).getText();
 
-	        currentMonthYear = driver.findElement(
-	            By.xpath("//*[@class='custom-header']")
-	        ).getText();
-	    }
+		// Loop to navigate to the desired month
+		while (!currentMonthYear.equals(MonthandYear)) {
+			driver.findElement(By.xpath("(//button[contains(@class,'nav-arrow')])[2]")).click();
+			wait.until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//*[@class='custom-header']"),
+					MonthandYear));
 
-	    // Once the correct month is displayed, select the day
-	    WebElement dateElement = wait.until(ExpectedConditions.elementToBeClickable(
-	        By.xpath("(//div[@class='react-datepicker'])[1]//span[text()='" + day + "']")
-	    ));
+			currentMonthYear = driver.findElement(By.xpath("//*[@class='custom-header']")).getText();
+		}
 
-	    ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", dateElement);
-	    ((JavascriptExecutor) driver).executeScript("arguments[0].click();", dateElement);
+		// Once the correct month is displayed, select the day
+		WebElement dateElement = wait.until(ExpectedConditions
+				.elementToBeClickable(By.xpath("(//div[@class='react-datepicker'])[1]//span[text()='" + day + "']")));
 
-	    Log.ReportEvent("INFO", "Selected Date: " + day + " " + MonthandYear);
+		((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", dateElement);
+		((JavascriptExecutor) driver).executeScript("arguments[0].click();", dateElement);
+
+		Log.ReportEvent("INFO", "Selected Date: " + day + " " + MonthandYear);
 	}
-	
+
 	public void SearchBus(Log Log, ScreenShots screenshots) {
-	    driver.findElement(By.xpath("//button[text()='Search Bus']")).click();
+		driver.findElement(By.xpath("//button[text()='Search Bus']")).click();
 
-	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(70)); // wait up to 10 seconds
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(70)); // wait up to 10 seconds
 
-	    try {
-	        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[text()='Start your Journey!']")));
+		try {
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[text()='Start your Journey!']")));
 
-	        System.out.println("Message displayed: Start your Journey!");
+			System.out.println("Message displayed: Start your Journey!");
 
-	    } catch (TimeoutException e) {
+		} catch (TimeoutException e) {
 
-	        String pageText = driver.findElement(By.tagName("body")).getText();
-	        Log.ReportEvent("FAIL", "Failed to find 'Start your Journey!' message after clicking 'Search Bus'. Current page text: " + pageText);
-	        screenshots.takeScreenShot1();
+			String pageText = driver.findElement(By.tagName("body")).getText();
+			Log.ReportEvent("FAIL",
+					"Failed to find 'Start your Journey!' message after clicking 'Search Bus'. Current page text: "
+							+ pageText);
+			screenshots.takeScreenShot1();
 
-	        throw new RuntimeException("Test failed: 'Start your Journey!' message NOT found.");
-	    }
+			throw new RuntimeException("Test failed: 'Start your Journey!' message NOT found.");
+		}
 	}
-
-
 
 }

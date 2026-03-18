@@ -2,16 +2,12 @@
 <testng-results ignored="0" total="1" passed="0" failed="1" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2026-02-23T17:05:24 IST" name="Suite" finished-at="2026-02-23T17:09:57 IST" duration-ms="273396">
+  <suite started-at="2026-03-18T18:17:53 IST" name="Suite" finished-at="2026-03-18T18:18:42 IST" duration-ms="49146">
     <groups>
     </groups>
-    <test started-at="2026-02-23T17:05:24 IST" name="test4" finished-at="2026-02-23T17:05:24 IST" duration-ms="16">
-    </test> <!-- test4 -->
-    <test started-at="2026-02-23T17:05:24 IST" name="test3" finished-at="2026-02-23T17:05:24 IST" duration-ms="18">
-    </test> <!-- test3 -->
-    <test started-at="2026-02-23T17:05:24 IST" name="test1" finished-at="2026-02-23T17:05:24 IST" duration-ms="16">
-      <class name="NewDesign_Hotels_Flights.TCNDFL_4_GetRoundTrip_Combined_FlightsResponseBody">
-        <test-method is-config="true" signature="afterSuite()[pri:0, instance:NewDesign_Hotels_Flights.TCNDFL_4_GetRoundTrip_Combined_FlightsResponseBody@75db5df9]" started-at="2026-02-23T17:09:57 IST" name="afterSuite" finished-at="2026-02-23T17:09:57 IST" duration-ms="5" status="FAIL">
+    <test started-at="2026-03-18T18:17:53 IST" name="test1" finished-at="2026-03-18T18:17:53 IST" duration-ms="10">
+      <class name="NewDesign_Trips.TCNDTR_1_CreateTripsForHotels">
+        <test-method is-config="true" signature="afterSuite()[pri:0, instance:NewDesign_Trips.TCNDTR_1_CreateTripsForHotels@7530ad9c]" started-at="2026-03-18T18:18:42 IST" name="afterSuite" finished-at="2026-03-18T18:18:42 IST" duration-ms="6" status="FAIL">
           <exception class="java.lang.StackOverflowError">
             <full-stacktrace>
               <![CDATA[java.lang.StackOverflowError
@@ -1045,11 +1041,15 @@ at com.tripgain.common.ExtantManager.getReportFilePath(ExtantManager.java:81)
           <reporter-output>
           </reporter-output>
         </test-method> <!-- afterSuite -->
-      </class> <!-- NewDesign_Hotels_Flights.TCNDFL_4_GetRoundTrip_Combined_FlightsResponseBody -->
+      </class> <!-- NewDesign_Trips.TCNDTR_1_CreateTripsForHotels -->
     </test> <!-- test1 -->
-    <test started-at="2026-02-23T17:05:24 IST" name="test" finished-at="2026-02-23T17:09:57 IST" duration-ms="273396">
-      <class name="NewDesign_Hotels_Flights.TCNDFL_4_GetRoundTrip_Combined_FlightsResponseBody">
-        <test-method is-config="true" signature="launchApplication(java.lang.String,java.lang.reflect.Method,[Ljava.lang.Object;)[pri:0, instance:NewDesign_Hotels_Flights.TCNDFL_4_GetRoundTrip_Combined_FlightsResponseBody@75db5df9]" started-at="2026-02-23T17:05:25 IST" name="launchApplication" finished-at="2026-02-23T17:05:30 IST" duration-ms="5040" status="PASS">
+    <test started-at="2026-03-18T18:17:53 IST" name="test3" finished-at="2026-03-18T18:17:53 IST" duration-ms="10">
+    </test> <!-- test3 -->
+    <test started-at="2026-03-18T18:17:53 IST" name="test4" finished-at="2026-03-18T18:17:53 IST" duration-ms="10">
+    </test> <!-- test4 -->
+    <test started-at="2026-03-18T18:17:53 IST" name="test" finished-at="2026-03-18T18:18:42 IST" duration-ms="49146">
+      <class name="NewDesign_Trips.TCNDTR_1_CreateTripsForHotels">
+        <test-method is-config="true" signature="launchApplication(java.lang.String,java.lang.reflect.Method,[Ljava.lang.Object;)[pri:0, instance:NewDesign_Trips.TCNDTR_1_CreateTripsForHotels@7530ad9c]" started-at="2026-03-18T18:17:54 IST" name="launchApplication" finished-at="2026-03-18T18:17:57 IST" duration-ms="3212" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -1058,34 +1058,50 @@ at com.tripgain.common.ExtantManager.getReportFilePath(ExtantManager.java:81)
             </param>
             <param index="1">
               <value>
-                <![CDATA[public void NewDesign_Hotels_Flights.TCNDFL_4_GetRoundTrip_Combined_FlightsResponseBody.myTest(java.util.Map) throws java.lang.InterruptedException,java.io.IOException,java.text.ParseException,java.util.concurrent.TimeoutException]]>
+                <![CDATA[public void NewDesign_Trips.TCNDTR_1_CreateTripsForHotels.myTest(java.util.Map) throws java.lang.InterruptedException,java.io.IOException,java.text.ParseException,java.util.concurrent.TimeoutException]]>
               </value>
             </param>
             <param index="2">
               <value>
-                <![CDATA[[Ljava.lang.Object;@193f604a]]>
+                <![CDATA[[Ljava.lang.Object;@247d8ae]]>
               </value>
             </param>
           </params>
           <reporter-output>
           </reporter-output>
         </test-method> <!-- launchApplication -->
-        <test-method signature="myTest(java.util.Map)[pri:0, instance:NewDesign_Hotels_Flights.TCNDFL_4_GetRoundTrip_Combined_FlightsResponseBody@75db5df9]" started-at="2026-02-23T17:05:30 IST" name="myTest" data-provider="sheetBasedData" finished-at="2026-02-23T17:09:46 IST" duration-ms="256028" status="FAIL">
+        <test-method signature="myTest(java.util.Map)[pri:0, instance:NewDesign_Trips.TCNDTR_1_CreateTripsForHotels@7530ad9c]" started-at="2026-03-18T18:17:57 IST" name="myTest" data-provider="sheetBasedData" finished-at="2026-03-18T18:18:41 IST" duration-ms="44159" status="FAIL">
           <params>
             <param index="0">
               <value>
-                <![CDATA[{Origin=BLR, Destination=DXB, UserName=testtraveller98@tripgain.com, FareType=Flexi, Title=Mr, Reason=Better Flight Time, URL=https://neo.tripgain.com/, TestRun=, TripType=Round Trip, Class=Economy, Adults=1, SelectFlightIndex=2, Password=@AM@TGA1$29TN}]]>
+                <![CDATA[{Origin=Hyderabad, Destination=vijayawada, UserName=testtraveller98@tripgain.com, TripName=AutoStart1, TestRun=, URL=https://neo.tripgain.com/login, Password=@AM@TGA1$29TN}]]>
               </value>
             </param>
           </params>
           <exception class="java.lang.AssertionError">
             <message>
-              <![CDATA[Exception occurred: org.json.JSONException: A JSONObject text must begin with '{' at 0 [character 1 line 1]]]>
+              <![CDATA[Exception occurred: org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"(//div[contains(@id,'hotel-search-header-id')]//div[@class=' tg-typography tg-typography_subtitle-6 ms-1 fw-600 tg-typography_default'])[1]"}
+  (Session info: chrome=120.0.6099.110)
+For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Build info: version: '4.18.1', revision: 'b1d3319b48'
+System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.7'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Command: [5f533f3f908d76e58695a23e6ea21c58, findElement {using=xpath, value=(//div[contains(@id,'hotel-search-header-id')]//div[@class=' tg-typography tg-typography_subtitle-6 ms-1 fw-600 tg-typography_default'])[1]}]
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 120.0.6099.110, chrome: {chromedriverVersion: 120.0.6099.109 (3419140ab66..., userDataDir: C:\Users\LENOVO\AppData\Loc...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:61054}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:61054/devtoo..., se:cdpVersion: 120.0.6099.110, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: 5f533f3f908d76e58695a23e6ea21c58]]>
             </message>
             <full-stacktrace>
-              <![CDATA[java.lang.AssertionError: Exception occurred: org.json.JSONException: A JSONObject text must begin with '{' at 0 [character 1 line 1]
+              <![CDATA[java.lang.AssertionError: Exception occurred: org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {"method":"xpath","selector":"(//div[contains(@id,'hotel-search-header-id')]//div[@class=' tg-typography tg-typography_subtitle-6 ms-1 fw-600 tg-typography_default'])[1]"}
+  (Session info: chrome=120.0.6099.110)
+For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Build info: version: '4.18.1', revision: 'b1d3319b48'
+System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.7'
+Driver info: org.openqa.selenium.chrome.ChromeDriver
+Command: [5f533f3f908d76e58695a23e6ea21c58, findElement {using=xpath, value=(//div[contains(@id,'hotel-search-header-id')]//div[@class=' tg-typography tg-typography_subtitle-6 ms-1 fw-600 tg-typography_default'])[1]}]
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 120.0.6099.110, chrome: {chromedriverVersion: 120.0.6099.109 (3419140ab66..., userDataDir: C:\Users\LENOVO\AppData\Loc...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:61054}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:61054/devtoo..., se:cdpVersion: 120.0.6099.110, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: 5f533f3f908d76e58695a23e6ea21c58
 at org.testng.Assert.fail(Assert.java:111)
-at NewDesign_Hotels_Flights.TCNDFL_4_GetRoundTrip_Combined_FlightsResponseBody.myTest(TCNDFL_4_GetRoundTrip_Combined_FlightsResponseBody.java:315)
+at NewDesign_Trips.TCNDTR_1_CreateTripsForHotels.myTest(TCNDTR_1_CreateTripsForHotels.java:285)
 at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
@@ -1112,11 +1128,11 @@ at java.base/java.lang.Thread.run(Thread.java:1583)
           <reporter-output>
           </reporter-output>
         </test-method> <!-- myTest -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:NewDesign_Hotels_Flights.TCNDFL_4_GetRoundTrip_Combined_FlightsResponseBody@75db5df9]" started-at="2026-02-23T17:09:46 IST" name="tearDown" finished-at="2026-02-23T17:09:57 IST" duration-ms="11041" status="PASS">
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:NewDesign_Trips.TCNDTR_1_CreateTripsForHotels@7530ad9c]" started-at="2026-03-18T18:18:41 IST" name="tearDown" finished-at="2026-03-18T18:18:42 IST" duration-ms="810" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-      </class> <!-- NewDesign_Hotels_Flights.TCNDFL_4_GetRoundTrip_Combined_FlightsResponseBody -->
+      </class> <!-- NewDesign_Trips.TCNDTR_1_CreateTripsForHotels -->
     </test> <!-- test -->
   </suite> <!-- Suite -->
 </testng-results>

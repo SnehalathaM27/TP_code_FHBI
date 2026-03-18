@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.time.Duration;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -116,10 +117,13 @@ try {
         String userName = excelData.get("UserName");
         String password = excelData.get("Password");
         String[] dates = GenerateDates.GenerateDatesToSelectFlights();
-		 String fromDate=dates[11];
+        String fromDate=dates[11];
         String returnDate=dates[0];
         String fromMonthYear=dates[12];
         String returnMonthYear=dates[2];
+       
+
+        
        
         String origin = excelData.get("Origin");
         String destination = excelData.get("Destination");
@@ -140,70 +144,57 @@ try {
         
 			 //Login to application
 	         NewDesign_Login NewDesignLogin= new NewDesign_Login(driver);
-	        SkyTravelers_Hotels_Login SkyTravelersHotelsLogin= new SkyTravelers_Hotels_Login(driver);
+			Tripgain_HomePage_Flights tripgain_HomePage= new Tripgain_HomePage_Flights(driver);
+
 	        NewDesignLogin.enterUserName(username);
 	        NewDesignLogin.enterPasswordName(pwd);
 	        NewDesignLogin.clickButton(); 
 	  Log.ReportEvent("PASS", "Enter UserName and Password is Successful");
 	  Thread.sleep(2000);
+		tripgain_HomePage.clickIfPresentCloseBtn();
+
 	  NewDesignLogin.clickOnTravel();
 	  
-		Tripgain_HomePage_Flights tripgain_HomePage= new Tripgain_HomePage_Flights(driver);
 		Tripgain_BookingPage_Flights tripgain_BookingPage= new Tripgain_BookingPage_Flights(driver);
 
-	  
 	  // Method to Enter the Search Details
-		  tripgain_HomePage.verifyTripGainHomePageIsDisplayed(Log, screenShots);
-	      tripgain_HomePage.selectTripType(tripType);
-	      tripgain_HomePage.selectCabinClass(travelClass);
-	      tripgain_HomePage.selectFromLocation(origin);
-	      tripgain_HomePage.selectToLocation(destination);
-	      tripgain_HomePage.selectJourneyDate(fromDate,fromMonthYear);
-	        tripgain_HomePage.selectreturnJourneyDate(returnDate, returnMonthYear);
-	      tripgain_HomePage.selectTravellers(adults);
-	      tripgain_HomePage.clickSearchFlightsButton(Log, screenShots);
-	        
-	    
-     
-      
-      
-   // 1. Attempt to get the body
+	      tripgain_HomePage.verifyTripGainHomePageIsDisplayed(Log, screenShots);
+
+      tripgain_HomePage.selectTripType(tripType);
+      tripgain_HomePage.selectCabinClass(travelClass);
+      tripgain_HomePage.selectFromLocation(origin);
+      tripgain_HomePage.selectToLocation(destination);
+      tripgain_HomePage.selectJourneyDate(fromDate,fromMonthYear);
+      tripgain_HomePage.selectreturnJourneyDate(returnDate, returnMonthYear);
+      tripgain_HomePage.selectTravellers(adults);
+      tripgain_HomePage.clickSearchFlightsButton(Log, screenShots);
+        
+      // 1. Attempt to get the body
       String body1 = getResponseBodyByPartialUrl("TGFS&authtoken", 60);
 
       // Initialize the list so it's not null, even if the API fails
       List<Map<String, String>> uiFlightDetails = new ArrayList<>();
 
       if (body1 != null && !body1.isEmpty()) {
-          System.out.println(" Oneway Flight search Body found. Proceeding with validation...");
+          System.out.println(" Roundtrip Flight search Body found."+body1);
           embedApiResponseInReport("Oneway_FlightSearchAPI", body1);
 
           // Capture the UI segments
           uiFlightDetails = tripgain_HomePage.getDynamicFlightDetailsForRoundTripCombined(selectFlightIndex);
           
-          // Validate segments
           tripgain_HomePage.validateCombinedRoundTripSearchDataFromUIAndResponseBody(uiFlightDetails, body1, Log, screenShots);
 
           resetApiResponses();    
       } else {
-          // This is where it "skips"
-          System.out.println("⚠ failed to load response data: request content was evicted from inspector cache.");
-          System.out.println("⏭ Skipping validation and moving to the next line of code...");
+          System.out.println(" failed to load response data: request content was evicted from inspector cache.");
           
-          // Optional: If you still need the UI data for later steps even without API validation, 
-          // you can scrape it here as a fallback:
-          // uiFlightDetails = tripgain_HomePage.getDynamicFlightDetailsForRoundTripCombined(selectFlightIndex);
-      }
-
-      // --- NEXT LINE OF CODE ---
-      // The script will always reach here because we removed Assert.fail() from getResponseBodyByPartialUrl
-      System.out.println("🚀 Continuing with the rest of the test flow...");
-      // Proceed with booking, passenger details, etc.
-
+      }      
+      
       // --- FARE CARD SECTION ---
       
-      //Methods to get the Fare Details from Fare Care and Validate with Flight Info
-      tripgain_HomePage.clickViewFareByIndex(1);
-      
+      tripgain_HomePage.clickViewFareByIndex(selectFlightIndex);
+      Thread.sleep(3000); 
+
       // Scrape Fare Cards (Saver, Flexi, etc.)
       List<Map<String, String>> uiFareCards = tripgain_HomePage.getFareCardDetails();
 
@@ -221,13 +212,11 @@ try {
 
           // Perform Validation using the data already captured
           tripgain_HomePage.validateFareCardDetails(uiFareCards, body1, flightNums, Log, screenShots);
+          resetApiResponses(); 
+
       }
-      
-
-
-           
-      String[] fareDetails=tripgain_HomePage.clickOnSelectBasedOnFareType("Flexi",Log, screenShots);
-
+       
+       String[] fareDetails = tripgain_HomePage.clickOnSelectBasedOnFareType(fareType, Log, screenShots);
       Map<String, String> fareInfo = tripgain_HomePage.getFareDetailsFromFlightInfo(Log, screenShots);
       System.out.println("Fare Price: " + fareInfo.get("FarePrice"));
       System.out.println("Supplier: " + fareInfo.get("Supplier"));
@@ -236,51 +225,57 @@ try {
 
       Log.ReportEvent("INFO", "Validating the Fare Details from Fare Card to Flight info Card");
 
+      tripgain_HomePage.ValidateActualAndExpectedValuesForFlights(fareDetails[0],fareInfo.get("FarePrice"),"Fare Price from Fare Card to Flight Info",Log, screenShots);
+      tripgain_HomePage.ValidateActualAndExpectedValuesForFlights(fareDetails[2],fareInfo.get("Supplier"),"Supplier Name from Fare Card to Flight Info",Log, screenShots);
+      tripgain_HomePage.ValidateActualAndExpectedValuesForFlights(fareDetails[1],fareInfo.get("FareType"),"Fare Name from Fare Card to Flight Info",Log, screenShots);
       tripgain_HomePage.ValidateActualAndExpectedValuesForFlights(fareDetails[7],fareInfo.get("policyType"),"Policy Type from Fare Card to Flight Info",Log, screenShots);
 
+      tripgain_HomePage.handleReasonAndProceed(reason);
+      Thread.sleep(1000);
       
-      tripgain_HomePage.handleReasonAndProceed("Better Flight Time");
-
-      String body3 = getResponseBodyByPartialUrl("TGFS&authtoken=", 60);
+   /*  String body3 = getResponseBodyByPartialUrl("opid=TGFS&authtoken", 60);
       System.out.println("Oneway Flight Booking Body found: " + body3);
-      embedApiResponseInReport("Oneway_BookingSearchAPI", body3);
+      embedApiResponseInReport("Oneway_BookingSearchAPI", body3); */
       
-      //Method to Validate Booking Screen is Displayed
-      tripgain_BookingPage.validateBookingScreenIsDisplayed(Log, screenShots);
+      String urlIdentifier = "opid=TGFS&authtoken";
+      Map<String, String> markers = new HashMap<>();
+      markers.put("Booking", "ValidateSearchResponse");
+      markers.put("SSR", "CarrierSSR");
+      markers.put("SeatMap", "Status");
       
-      List<Map<String, String>> uiFlightBookingDetails = tripgain_HomePage.getCombinedRoundTripBookingFlightDetails();
+   // --- 3. FETCH AND CATEGORIZE (Dynamically) ---
+      Map<String, String> responses = getCategorizedResponses(urlIdentifier, markers, 60);
 
+      String bodyBooking = responses.getOrDefault("Booking", "");
+      String bodySeatMap = responses.getOrDefault("SeatMap", "");
+      String bodySSR = responses.getOrDefault("SSR", "");
       
-     
-      tripgain_HomePage.validateCombinedRoundTripBookingDataUIToBackend(uiFlightBookingDetails, body3, Log, screenShots);
+      if (!bodyBooking.isEmpty()) {
+    	    System.out.println(" Processing Booking Body."+bodyBooking);
+    	    embedApiResponseInReport("Oneway_FlightValidateSearchAPI", bodyBooking);
+    	    
+    	    tripgain_BookingPage.validateBookingScreenIsDisplayed(Log, screenShots);
+    	      List<Map<String, String>> uiFlightBookingDetails = tripgain_HomePage.getCombinedRoundTripBookingFlightDetails();
+    	      tripgain_HomePage.validateCombinedRoundTripSearchDataFromUIAndResponseBody(uiFlightBookingDetails, bodyBooking, Log, screenShots);
+    	} else {
+    	    Assert.fail("❌ Booking Search API Response not found.");
+    	}
 
-      Log.ReportEvent("INFO", "Validating the Final fare from Flight info Card to Booking Screen");
+    	if (!bodySeatMap.isEmpty()) {
+    	    System.out.println(" Processing SeatMap Body." +bodySeatMap);
+    	    embedApiResponseInReport("Oneway_GetSeatmapAPI", bodySeatMap);
+    	}
 
-      String totalFare=tripgain_BookingPage.getTotalFare();
-      tripgain_HomePage.ValidateActualAndExpectedValuesForFlights(fareInfo.get("FarePrice"),totalFare,"Total Cost from Result to Booking Screen",Log, screenShots);
-
-      String[] titles = title.split(",");
-      tripgain_BookingPage.enterAdultDetailsForDomestic(titles,adults,Log, screenShots);
+    	if (!bodySSR.isEmpty()) {
+    	    System.out.println(" Processing SSR Body."+bodySSR);
+    	    embedApiResponseInReport("Oneway_GETSSRAPI", bodySSR); 
+    	} 
       
-      
-     String body4 = getResponseBodyByPartialUrl("?opid=TGFS", 60);
-      System.out.println("Oneway Flight GetSeatmap Body found: " + body4);
-      embedApiResponseInReport("Oneway_GetSeatmapAPI", body4);
-
-     // resetApiResponses();  
-      
-      String body5 = getResponseBodyByPartialUrl("?opid=TGFS", 60);
-      System.out.println("Oneway Flight GETSSR Body found: " + body5);
-      embedApiResponseInReport("Oneway_GETSSRAPI", body5); 
-      
-      
-     
-    //  resetApiResponses();   
+  
 
       //Methods to Select the Add-on's and Validate
       
-      int addonsPricePrice = tripgain_BookingPage.selectAddOnsFlow2(Log, screenShots, body4, body5);  
-      System.out.println("Total price after add-ons selection: ₹ " + addonsPricePrice);    
+    	int addonsPricePrice = tripgain_BookingPage.selectAddOnsFlowForRTCombinedFts(Log, screenShots, bodySeatMap, bodySSR);      System.out.println("Total price after add-ons selection: ₹ " + addonsPricePrice);    
       String farePrice=fareInfo.get("FarePrice");
       String priceText = farePrice.replaceAll("[^0-9]", "");
       int farePriceInt = Integer.parseInt(priceText);
@@ -298,14 +293,14 @@ try {
       tripgain_HomePage.ValidateNumericValuesForFlights(bookingPrice,finalBookingPrice,"Final Fare from Booking",Log, screenShots);
       tripgain_BookingPage.clickProceedBookingAndValidateToast(Log, screenShots);
 
-	  
+//	  
 		// Function to Logout from Application
 		// tripgainhomepage.logOutFromApplication(Log, screenShots);
-		driver.quit();
+	//	driver.quit();
+		
 		
 
-     
-   	
+	
 }catch (Exception e)
 {
 	String errorMessage = "Exception occurred: " + e.toString();
@@ -316,8 +311,7 @@ try {
 }
  
 }
-
-    // Add this helper method to your class
+ // Add this helper method to your class
     private boolean isApiCallPresent(String apiName) {
         try {
             // Try to get the API response with a very short timeout just to check existence
@@ -340,39 +334,86 @@ try {
             return rawJson;
         }
     }
+ // 1. Method to fetch ALL responses matching the URL pattern
+  /*  public List<String> getAllResponseBodiesByUrl(String userPassedName, int timeoutSeconds) {
+        System.out.println("🔎 Searching for all API responses containing: " + userPassedName);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+
+        try {
+            // Wait until at least one response is captured
+            wait.until(d -> !allApiResponses.isEmpty());
+
+            // Filter all matching URLs and return their bodies
+            return allApiResponses.entrySet().stream()
+                    .filter(entry -> entry.getKey().contains(userPassedName))
+                    .map(Map.Entry::getValue)
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            System.out.println("⚠️ Error fetching APIs: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+    */
     
+     
    
 
-    public String getResponseBodyByPartialUrl(String userPassedName, int timeoutSeconds) {
+//    public String getResponseBodyByPartialUrl(String userPassedName, int timeoutSeconds) {
+//        System.out.println("🔎 Searching for API response containing: " + userPassedName);
+//        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+//
+//        try {
+//            // Wait until an entry in our map contains the user's string in its URL key
+//            wait.until(d -> allApiResponses.keySet().stream()
+//                    .anyMatch(url -> url.contains(userPassedName)));
+//
+//            // Find the full URL key that matches the user's string
+//            String fullUrl = allApiResponses.keySet().stream()
+//                    .filter(url -> url.contains(userPassedName))
+//                    .findFirst()
+//                    .get();
+//
+//            return allApiResponses.get(fullUrl);
+//        } catch (Exception e) {
+//            Assert.fail("❌ Could not find any captured API response containing: " + userPassedName);
+//            return null;
+//        }
+//    }
+    
+    public String getResponseBodyByPartialUrl(String userPassedName, int timeoutSeconds) throws TimeoutException {
         System.out.println("🔎 Searching for API response containing: " + userPassedName);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
 
         try {
-            // 1. Wait for the URL to appear in the map keys
+            // 1. Wait for the URL to appear in the captured keys
             wait.until(d -> allApiResponses.keySet().stream()
                     .anyMatch(url -> url.contains(userPassedName)));
 
-            // 2. Extract the full URL
+            // 2. Find the full URL key
             String fullUrl = allApiResponses.keySet().stream()
                     .filter(url -> url.contains(userPassedName))
                     .findFirst()
                     .orElse(null);
 
-            String body = (fullUrl != null) ? allApiResponses.get(fullUrl) : null;
-
-            // 3. CHECK FOR EMPTY/EVICTED BODY
-            if (body == null || body.trim().isEmpty()) {
-                System.out.println("⚠️ failed to load response data: request content was evicted from inspector cache");
-                return ""; // Return empty string so the calling code knows there's no data
+            if (fullUrl != null) {
+                String body = allApiResponses.get(fullUrl);
+                
+                // 3. CHECK IF BODY IS EMPTY (Evicted or missing)
+                if (body == null || body.trim().isEmpty()) {
+                    System.out.println("⚠️ failed to load response data: request content was evicted from inspector cache");
+                    return ""; // Return empty string to signal "nothing to validate"
+                }
+                return body;
             }
 
-            return body;
-
         } catch (Exception e) {
-            // Log the specific message you requested instead of failing the test
-            System.out.println("⚠️ failed to load response data: request content was evicted from inspector cache");
-            return ""; // Return empty to allow next lines of code to run
+            System.out.println("⚠️ Error during API capture: " + e.getMessage());
         }
+
+        // 4. LOG THE SPECIFIC EVICTION MESSAGE AND CONTINUE
+        System.out.println("⚠️ failed to load response data: request content was evicted from inspector cache");
+        return ""; // Return empty instead of Assert.fail to allow code to continue
     }
     
     public String getPartialResponseBodyByPartialUrl(String userPassedName, int timeoutSeconds) {
@@ -404,23 +445,93 @@ try {
         lastResetTime.set(System.currentTimeMillis());
     }
     
+    /**
+     * Fetches all responses for a URL pattern and categorizes them based on unique content markers.
+     */
+    public Map<String, String> getCategorizedResponses(String urlIdentifier, Map<String, String> contentMarkers, int waitSeconds) {
+        System.out.println("🔎 Waiting " + waitSeconds + " seconds to capture responses for: " + urlIdentifier);
+        
+        try {
+            // Wait for asynchronous calls to complete
+            Thread.sleep(waitSeconds * 1000); 
 
-  
+            // Filter all matching URLs from the map
+            Map<String, String> filteredResponses = allApiResponses.entrySet().stream()
+                    .filter(entry -> entry.getKey().contains(urlIdentifier))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
+            System.out.println("Total responses captured for " + urlIdentifier + ": " + filteredResponses.size());
+
+            Map<String, String> categorizedBodies = new ConcurrentHashMap<>();
+
+            // Categorize based on content markers
+            for (String responseBody : filteredResponses.values()) {
+                for (Map.Entry<String, String> marker : contentMarkers.entrySet()) {
+                    if (responseBody.contains(marker.getValue())) {
+                        categorizedBodies.put(marker.getKey(), responseBody);
+                        System.out.println("🎯 Identified Response: " + marker.getKey());
+                    }
+                }
+            }
+            return categorizedBodies;
+
+        } catch (Exception e) {
+            System.out.println("⚠️ Error fetching APIs: " + e.getMessage());
+            return new ConcurrentHashMap<>();
+        }
+    }
+    
+ 
+
+
+//    private void embedApiResponseInReport(String apiName, String responseBody) {
+//        try {
+//            String formattedJson = formatJson(responseBody);
+//
+//            test.log(Status.INFO,
+//                "<details style='margin-left:15px;'>"
+//              + "<summary style='cursor:pointer;font-weight:bold;'>📄 View "
+//              + apiName + " JSON Response</summary>"
+//              + "<pre style='white-space:pre-wrap; word-wrap:break-word; "
+//              + "max-height:400px; overflow:auto; background:#f4f4f4; "
+//              + "padding:10px; border:1px solid #ccc;'>"
+//              + formattedJson +
+//              "</pre></details>");
+//
+//        } catch (Exception e) {
+//            test.log(Status.WARNING, "Unable to embed API response: " + e.getMessage());
+//        }
+//    }
 
     private void embedApiResponseInReport(String apiName, String responseBody) {
         try {
             String formattedJson = formatJson(responseBody);
+            // We use a unique ID to ensure the script copies the correct text if there are multiple logs
+            String uniqueId = "copy_" + System.currentTimeMillis();
 
             test.log(Status.INFO,
-                "<details style='margin-left:15px;'>"
-              + "<summary style='cursor:pointer;font-weight:bold;'>📄 View "
-              + apiName + " JSON Response</summary>"
-              + "<pre style='white-space:pre-wrap; word-wrap:break-word; "
+                "<details style='margin-left:15px; border:1px solid #ddd; padding:5px; border-radius:4px;'>"
+              + "<summary style='cursor:pointer; font-weight:bold;'>📄 View " + apiName + " JSON Response</summary>"
+              + "<div style='position:relative; margin-top:10px;'>"
+              + "<button onclick=\"copyToClipboard('" + uniqueId + "')\" style='position:absolute; right:10px; top:10px; z-index:1; cursor:pointer; padding:5px 10px; background:#007bff; color:white; border:none; border-radius:3px; font-size:12px;'>Copy</button>"
+              + "<pre id='" + uniqueId + "' style='white-space:pre-wrap; word-wrap:break-word; "
               + "max-height:400px; overflow:auto; background:#f4f4f4; "
-              + "padding:10px; border:1px solid #ccc;'>"
-              + formattedJson +
-              "</pre></details>");
+              + "padding:10px; border:1px solid #ccc; font-family:monospace;'>"
+              + formattedJson + "</pre>"
+              + "</div>"
+              + "<script>"
+              + "function copyToClipboard(elementId) {"
+              + "  var text = document.getElementById(elementId).innerText;"
+              + "  var elem = document.createElement('textarea');"
+              + "  document.body.appendChild(elem);"
+              + "  elem.value = text;"
+              + "  elem.select();"
+              + "  document.execCommand('copy');"
+              + "  document.body.removeChild(elem);"
+              + "  alert('Response copied to clipboard!');"
+              + "}"
+              + "</script>"
+              + "</details>");
 
         } catch (Exception e) {
             test.log(Status.WARNING, "Unable to embed API response: " + e.getMessage());
@@ -428,78 +539,113 @@ try {
     }
 
 
-            @BeforeMethod(alwaysRun = true)
-            @Parameters("browser")
-            public void launchApplication(String browser, Method method, Object[] testDataObjects) {
-            // Get test data passed from DataProvider
-            @SuppressWarnings("unchecked")
-            Map<String, String> testData = (Map<String, String>) testDataObjects[0];
-            excelDataThread.set(testData);  // Set it early!
+    @BeforeMethod(alwaysRun = true)
+    @Parameters("browser")
+    public void launchApplication(String browser, Method method, Object[] testDataObjects) {
+    // Get test data passed from DataProvider
+    @SuppressWarnings("unchecked")
+    Map<String, String> testData = (Map<String, String>) testDataObjects[0];
+    excelDataThread.set(testData);  // Set it early!
 
-            String url = (testData != null && testData.get("URL") != null) ? testData.get("URL") : "https://defaulturl.com";
+    String url = (testData != null && testData.get("URL") != null) ? testData.get("URL") : "https://defaulturl.com";
 
-            extantManager = new ExtantManager();
-            extantManager.setUpExtentReporter(browser);
-            className = this.getClass().getSimpleName();
-            String testName = className + "_" + number;
-            extantManager.createTest(testName);
-            test = ExtantManager.getTest();
-            extent = extantManager.getReport();
-            test.log(Status.INFO, "Execution Started Successfully");
+    extantManager = new ExtantManager();
+    extantManager.setUpExtentReporter(browser);
+    className = this.getClass().getSimpleName();
+    String testName = className + "_" + number;
+    extantManager.createTest(testName);
+    test = ExtantManager.getTest();
+    extent = extantManager.getReport();
+    test.log(Status.INFO, "Execution Started Successfully");
 
-            driver = launchBrowser(browser, url);
-            
-            System.out.println("DRIVER CLASS = " + driver.getClass().getName());
+    driver = launchBrowser1(browser, url);
+    
+    System.out.println("DRIVER CLASS = " + driver.getClass().getName());
 
-            // 🔹 DevTools  and explanation 
-            // HasDevTools: Checks if the browser supports Chrome DevTools (Chrome and Edge do).
-            //createSession(): Opens a direct communication line between your Java code and the browser's internal engine.
-            //new Thread -- If we pause the main code, the browser freezes. By starting a new thread, the browser keeps working while our "spy" waits in the background.
-            //AtomicReference guarantees visibility between threads
-            //hotelSearchApiResponse.set(responseBody);  -- store the response body 
+    // 🔹 DevTools  and explanation 
+    // HasDevTools: Checks if the browser supports Chrome DevTools (Chrome and Edge do).
+    //createSession(): Opens a direct communication line between your Java code and the browser's internal engine.
+    //new Thread -- If we pause the main code, the browser freezes. By starting a new thread, the browser keeps working while our "spy" waits in the background.
+    //AtomicReference guarantees visibility between threads
+    //hotelSearchApiResponse.set(responseBody);  -- store the response body 
 
-            
-         // Thread-safe timestamp to track last reset
-            AtomicReference<Long> lastResetTime = new AtomicReference<>(System.currentTimeMillis());
+    
+ // Thread-safe timestamp to track last reset
+    AtomicReference<Long> lastResetTime = new AtomicReference<>(System.currentTimeMillis());
 
-            if (driver instanceof HasDevTools) {
-                devTools = ((HasDevTools) driver).getDevTools();
-                devTools.createSession();
-                devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
+//    if (driver instanceof HasDevTools) {
+//        devTools = ((HasDevTools) driver).getDevTools();
+//        devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
+//
+//        devTools.addListener(Network.responseReceived(), response -> {
+//            String apiUrl = response.getResponse().getUrl();
+//            RequestId requestId = response.getRequestId();
+//
+//            // Background thread to fetch the body for EVERY request
+//            new Thread(() -> {
+//                try {
+//                    // Short wait to ensure the response body is ready
+//                    Thread.sleep(1500);
+//
+//                    Network.GetResponseBodyResponse body = devTools.send(Network.getResponseBody(requestId));
+//                    String bodyText = body.getBody();
+//
+//                    // ✅ Only store responses captured AFTER the last reset
+//                    long currentTime = System.currentTimeMillis();
+//                    if (bodyText != null && !bodyText.isEmpty() && currentTime > lastResetTime.get()) {
+//                        allApiResponses.put(apiUrl, bodyText);
+//                    }
+//                } catch (Exception e) {
+//                    // Ignore non-XHR failures (images, css, etc.)
+//                }
+//            }).start();
+//        });
+//    }
+    
+ // --- UPDATE THIS PART INSIDE launchApplication ---
+    if (driver instanceof HasDevTools) {
+        devTools = ((HasDevTools) driver).getDevTools();
+        devTools.createSession();
+        devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
 
-                devTools.addListener(Network.responseReceived(), response -> {
-                    String apiUrl = response.getResponse().getUrl();
-                    RequestId requestId = response.getRequestId();
+        devTools.addListener(Network.responseReceived(), response -> {
+            String apiUrl = response.getResponse().getUrl();
+            RequestId requestId = response.getRequestId();
 
-                    // Background thread to fetch the body for EVERY request
-                    new Thread(() -> {
-                        try {
-                            // Short wait to ensure the response body is ready
-                            Thread.sleep(1500);
+            // Background thread to fetch the body
+            new Thread(() -> {
+                try {
+                    // Short wait to ensure the response body is ready
+                    Thread.sleep(1000);
 
-                            Network.GetResponseBodyResponse body = devTools.send(Network.getResponseBody(requestId));
-                            String bodyText = body.getBody();
+                    Network.GetResponseBodyResponse body = devTools.send(Network.getResponseBody(requestId));
+                    String bodyText = body.getBody();
 
-                            // ✅ Only store responses captured AFTER the last reset
-                            long currentTime = System.currentTimeMillis();
-                            if (bodyText != null && !bodyText.isEmpty() && currentTime > lastResetTime.get()) {
-                                allApiResponses.put(apiUrl, bodyText);
-                            }
-                        } catch (Exception e) {
-                            // Ignore non-XHR failures (images, css, etc.)
-                        }
-                    }).start();
-                });
-            }
-            Log = new Log(driver, test);
-             screenShots = new ScreenShots(driver, test);
-         }
-         
-            @AfterMethod
-            public void tearDown() {
-            if (driver != null) {
-             driver.quit();
-             extantManager.flushReport();
-            }
-            }
-            }
+                    // ✅ Store the response if it matches the URL pattern
+                    if (apiUrl.contains("opid=TGFS") && bodyText != null && !bodyText.isEmpty()) {
+                        // Use a unique key (URL + Timestamp) to prevent overwriting
+                        allApiResponses.put(apiUrl + "_" + System.currentTimeMillis(), bodyText);
+                        System.out.println("✅ Captured TGFS API: " + apiUrl);
+                    }
+                } catch (Exception e) {
+                    // Ignore failures (images, css, etc.)
+                }
+            }).start();
+        });
+    }
+    Log = new Log(driver, test);
+     screenShots = new ScreenShots(driver, test);
+ }
+ 
+    @AfterMethod
+    public void tearDown() {
+    if (driver != null) {
+     //driver.quit();
+     extantManager.flushReport();
+    }
+    }
+    }
+
+
+
+

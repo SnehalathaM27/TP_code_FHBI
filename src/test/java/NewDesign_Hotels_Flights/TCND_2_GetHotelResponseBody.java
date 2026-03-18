@@ -387,7 +387,7 @@ if (body1 != null) {
      extent = extantManager.getReport();
      test.log(Status.INFO, "Execution Started Successfully");
 
-     driver = launchBrowser(browser, url);
+     driver = launchBrowser1(browser, url);
      
      System.out.println("DRIVER CLASS = " + driver.getClass().getName());
 

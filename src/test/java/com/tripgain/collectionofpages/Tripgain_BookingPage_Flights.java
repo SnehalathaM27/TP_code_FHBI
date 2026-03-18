@@ -19,10 +19,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class Tripgain_BookingPage_Flights {
 	WebDriver driver;
 
-	public Tripgain_BookingPage_Flights(WebDriver driver)
-	{
+	public Tripgain_BookingPage_Flights(WebDriver driver) {
 		PageFactory.initElements(driver, this);
-		this.driver=driver;
+		this.driver = driver;
 	}
 
 	private static AtomicInteger backEndIssueCount = new AtomicInteger(0);
@@ -30,15 +29,14 @@ public class Tripgain_BookingPage_Flights {
 	public void validateBookingScreenIsDisplayed(Log Log, ScreenShots ScreenShots) {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(90));
-			wait.until(
-					ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(text(), 'Booking Summary')]"))
-			);
+			wait.until(ExpectedConditions
+					.visibilityOfElementLocated(By.xpath("//div[contains(text(), 'Booking Summary')]")));
 			Log.ReportEvent("PASS", "Review Your Flight Page is Displayed");
 			Thread.sleep(8000);
 		} catch (Exception e) {
 			if (isElementPresent(By.xpath("//p[@class='toast-title']"))) {
 				WebElement snackbar = driver.findElement(By.xpath("//p[@class='toast-title']"));
-				String errorMessage = snackbar.getText().trim();  // Get the actual text
+				String errorMessage = snackbar.getText().trim(); // Get the actual text
 
 				int currentCount = backEndIssueCount.incrementAndGet();
 
@@ -53,10 +51,6 @@ public class Tripgain_BookingPage_Flights {
 		}
 	}
 
-
-
-
-
 	// Your existing method for element presence check
 	private boolean isElementPresent(By locator) {
 		try {
@@ -70,12 +64,13 @@ public class Tripgain_BookingPage_Flights {
 		driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
 
 		List<WebElement> rows = driver.findElements(By.cssSelector(".flight-seat-map_row"));
-		String[] seatLetters = {"A", "B", "C", "D", "E", "F"};
+		String[] seatLetters = { "A", "B", "C", "D", "E", "F" };
 
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
 		for (WebElement row : rows) {
-			List<WebElement> rowNumberElems = row.findElements(By.cssSelector(".flight-seat-map_seat_aisle_row-number"));
+			List<WebElement> rowNumberElems = row
+					.findElements(By.cssSelector(".flight-seat-map_seat_aisle_row-number"));
 			String rowNumber = rowNumberElems.size() > 0 ? rowNumberElems.get(0).getText().trim() : "";
 
 			List<WebElement> seats = row.findElements(By.cssSelector(".flight-seat-map_seat"));
@@ -92,10 +87,8 @@ public class Tripgain_BookingPage_Flights {
 				}
 
 				String src = img.getAttribute("src");
-				if (src != null && (src.contains("/images/seat-free.svg")
-						|| src.contains("/images/seat-lowmid.svg")
-						|| src.contains("/images/seat-secondary.svg")
-						|| src.contains("/images/seat-premium.svg"))) {
+				if (src != null && (src.contains("/images/seat-free.svg") || src.contains("/images/seat-lowmid.svg")
+						|| src.contains("/images/seat-secondary.svg") || src.contains("/images/seat-premium.svg"))) {
 					try {
 						// Scroll into view
 						((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", seat);
@@ -109,7 +102,8 @@ public class Tripgain_BookingPage_Flights {
 
 						// ✅ Check for toast message
 						try {
-							WebElement toast = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//p[@class='toast-title']")));
+							WebElement toast = wait.until(
+									ExpectedConditions.presenceOfElementLocated(By.xpath("//p[@class='toast-title']")));
 							if (toast.isDisplayed()) {
 								String toastMessage = toast.getText().trim();
 								Log.ReportEvent("FAIL", "Seat selection failed. Toast message: " + toastMessage);
@@ -122,8 +116,10 @@ public class Tripgain_BookingPage_Flights {
 						// ✅ Wait for selection indication
 						try {
 							wait.until(ExpectedConditions.attributeContains(seat, "class", "selected"));
-							System.out.println("Selected seat: " + rowNumber + (i < seatLetters.length ? seatLetters[i] : ""));
-							Log.ReportEvent("PASS", "Selected seat: " + rowNumber + (i < seatLetters.length ? seatLetters[i] : ""));
+							System.out.println(
+									"Selected seat: " + rowNumber + (i < seatLetters.length ? seatLetters[i] : ""));
+							Log.ReportEvent("PASS",
+									"Selected seat: " + rowNumber + (i < seatLetters.length ? seatLetters[i] : ""));
 							return;
 						} catch (TimeoutException e) {
 							System.out.println("Seat clicked, but no confirmation of selection.");
@@ -131,7 +127,8 @@ public class Tripgain_BookingPage_Flights {
 						}
 
 					} catch (Exception e) {
-						System.out.println("Failed to click seat at: " + rowNumber + (i < seatLetters.length ? seatLetters[i] : "") + " - " + e.getMessage());
+						System.out.println("Failed to click seat at: " + rowNumber
+								+ (i < seatLetters.length ? seatLetters[i] : "") + " - " + e.getMessage());
 						continue;
 					}
 				}
@@ -141,10 +138,6 @@ public class Tripgain_BookingPage_Flights {
 		Log.ReportEvent("FAIL", "No available seats found.");
 		System.out.println("No available seats found.");
 	}
-
-
-
-
 
 	public void selectFirstAvailableMeal() {
 		// Find all "Add" buttons for meals
@@ -189,10 +182,11 @@ public class Tripgain_BookingPage_Flights {
 		int totalPrice = 0;
 
 		// Find all price elements
-		List<WebElement> priceElements = driver.findElements(By.xpath("//div[@class='special-service-request_add-on_text']/div"));
+		List<WebElement> priceElements = driver
+				.findElements(By.xpath("//div[@class='special-service-request_add-on_text']/div"));
 
 		for (WebElement priceElem : priceElements) {
-			String priceText = priceElem.getText().trim();  // Example: "₹ 0", "₹ 10", "₹ 40"
+			String priceText = priceElem.getText().trim(); // Example: "₹ 0", "₹ 10", "₹ 40"
 
 			// Remove currency symbol and commas, then parse to int
 			// Using regex to extract digits only, assuming format "₹ 1,000" or "₹ 1000"
@@ -222,8 +216,7 @@ public class Tripgain_BookingPage_Flights {
 		driver.findElement(By.xpath("//*[text()='Select Add-Ons']")).click();
 	}
 
-
-	//Method to get the Final Price
+	// Method to get the Final Price
 	public String getFinalPrice() {
 		// Locate the element using the provided XPath
 		WebElement priceElement = driver.findElement(By.xpath("//div[text()='Total Fare']/following-sibling::div"));
@@ -240,8 +233,7 @@ public class Tripgain_BookingPage_Flights {
 		try {
 			// Wait for the button to be visible and clickable
 			WebElement button = wait.until(ExpectedConditions.elementToBeClickable(
-					By.xpath("//button[@class='flight-booking-page_flight-details_content_action-btn']"))
-			);
+					By.xpath("//button[@class='flight-booking-page_flight-details_content_action-btn']")));
 
 			// Click the button
 			button.click();
@@ -256,7 +248,8 @@ public class Tripgain_BookingPage_Flights {
 
 	public Map<String, List<String>> clickIfPresentAndGetBookingData() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-		By showConnectedFlightsBtn = By.xpath("//div[contains(@class,'flight-booking-page_flight-details flight_0')]//button/span");
+		By showConnectedFlightsBtn = By
+				.xpath("//div[contains(@class,'flight-booking-page_flight-details flight_0')]//button/span");
 
 		try {
 			List<WebElement> buttons = driver.findElements(showConnectedFlightsBtn);
@@ -293,7 +286,8 @@ public class Tripgain_BookingPage_Flights {
 
 	public Map<String, List<String>> clickIfPresentAndGetBookingDataForReturnFlight() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-		By showConnectedFlightsBtn = By.xpath("//div[contains(@class,'flight-booking-page_flight-details flight_1')]//button/span");
+		By showConnectedFlightsBtn = By
+				.xpath("//div[contains(@class,'flight-booking-page_flight-details flight_1')]//button/span");
 
 		try {
 			List<WebElement> buttons = driver.findElements(showConnectedFlightsBtn);
@@ -328,8 +322,7 @@ public class Tripgain_BookingPage_Flights {
 		return getDataFromBookingScreenByXPathForReturnFlight();
 	}
 
-
-	//Method to Get the Data from Booking Screen.
+	// Method to Get the Data from Booking Screen.
 	public Map<String, List<String>> getDataFromBookingScreenByXPathForReturnFlight() {
 		TestExecutionNotifier.showExecutionPopup();
 		Map<String, List<String>> data = new LinkedHashMap<>();
@@ -337,13 +330,20 @@ public class Tripgain_BookingPage_Flights {
 
 		// Map of labels to XPaths for the booking screen (return flight)
 		Map<String, String> xpathMap = new LinkedHashMap<>();
-		xpathMap.put("departureTime", "//div[contains(@class,'flight-booking-page_flight-details flight_1')]//div[contains(@class,'tg-deptime')]");
-		xpathMap.put("originFullName", "//div[contains(@class,'flight-booking-page_flight-details flight_1')]//div[contains(@class,'tg-origin-fullname')]");
-		xpathMap.put("arrivalTime", "//div[contains(@class,'flight-booking-page_flight-details flight_1')]//div[contains(@class,'tg-arrtime')]");
-		xpathMap.put("destinationFullName", "//div[contains(@class,'flight-booking-page_flight-details flight_1')]//div[contains(@class,'tg-destination-fullname')]");
-		xpathMap.put("cabinClass", "//div[contains(@class,'flight-booking-page_flight-details flight_1')]//div[contains(@class,'tg-cabinclass')]");
-		xpathMap.put("duration", "//div[contains(@class,'flight-booking-page_flight-details flight_1')]//div[contains(@class,'tg-mb-duration')]");
-		xpathMap.put("layoverText", "//div[contains(@class,'flight-booking-page_flight-details flight_1')]//span[@aria-label]");
+		xpathMap.put("departureTime",
+				"//div[contains(@class,'flight-booking-page_flight-details flight_1')]//div[contains(@class,'tg-deptime')]");
+		xpathMap.put("originFullName",
+				"//div[contains(@class,'flight-booking-page_flight-details flight_1')]//div[contains(@class,'tg-origin-fullname')]");
+		xpathMap.put("arrivalTime",
+				"//div[contains(@class,'flight-booking-page_flight-details flight_1')]//div[contains(@class,'tg-arrtime')]");
+		xpathMap.put("destinationFullName",
+				"//div[contains(@class,'flight-booking-page_flight-details flight_1')]//div[contains(@class,'tg-destination-fullname')]");
+		xpathMap.put("cabinClass",
+				"//div[contains(@class,'flight-booking-page_flight-details flight_1')]//div[contains(@class,'tg-cabinclass')]");
+		xpathMap.put("duration",
+				"//div[contains(@class,'flight-booking-page_flight-details flight_1')]//div[contains(@class,'tg-mb-duration')]");
+		xpathMap.put("layoverText",
+				"//div[contains(@class,'flight-booking-page_flight-details flight_1')]//span[@aria-label]");
 
 		for (Map.Entry<String, String> entry : xpathMap.entrySet()) {
 			String key = entry.getKey();
@@ -393,10 +393,6 @@ public class Tripgain_BookingPage_Flights {
 		return data;
 	}
 
-
-
-
-
 	// Method to Get the Data from Booking Screen.
 // Method to Get the Data from Booking Screen.
 	public Map<String, List<String>> getDataFromBookingScreenByXPath() {
@@ -406,12 +402,18 @@ public class Tripgain_BookingPage_Flights {
 
 		// Map of labels to XPaths for the booking screen
 		Map<String, String> xpathMap = new LinkedHashMap<>();
-		xpathMap.put("departureTime", "//div[contains(@class,'flight-booking-page_flight-details flight_0')]//div[contains(@class,'tg-deptime')]");
-		xpathMap.put("originFullName", "//div[contains(@class,'flight-booking-page_flight-details flight_0')]//div[contains(@class,'tg-origin-fullname')]");
-		xpathMap.put("arrivalTime", "//div[contains(@class,'flight-booking-page_flight-details flight_0')]//div[contains(@class,'tg-arrtime')]");
-		xpathMap.put("destinationFullName", "//div[contains(@class,'flight-booking-page_flight-details flight_0')]//div[contains(@class,'tg-destination-fullname')]");
-		xpathMap.put("cabinClass", "//div[contains(@class,'flight-booking-page_flight-details flight_0')]//div[contains(@class,'tg-cabinclass')]");
-		xpathMap.put("duration", "//div[contains(@class,'flight-booking-page_flight-details flight_0')]//div[contains(@class,'tg-mb-duration')]");
+		xpathMap.put("departureTime",
+				"//div[contains(@class,'flight-booking-page_flight-details flight_0')]//div[contains(@class,'tg-deptime')]");
+		xpathMap.put("originFullName",
+				"//div[contains(@class,'flight-booking-page_flight-details flight_0')]//div[contains(@class,'tg-origin-fullname')]");
+		xpathMap.put("arrivalTime",
+				"//div[contains(@class,'flight-booking-page_flight-details flight_0')]//div[contains(@class,'tg-arrtime')]");
+		xpathMap.put("destinationFullName",
+				"//div[contains(@class,'flight-booking-page_flight-details flight_0')]//div[contains(@class,'tg-destination-fullname')]");
+		xpathMap.put("cabinClass",
+				"//div[contains(@class,'flight-booking-page_flight-details flight_0')]//div[contains(@class,'tg-cabinclass')]");
+		xpathMap.put("duration",
+				"//div[contains(@class,'flight-booking-page_flight-details flight_0')]//div[contains(@class,'tg-mb-duration')]");
 		xpathMap.put("layoverText", "//div[contains(@class,' oneway-card__connect_line_text')]//span");
 
 		for (Map.Entry<String, String> entry : xpathMap.entrySet()) {
@@ -462,24 +464,20 @@ public class Tripgain_BookingPage_Flights {
 		return data;
 	}
 
-
-
-
-	//Method to Validate Flight Details From Result to Booking Screen.
+	// Method to Validate Flight Details From Result to Booking Screen.
 	public void validateSearchAndBookingDataByXPath(Map<String, List<String>> searchData,
-													Map<String, List<String>> bookingData,
-													Log log, ScreenShots screenShots) {
+			Map<String, List<String>> bookingData, Log log, ScreenShots screenShots) {
 		TestExecutionNotifier.showExecutionPopup();
 
 		// Friendly field name -> [searchDataKey, bookingDataKey]
 		Map<String, String[]> fieldMappings = new LinkedHashMap<>();
-		fieldMappings.put("Departure Time", new String[]{"fromDepartureTime", "departureTime"});
-		fieldMappings.put("Origin", new String[]{"fromOrigin", "originFullName"});
-		fieldMappings.put("Arrival Time", new String[]{"fromArrivalTime", "arrivalTime"});
-		fieldMappings.put("Destination", new String[]{"fromDestination", "destinationFullName"});
-		fieldMappings.put("Cabin Class", new String[]{"cabinClass", "cabinClass"});
-		fieldMappings.put("Duration", new String[]{"totalDuration", "duration"});
-		fieldMappings.put("Layover Info", new String[]{"connectionLineText", "layoverText"});
+		fieldMappings.put("Departure Time", new String[] { "fromDepartureTime", "departureTime" });
+		fieldMappings.put("Origin", new String[] { "fromOrigin", "originFullName" });
+		fieldMappings.put("Arrival Time", new String[] { "fromArrivalTime", "arrivalTime" });
+		fieldMappings.put("Destination", new String[] { "fromDestination", "destinationFullName" });
+		fieldMappings.put("Cabin Class", new String[] { "cabinClass", "cabinClass" });
+		fieldMappings.put("Duration", new String[] { "totalDuration", "duration" });
+		fieldMappings.put("Layover Info", new String[] { "connectionLineText", "layoverText" });
 
 		boolean allMatch = true;
 
@@ -499,8 +497,7 @@ public class Tripgain_BookingPage_Flights {
 
 				if (!searchVal.equals(bookingVal)) {
 					allMatch = false;
-					log.ReportEvent("FAIL", String.format(
-							"Mismatch in '%s' at index %d: Search = '%s', Booking = '%s'",
+					log.ReportEvent("FAIL", String.format("Mismatch in '%s' at index %d: Search = '%s', Booking = '%s'",
 							label, i + 1, searchVal, bookingVal));
 					screenShots.takeScreenShot();
 					Assert.fail(); // Optional: remove this if you want to collect all mismatches before failing
@@ -515,58 +512,57 @@ public class Tripgain_BookingPage_Flights {
 		}
 	}
 
-
-    //Method to Get the Data from Booking Screen
+	// Method to Get the Data from Booking Screen
 	public Map<String, String> getDataFromBookingPage() {
 		Map<String, String> fareDetails = new HashMap<>();
 		// Wait setup (optional but recommended)
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		// Get fare price text
-		WebElement fareNameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-				By.xpath("(//span[@class='tg-origin-destination']//span)[3]")));
-		String fareName=fareNameElement.getText().trim();		;
+		WebElement fareNameElement = wait.until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("(//span[@class='tg-origin-destination']//span)[3]")));
+		String fareName = fareNameElement.getText().trim();
+		;
 		fareDetails.put("FareName", fareName.replaceFirst("^\\|\\s*", "").trim());
 
-
 		// Get supplier name from img alt attribute
-		WebElement supplierImg = wait.until(ExpectedConditions.visibilityOfElementLocated(
-				By.xpath("//div[contains(@class,'flight-booking-page_flight-details flight_0')]//img[contains(@class,'tg-supplier-img')]")));
+		WebElement supplierImg = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+				"//div[contains(@class,'flight-booking-page_flight-details flight_0')]//img[contains(@class,'tg-supplier-img')]")));
 		String supplierName = supplierImg.getAttribute("alt");
 		fareDetails.put("Supplier", supplierName);
 
-		WebElement policyElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-				By.xpath("//div[contains(@class,'flight-booking-page_flight-details flight_0')]//div[contains(@class,'tg-policy')]")));
+		WebElement policyElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+				"//div[contains(@class,'flight-booking-page_flight-details flight_0')]//div[contains(@class,'tg-policy')]")));
 		fareDetails.put("PolicyType", policyElement.getText().trim());
 
 		return fareDetails;
 	}
 
-	//Method to Get the Data from Booking Screen
+	// Method to Get the Data from Booking Screen
 	public Map<String, String> getDataFromBookingPageForReturnFlights() {
 		Map<String, String> fareDetails = new HashMap<>();
 		// Wait setup (optional but recommended)
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		// Get fare price text
-		WebElement fareNameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-				By.xpath("(//div[contains(@class,'flight-booking-page_flight-details flight_1')]//span[@class='tg-origin-destination']/span)[3]")));
-		String fareName=fareNameElement.getText().trim();		;
+		WebElement fareNameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+				"(//div[contains(@class,'flight-booking-page_flight-details flight_1')]//span[@class='tg-origin-destination']/span)[3]")));
+		String fareName = fareNameElement.getText().trim();
+		;
 		fareDetails.put("FareName", fareName.replaceFirst("^\\|\\s*", "").trim());
 
 		// Get supplier name from img alt attribute
-		WebElement supplierImg = wait.until(ExpectedConditions.visibilityOfElementLocated(
-				By.xpath("//div[contains(@class,'flight-booking-page_flight-details flight_1')]//img[contains(@class,'tg-supplier-img')]")));
+		WebElement supplierImg = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+				"//div[contains(@class,'flight-booking-page_flight-details flight_1')]//img[contains(@class,'tg-supplier-img')]")));
 		String supplierName = supplierImg.getAttribute("alt");
 		fareDetails.put("Supplier", supplierName);
 
-		WebElement policyElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-				By.xpath("//div[contains(@class,'flight-booking-page_flight-details flight_1')]//div[contains(@class,'tg-policy')]")));
+		WebElement policyElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+				"//div[contains(@class,'flight-booking-page_flight-details flight_1')]//div[contains(@class,'tg-policy')]")));
 		fareDetails.put("PolicyType", policyElement.getText().trim());
 
 		return fareDetails;
 	}
 
-
-    //Method to Click on Proceed Booking.
+	// Method to Click on Proceed Booking.
 	public void clickProceedBookingAndValidateToast(Log log, ScreenShots screenShots) {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
 
@@ -607,15 +603,13 @@ public class Tripgain_BookingPage_Flights {
 		}
 	}
 
-
 	public String[] getJourneyDetails() {
 		String[] journeys = new String[2];
 
 		// XPaths for flight_0 and flight_1
 		String[] xpaths = {
 				"//div[contains(@class,'flight-booking-page_flight-details flight_0')]//span[@class='tg-origin-destination']",
-				"//div[contains(@class,'flight-booking-page_flight-details flight_1')]//span[@class='tg-origin-destination']"
-		};
+				"//div[contains(@class,'flight-booking-page_flight-details flight_1')]//span[@class='tg-origin-destination']" };
 
 		for (int i = 0; i < xpaths.length; i++) {
 			String raw = driver.findElement(By.xpath(xpaths[i])).getText();
@@ -628,9 +622,7 @@ public class Tripgain_BookingPage_Flights {
 
 	public String getTotalFare() {
 		// Locate the element after "Total Fare"
-		String raw = driver.findElement(
-				By.xpath("//div[text()='Total Fare']/following-sibling::div")
-		).getText();
+		String raw = driver.findElement(By.xpath("//div[text()='Total Fare']/following-sibling::div")).getText();
 
 		// Trim to remove extra spaces
 		return raw.trim();
@@ -638,7 +630,8 @@ public class Tripgain_BookingPage_Flights {
 
 	public Map<String, List<String>> clickIfPresentAndGetBookingDataForInternationDepartingFlight() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		By showConnectedFlightsBtn = By.xpath("(//div[contains(@class,'flight-booking-page_flight-details')])[1]//button/span");
+		By showConnectedFlightsBtn = By
+				.xpath("(//div[contains(@class,'flight-booking-page_flight-details')])[1]//button/span");
 
 		try {
 			List<WebElement> buttons = driver.findElements(showConnectedFlightsBtn);
@@ -673,8 +666,7 @@ public class Tripgain_BookingPage_Flights {
 		return getDataFromBookingScreenByXPathForInterNationalDepartingFlight();
 	}
 
-
-	//Method to Get the Data from Booking Screen.
+	// Method to Get the Data from Booking Screen.
 	public Map<String, List<String>> getDataFromBookingScreenByXPathForInterNationalDepartingFlight() {
 		TestExecutionNotifier.showExecutionPopup();
 		Map<String, List<String>> data = new LinkedHashMap<>();
@@ -682,13 +674,20 @@ public class Tripgain_BookingPage_Flights {
 
 		// Map of labels to XPaths for the booking screen
 		Map<String, String> xpathMap = new LinkedHashMap<>();
-		xpathMap.put("departureTime", "(//div[contains(@class,'flight-booking-page_flight-details')])[1]//div[contains(@class,'tg-deptime')]");
-		xpathMap.put("originFullName", "(//div[contains(@class,'flight-booking-page_flight-details')])[1]//div[contains(@class,'tg-origin-fullname')]");
-		xpathMap.put("arrivalTime", "(//div[contains(@class,'flight-booking-page_flight-details')])[1]//div[contains(@class,'tg-arrtime')]");
-		xpathMap.put("destinationFullName", "(//div[contains(@class,'flight-booking-page_flight-details')])[1]//div[contains(@class,'tg-destination-fullname')]");
-		xpathMap.put("cabinClass", "(//div[contains(@class,'flight-booking-page_flight-details')])[1]//div[contains(@class,'tg-cabinclass')]");
-		xpathMap.put("duration", "(//div[contains(@class,'flight-booking-page_flight-details')])[1]//div[contains(@class,'tg-mb-duration')]");
-		xpathMap.put("layoverText", "(//div[contains(@class,'flight-booking-page_flight-details')])[1]//div[contains(@class,'oneway-card__connect_line_text')]//span");
+		xpathMap.put("departureTime",
+				"(//div[contains(@class,'flight-booking-page_flight-details')])[1]//div[contains(@class,'tg-deptime')]");
+		xpathMap.put("originFullName",
+				"(//div[contains(@class,'flight-booking-page_flight-details')])[1]//div[contains(@class,'tg-origin-fullname')]");
+		xpathMap.put("arrivalTime",
+				"(//div[contains(@class,'flight-booking-page_flight-details')])[1]//div[contains(@class,'tg-arrtime')]");
+		xpathMap.put("destinationFullName",
+				"(//div[contains(@class,'flight-booking-page_flight-details')])[1]//div[contains(@class,'tg-destination-fullname')]");
+		xpathMap.put("cabinClass",
+				"(//div[contains(@class,'flight-booking-page_flight-details')])[1]//div[contains(@class,'tg-cabinclass')]");
+		xpathMap.put("duration",
+				"(//div[contains(@class,'flight-booking-page_flight-details')])[1]//div[contains(@class,'tg-mb-duration')]");
+		xpathMap.put("layoverText",
+				"(//div[contains(@class,'flight-booking-page_flight-details')])[1]//div[contains(@class,'oneway-card__connect_line_text')]//span");
 
 		for (Map.Entry<String, String> entry : xpathMap.entrySet()) {
 			String key = entry.getKey();
@@ -739,7 +738,8 @@ public class Tripgain_BookingPage_Flights {
 
 	public Map<String, List<String>> clickIfPresentAndGetBookingDataForInternationReturnFlight() {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(18));
-		By showConnectedFlightsBtn = By.xpath("(//div[contains(@class,'flight-booking-page_flight-details_content')])[2]//button/span");
+		By showConnectedFlightsBtn = By
+				.xpath("(//div[contains(@class,'flight-booking-page_flight-details_content')])[2]//button/span");
 
 		try {
 			List<WebElement> buttons = driver.findElements(showConnectedFlightsBtn);
@@ -774,8 +774,7 @@ public class Tripgain_BookingPage_Flights {
 		return getDataFromBookingScreenByXPathForInterNationalReturnFlight();
 	}
 
-
-	//Method to Get the Data from Booking Screen.
+	// Method to Get the Data from Booking Screen.
 	public Map<String, List<String>> getDataFromBookingScreenByXPathForInterNationalReturnFlight() {
 		TestExecutionNotifier.showExecutionPopup();
 		Map<String, List<String>> data = new LinkedHashMap<>();
@@ -783,13 +782,20 @@ public class Tripgain_BookingPage_Flights {
 
 		// Map of labels to XPaths for the international return flight booking screen
 		Map<String, String> xpathMap = new LinkedHashMap<>();
-		xpathMap.put("departureTime", "(//div[contains(@class,'flight-booking-page_flight-details_content')])[2]//div[contains(@class,'tg-deptime')]");
-		xpathMap.put("originFullName", "(//div[contains(@class,'flight-booking-page_flight-details_content')])[2]//div[contains(@class,'tg-origin-fullname')]");
-		xpathMap.put("arrivalTime", "(//div[contains(@class,'flight-booking-page_flight-details_content')])[2]//div[contains(@class,'tg-arrtime')]");
-		xpathMap.put("destinationFullName", "(//div[contains(@class,'flight-booking-page_flight-details_content')])[2]//div[contains(@class,'tg-destination-fullname')]");
-		xpathMap.put("cabinClass", "(//div[contains(@class,'flight-booking-page_flight-details_content')])[2]//div[contains(@class,'tg-cabinclass')]");
-		xpathMap.put("duration", "(//div[contains(@class,'flight-booking-page_flight-details_content')])[2]//div[contains(@class,'tg-mb-duration')]");
-		xpathMap.put("layoverText", "(//div[contains(@class,'flight-booking-page_flight-details_content')])[2]//div[contains(@class,'oneway-card__connect_line_text')]//span");
+		xpathMap.put("departureTime",
+				"(//div[contains(@class,'flight-booking-page_flight-details_content')])[2]//div[contains(@class,'tg-deptime')]");
+		xpathMap.put("originFullName",
+				"(//div[contains(@class,'flight-booking-page_flight-details_content')])[2]//div[contains(@class,'tg-origin-fullname')]");
+		xpathMap.put("arrivalTime",
+				"(//div[contains(@class,'flight-booking-page_flight-details_content')])[2]//div[contains(@class,'tg-arrtime')]");
+		xpathMap.put("destinationFullName",
+				"(//div[contains(@class,'flight-booking-page_flight-details_content')])[2]//div[contains(@class,'tg-destination-fullname')]");
+		xpathMap.put("cabinClass",
+				"(//div[contains(@class,'flight-booking-page_flight-details_content')])[2]//div[contains(@class,'tg-cabinclass')]");
+		xpathMap.put("duration",
+				"(//div[contains(@class,'flight-booking-page_flight-details_content')])[2]//div[contains(@class,'tg-mb-duration')]");
+		xpathMap.put("layoverText",
+				"(//div[contains(@class,'flight-booking-page_flight-details_content')])[2]//div[contains(@class,'oneway-card__connect_line_text')]//span");
 
 		for (Map.Entry<String, String> entry : xpathMap.entrySet()) {
 			String key = entry.getKey();
@@ -839,33 +845,32 @@ public class Tripgain_BookingPage_Flights {
 		return data;
 	}
 
-
-
-	//Method to Get the Data from Booking Screen
+	// Method to Get the Data from Booking Screen
 	public Map<String, String> getDataFromBookingPageForInterNational() {
 		Map<String, String> fareDetails = new HashMap<>();
 		// Wait setup (optional but recommended)
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		// Get fare price text
-		WebElement fareNameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-				By.xpath("((//div[contains(@class,'flight-booking-page_flight-details')])[1]//span[@class='tg-origin-destination']/span)[3]")));
-		String fareName=fareNameElement.getText().trim();		;
+		WebElement fareNameElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+				"((//div[contains(@class,'flight-booking-page_flight-details')])[1]//span[@class='tg-origin-destination']/span)[3]")));
+		String fareName = fareNameElement.getText().trim();
+		;
 		fareDetails.put("FareName", fareName.replaceFirst("^\\|\\s*", "").trim());
 
 		// Get supplier name from img alt attribute
-		WebElement supplierImg = wait.until(ExpectedConditions.visibilityOfElementLocated(
-				By.xpath("(//div[contains(@class,'flight-booking-page_flight-details')])[1]//img[contains(@class,'tg-supplier-img')]")));
+		WebElement supplierImg = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+				"(//div[contains(@class,'flight-booking-page_flight-details')])[1]//img[contains(@class,'tg-supplier-img')]")));
 		String supplierName = supplierImg.getAttribute("alt");
 		fareDetails.put("Supplier", supplierName);
 
-		WebElement policyElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-				By.xpath("(//div[contains(@class,'flight-booking-page_flight-details')])[1]//div[contains(@class,'tg-policy')]")));
+		WebElement policyElement = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+				"(//div[contains(@class,'flight-booking-page_flight-details')])[1]//div[contains(@class,'tg-policy')]")));
 		fareDetails.put("PolicyType", policyElement.getText().trim());
 
 		return fareDetails;
 	}
-	
-	//Arun main code
+
+	// Arun main code
 	public int selectAddOnsNormalFlow(Log Log, ScreenShots ScreenShots) {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 		int totalAddOnPrice = 0;
@@ -877,10 +882,10 @@ public class Tripgain_BookingPage_Flights {
 			Log.ReportEvent("INFO", "Processing Select Add-Ons #" + (addonIndex + 1));
 
 			try {
-				WebElement addOnButton = wait.until(
-						ExpectedConditions.elementToBeClickable(addOnsElements.get(addonIndex))
-				);
-				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", addOnButton);
+				WebElement addOnButton = wait
+						.until(ExpectedConditions.elementToBeClickable(addOnsElements.get(addonIndex)));
+				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});",
+						addOnButton);
 				addOnButton.click();
 
 				// Always start with Seat Selection tab
@@ -892,9 +897,8 @@ public class Tripgain_BookingPage_Flights {
 				// Then Baggage
 				processTabnrml("Baggage", () -> selectFirstAvailableBaggage(), Log, ScreenShots);
 
-                // Special SSR
+				// Special SSR
 				processTabnrml("Special Requests", () -> selectFirstAvailableSsr(), Log, ScreenShots);
-
 
 				// ---------------- PRICE CALCULATION ----------------
 				try {
@@ -933,7 +937,7 @@ public class Tripgain_BookingPage_Flights {
 
 		Log.ReportEvent("PASS", "Final total price of all add-ons: ₹ " + totalAddOnPrice);
 		return totalAddOnPrice;
-	}  
+	}
 
 	/**
 	 * Generic method to process a tab (Seat, Meal, Baggage).
@@ -947,17 +951,18 @@ public class Tripgain_BookingPage_Flights {
 
 			// Wait for either sectors or not-found message
 			wait.until(ExpectedConditions.or(
-					ExpectedConditions.visibilityOfElementLocated(By.xpath("(//div[contains(@class,'special-service-request_sector-tabs')])[2]/div")),
-					ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='special-service-request_preferences_not-found_primary-text']"))
-			));
+					ExpectedConditions.visibilityOfElementLocated(
+							By.xpath("(//div[contains(@class,'special-service-request_sector-tabs')])[2]/div")),
+					ExpectedConditions.visibilityOfElementLocated(
+							By.xpath("//div[@class='special-service-request_preferences_not-found_primary-text']"))));
 
 			if (isNotFoundMessageDisplayed()) {
 				Log.ReportEvent("INFO", tabName + " not available. Skipping...");
 				return;
 			}
 
-			List<WebElement> sectors = driver.findElements(
-					By.xpath("(//div[contains(@class,'special-service-request_sector-tabs')])[2]/div"));
+			List<WebElement> sectors = driver
+					.findElements(By.xpath("(//div[contains(@class,'special-service-request_sector-tabs')])[2]/div"));
 
 			if (sectors.isEmpty()) {
 				Log.ReportEvent("INFO", "No sectors found for " + tabName + ". Skipping...");
@@ -981,17 +986,14 @@ public class Tripgain_BookingPage_Flights {
 	}
 
 // ---aruns actual code --------
-	private void processTabnrml(String tabName,
-							Runnable selectionAction,
-							Log Log,
-							ScreenShots ScreenShots) {
+	private void processTabnrml(String tabName, Runnable selectionAction, Log Log, ScreenShots ScreenShots) {
 
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
 
 		try {
 			// Click main tab
-			WebElement tab = wait.until(ExpectedConditions.elementToBeClickable(
-					By.xpath("//div[text()='" + tabName + "']")));
+			WebElement tab = wait
+					.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[text()='" + tabName + "']")));
 			tab.click();
 
 			// Wait for either sectors or not-found message
@@ -999,8 +1001,7 @@ public class Tripgain_BookingPage_Flights {
 					ExpectedConditions.visibilityOfElementLocated(
 							By.xpath("(//div[contains(@class,'special-service-request_sector-tab')])[6]/div")),
 					ExpectedConditions.visibilityOfElementLocated(
-							By.xpath("//div[@class='special-service-request_preferences_not-found_primary-text']"))
-			));
+							By.xpath("//div[@class='special-service-request_preferences_not-found_primary-text']"))));
 
 			// Check not found message
 			if (isNotFoundMessageDisplayed()) {
@@ -1009,8 +1010,8 @@ public class Tripgain_BookingPage_Flights {
 			}
 
 			// Get total sectors count
-			List<WebElement> sectors = driver.findElements(
-					By.xpath("(//div[contains(@class,'special-service-request_sector-tab')])[6]/div"));
+			List<WebElement> sectors = driver
+					.findElements(By.xpath("(//div[contains(@class,'special-service-request_sector-tab')])[6]/div"));
 
 			if (sectors.isEmpty()) {
 				Log.ReportEvent("INFO", "No sectors found for " + tabName + ". Skipping...");
@@ -1023,22 +1024,20 @@ public class Tripgain_BookingPage_Flights {
 					Log.ReportEvent("INFO", "Selecting " + tabName + " for sector " + i);
 
 					// 👇 Re-locate sector each time to avoid stale element issues
-					WebElement sector = wait.until(ExpectedConditions.elementToBeClickable(
-							By.xpath("((//div[contains(@class,'special-service-request_sector-tab')])[6]/div)[" + i + "]")
-					));
+					WebElement sector = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+							"((//div[contains(@class,'special-service-request_sector-tab')])[6]/div)[" + i + "]")));
 
 					sector.click();
 
 					// Small wait for content refresh (SSR UI is async)
-					wait.until(ExpectedConditions.presenceOfElementLocated(
-							By.xpath("//div[contains(@class,'special-service-request')]")));
+					wait.until(ExpectedConditions
+							.presenceOfElementLocated(By.xpath("//div[contains(@class,'special-service-request')]")));
 
 					// Perform selection
 					selectionAction.run();
 
 				} catch (Exception ex) {
-					Log.ReportEvent("INFO",
-							tabName + " not selectable for sector " + i + ". Moving on...");
+					Log.ReportEvent("INFO", tabName + " not selectable for sector " + i + ". Moving on...");
 				}
 			}
 
@@ -1050,165 +1049,170 @@ public class Tripgain_BookingPage_Flights {
 		}
 	}
 
-	
 	public int selectAddOnsFlow2(Log Log, ScreenShots ScreenShots, String body4, String body5) {
-	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
-	    int totalAddOnPrice = 0;
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+		int totalAddOnPrice = 0;
 
-	    List<WebElement> addOnsElements = driver.findElements(By.xpath("//*[text()='Select Add-Ons']"));
+		List<WebElement> addOnsElements = driver.findElements(By.xpath("//*[text()='Select Add-Ons']"));
 
-	    for (int addonIndex = 0; addonIndex < addOnsElements.size(); addonIndex++) {
-	        try {
-	            WebElement addOnButton = wait.until(ExpectedConditions.elementToBeClickable(addOnsElements.get(addonIndex)));
-	            ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});", addOnButton);
-	            addOnButton.click();
+		for (int addonIndex = 0; addonIndex < addOnsElements.size(); addonIndex++) {
+			try {
+				WebElement addOnButton = wait
+						.until(ExpectedConditions.elementToBeClickable(addOnsElements.get(addonIndex)));
+				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});",
+						addOnButton);
+				addOnButton.click();
 
-	            // Use body4 for Seats
-	            processTab1("Seat Selection", () -> selectFirstAvailableSeat(Log), Log, ScreenShots, body4);
-	            
-	            // Use body5 for everything else
-	            processTab1("Meal Preferences", () -> selectFirstAvailableMeal(), Log, ScreenShots, body5);
-	            processTab1("Baggage", () -> selectFirstAvailableBaggage(), Log, ScreenShots, body5);
-	            processTab1("Special Requests", () -> selectFirstAvailableSsr(), Log, ScreenShots, body5);
+				// Use body4 for Seats
+				processTab1("Seat Selection", () -> selectFirstAvailableSeat(Log), Log, ScreenShots, body4);
 
-	            totalAddOnPrice += sumAddOnPrices();
-	            clickConfirmButton();
+				// Use body5 for everything else
+				processTab1("Meal Preferences", () -> selectFirstAvailableMeal(), Log, ScreenShots, body5);
+				processTab1("Baggage", () -> selectFirstAvailableBaggage(), Log, ScreenShots, body5);
+				processTab1("Special Requests", () -> selectFirstAvailableSsr(), Log, ScreenShots, body5);
 
-	            if (addonIndex + 1 < addOnsElements.size()) {
-	                addOnsElements = driver.findElements(By.xpath("//*[text()='Select Add-Ons']"));
-	            }
-	        } catch (Exception e) {
-	            Log.ReportEvent("FAIL", "Add-On processing failed: " + e.getMessage());
-	        }
-	    }
-	    return totalAddOnPrice;
+				totalAddOnPrice += sumAddOnPrices();
+				clickConfirmButton();
+
+				if (addonIndex + 1 < addOnsElements.size()) {
+					addOnsElements = driver.findElements(By.xpath("//*[text()='Select Add-Ons']"));
+				}
+			} catch (Exception e) {
+				Log.ReportEvent("FAIL", "Add-On processing failed: " + e.getMessage());
+			}
+		}
+		return totalAddOnPrice;
 	}
 
-	
-	private void processTab1(String tabName, Runnable selectionAction, Log Log, ScreenShots ScreenShots, String responseBody) {
-	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
-	    Tripgain_HomePage_Flights homePage = new Tripgain_HomePage_Flights(driver);
+	private void processTab1(String tabName, Runnable selectionAction, Log Log, ScreenShots ScreenShots,
+			String responseBody) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+		Tripgain_HomePage_Flights homePage = new Tripgain_HomePage_Flights(driver);
 
-	    try {
-	        WebElement tab = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[text()='" + tabName + "']")));
-	        tab.click();
+		try {
+			// 1. Click the main Tab (Seats, Meals, etc.)
+			WebElement tab = wait
+					.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[text()='" + tabName + "']")));
+			tab.click();
 
-	        if (isNotFoundMessageDisplayed()) {
-	            Log.ReportEvent("INFO", tabName + " not available. Skipping...");
-	            return;
-	        }
+			if (isNotFoundMessageDisplayed()) {
+				Log.ReportEvent("INFO", tabName + " not available. Skipping...");
+				return;
+			}
 
-	        String sectorBaseXpath = "(//div[contains(@class,'special-service-request_sector-tabs')])[2]/div";
-	        List<WebElement> sectors = driver.findElements(By.xpath(sectorBaseXpath));
+			String sectorBaseXpath = "(//div[contains(@class,'special-service-request_sector-tabs')])[2]/div";
+			List<WebElement> sectors = driver.findElements(By.xpath(sectorBaseXpath));
 
-	        for (int i = 1; i <= sectors.size(); i++) {
-	            WebElement sector = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("(" + sectorBaseXpath + ")[" + i + "]")));
-	            sector.click();
-	            Thread.sleep(1200); 
+			for (int i = 1; i <= sectors.size(); i++) {
+				// 2. Click the specific Sector
+				WebElement sector = wait.until(
+						ExpectedConditions.elementToBeClickable(By.xpath("(" + sectorBaseXpath + ")[" + i + "]")));
+				sector.click();
 
-	            // Common XPath to check if ANY data cards exist
-	            String itemCardXpath = "//div[contains(@class,'meal-selection_meal-tab_info')]";
-	            List<WebElement> itemCards = driver.findElements(By.xpath(itemCardXpath));
+				// 3. DYNAMIC WAIT: Wait for the specific data cards to appear
+				String itemCardXpath = tabName.equals("Seat Selection")
+						? "//div[contains(@class,'flight-seat-map_seat')]"
+						: "//div[contains(@class,'meal-selection_meal-tab_info')]";
 
-	            if (!itemCards.isEmpty()) {
-	                List<Map<String, String>> uiData = new ArrayList<>();
-	                
-	                // --- STEP 1: SCRAPE & VALIDATE (NO CLICKING HERE) ---
-	                
-	                if (tabName.equals("Seat Selection")) {
-	                    uiData = homePage.getOnewayBookingpgAllSeatData(Log, ScreenShots, i);
-	                    if (!uiData.isEmpty()) {
-	                        homePage.validateOnewayBookingPageSeatData(uiData, responseBody, Log, ScreenShots);
-	                    }
-	                } 
-	                else if (tabName.equals("Meal Preferences")) {
-	                    uiData = homePage.getOnewayBookingpgAllAvailableMeals(Log, ScreenShots, i);
-	                    if (!uiData.isEmpty()) {
-	                        homePage.validateOnewayBookingPageMealData(uiData, responseBody, Log, ScreenShots);
-	                    }
-	                } 
-	                else if (tabName.equals("Baggage")) {
-	                    uiData = homePage.getOnewayBookingpgAllAvailableBaggage(Log, ScreenShots, i);
-	                    if (!uiData.isEmpty()) {
-	                        homePage.validateOnewayBookingPageBaggageData(uiData, responseBody, Log, ScreenShots);
-	                    }
-	                }
-	                else if (tabName.equals("Special Requests")) {
-	                    uiData = homePage.getOnewayBookingpgAllAvailableSpecialRequests(Log, ScreenShots, i);
-	                    if (!uiData.isEmpty()) {
-	                        homePage.validateOnewayBookingPageSpecialRequests(uiData, responseBody, Log, ScreenShots);
-	                    }
-	                }
+				try {
+					// We use a short wait here. If it fails, the sector is truly empty.
+					wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(itemCardXpath)));
 
-	                // --- STEP 2: PERFORM SELECTION (Calls your existing selectFirstAvailable... methods) ---
-	                Log.ReportEvent("INFO", "Performing selection for " + tabName + " in Sector " + i);
-	                selectionAction.run(); 
-	                
-	            } else {
-	                Log.ReportEvent("INFO", "No data available to validate or select in " + tabName + " for Sector " + i);
-	            }
-	        }
-	    } catch (Exception e) {
-	        Log.ReportEvent("FAIL", tabName + " processing failed: " + e.getMessage());
-	        ScreenShots.takeScreenShot();
-	    }
+					List<WebElement> itemCards = driver.findElements(By.xpath(itemCardXpath));
+					List<Map<String, String>> uiData = new ArrayList<>();
+
+					// 4. Scrape & Validate
+					if (tabName.equals("Seat Selection")) {
+						uiData = homePage.getOnewayBookingpgAllSeatData(Log, ScreenShots, i);
+						if (!uiData.isEmpty())
+							homePage.validateOnewayBookingPageSeatData(uiData, responseBody, Log, ScreenShots);
+					} else if (tabName.equals("Meal Preferences")) {
+						uiData = homePage.getOnewayBookingpgAllAvailableMeals(Log, ScreenShots, i);
+						if (!uiData.isEmpty())
+							homePage.validateOnewayBookingPageMealData(uiData, responseBody, Log, ScreenShots);
+					} else if (tabName.equals("Baggage")) {
+						uiData = homePage.getOnewayBookingpgAllAvailableBaggage(Log, ScreenShots, i);
+						if (!uiData.isEmpty())
+							homePage.validateOnewayBookingPageBaggageData(uiData, responseBody, Log, ScreenShots);
+					} else if (tabName.equals("Special Requests")) {
+						uiData = homePage.getOnewayBookingpgAllAvailableSpecialRequests(Log, ScreenShots, i);
+						if (!uiData.isEmpty())
+							homePage.validateOnewayBookingPageSpecialRequests(uiData, responseBody, Log, ScreenShots);
+					}
+
+					// 5. Select the first item
+					// Log.ReportEvent("INFO", "Performing selection for " + tabName + " in Sector "
+					// + i);
+					selectionAction.run();
+
+				} catch (Exception e) {
+					// Log.ReportEvent("INFO", "No items found for " + tabName + " in Sector " + i +
+					// " after waiting.");
+				}
+			}
+		} catch (Exception e) {
+			Log.ReportEvent("FAIL", tabName + " processing failed: " + e.getMessage());
+			ScreenShots.takeScreenShot();
+		}
 	}
 
-	public List<Map<String, String>> getOnewayBookingpgAllAvailableBaggage(Log log, ScreenShots ScreenShots, int sectorIndex) {
-	    List<Map<String, String>> baggageList = new ArrayList<>();
-	    try {
-	        // Find the sector name currently selected
-	        String sectorNameXpath = "((//div[contains(@class,'special-service-request_sector-tabs')])[2]/div)[" + sectorIndex + "]";
-	        String currentSector = driver.findElement(By.xpath(sectorNameXpath)).getText().trim();
-	        
-	        // Find all cards (same container class as meals)
-	        List<WebElement> cards = driver.findElements(By.xpath("//div[contains(@class,'meal-selection_meal-tab_info')]"));
-	        
-	        for (WebElement card : cards) {
-	            Map<String, String> data = new HashMap<>();
-	            
-	            // Relative XPaths inside the 'card'
-	            // Text: "Extra Baggage 3KG"
-	            String name = card.findElement(By.xpath("(.//div[@class='fw-600'])[1]")).getText().trim();
-	            // Price: "₹ 1,800"
-	            String price = card.findElement(By.xpath("(.//div[@class='fw-600'])[2]")).getText().trim();
-	            
-	            data.put("sector", currentSector);
-	            data.put("mealName", name); 
-	            data.put("mealPrice", price);
-	            baggageList.add(data);
-	        }
-	    } catch (Exception e) {
-	        log.ReportEvent("INFO", "Baggage scrape failed for sector " + sectorIndex);
-	    }
-	    return baggageList;
+	public List<Map<String, String>> getOnewayBookingpgAllAvailableBaggage(Log log, ScreenShots ScreenShots,
+			int sectorIndex) {
+		List<Map<String, String>> baggageList = new ArrayList<>();
+		try {
+			// Find the sector name currently selected
+			String sectorNameXpath = "((//div[contains(@class,'special-service-request_sector-tabs')])[2]/div)["
+					+ sectorIndex + "]";
+			String currentSector = driver.findElement(By.xpath(sectorNameXpath)).getText().trim();
+
+			// Find all cards (same container class as meals)
+			List<WebElement> cards = driver
+					.findElements(By.xpath("//div[contains(@class,'meal-selection_meal-tab_info')]"));
+
+			for (WebElement card : cards) {
+				Map<String, String> data = new HashMap<>();
+
+				// Relative XPaths inside the 'card'
+				// Text: "Extra Baggage 3KG"
+				String name = card.findElement(By.xpath("(.//div[@class='fw-600'])[1]")).getText().trim();
+				// Price: "₹ 1,800"
+				String price = card.findElement(By.xpath("(.//div[@class='fw-600'])[2]")).getText().trim();
+
+				data.put("sector", currentSector);
+				data.put("mealName", name);
+				data.put("mealPrice", price);
+				baggageList.add(data);
+			}
+		} catch (Exception e) {
+			log.ReportEvent("INFO", "Baggage scrape failed for sector " + sectorIndex);
+		}
+		return baggageList;
 	}
-	
-	
 
 	/**
 	 * Helper method to check if "Not Found" message is displayed.
 	 */
 	private boolean isNotFoundMessageDisplayed() {
-		List<WebElement> notFoundElements = driver.findElements(
-				By.xpath("//div[@class='special-service-request_preferences_not-found_primary-text']"));
+		List<WebElement> notFoundElements = driver
+				.findElements(By.xpath("//div[@class='special-service-request_preferences_not-found_primary-text']"));
 		return !notFoundElements.isEmpty() && notFoundElements.get(0).isDisplayed();
 	}
 
-
-	public void validateTotalPriceMatches(String resultMainPrice, String resultOtherCurrencyPrice, Log Log, ScreenShots ScreenShots) {
+	public void validateTotalPriceMatches(String resultMainPrice, String resultOtherCurrencyPrice, Log Log,
+			ScreenShots ScreenShots) {
 		try {
 			// Combine result screen prices as per booking screen format
 			String expectedBookingPrice = resultMainPrice.trim() + "\n" + resultOtherCurrencyPrice.trim();
 
 			// Get actual value from booking screen
-			String actualBookingPrice = driver.findElement(
-					By.xpath("//div[text()='Total Fare']/following-sibling::h6")).getText().trim();
+			String actualBookingPrice = driver.findElement(By.xpath("//div[text()='Total Fare']/following-sibling::h6"))
+					.getText().trim();
 
 			if (expectedBookingPrice.equals(actualBookingPrice)) {
 				Log.ReportEvent("PASS", "Booking screen total price matches expected result screen price.");
 			} else {
-				Log.ReportEvent("FAIL", "Price mismatch!\nExpected: " + expectedBookingPrice + "\nActual: " + actualBookingPrice);
+				Log.ReportEvent("FAIL",
+						"Price mismatch!\nExpected: " + expectedBookingPrice + "\nActual: " + actualBookingPrice);
 				ScreenShots.takeScreenShot();
 				Assert.fail("Booking price does not match result screen price.");
 			}
@@ -1231,8 +1235,11 @@ public class Tripgain_BookingPage_Flights {
 		return sb.toString();
 	}
 
-	//Method to Enter Adult Details.
-	public void enterAdultDetailsForInterNational(String[] title,String countryCode,int adults,String birthYear, String birthMonth, String birthDay,String expireYear,String expireMonth,String expireDay,String issueYear,String issueMonth,String issueDay,Log Log, ScreenShots ScreenShots) throws InterruptedException {
+	// Method to Enter Adult Details.
+	public void enterAdultDetailsForInterNational(String[] title, String countryCode, int adults, String birthYear,
+			String birthMonth, String birthDay, String expireYear, String expireMonth, String expireDay,
+			String issueYear, String issueMonth, String issueDay, Log Log, ScreenShots ScreenShots)
+			throws InterruptedException {
 		try {
 			TestExecutionNotifier.showExecutionPopup();
 
@@ -1265,10 +1272,13 @@ public class Tripgain_BookingPage_Flights {
 
 						// Select Title
 						try {
-							WebElement titleDropDown = driver.findElement(By.xpath("(//span[text()='Title']/parent::div//input[@class='tg-select-box__input'])["+xpathIndex+"]"));
+							WebElement titleDropDown = driver.findElement(By
+									.xpath("(//span[text()='Title']/parent::div//input[@class='tg-select-box__input'])["
+											+ xpathIndex + "]"));
 							titleDropDown.click();
 							WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-							WebElement option = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='" + titleNames + "']")));
+							WebElement option = wait.until(ExpectedConditions
+									.elementToBeClickable(By.xpath("//span[text()='" + titleNames + "']")));
 							((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", option);
 							Actions actions = new Actions(driver);
 							actions.moveToElement(option).click().perform();
@@ -1279,10 +1289,12 @@ public class Tripgain_BookingPage_Flights {
 
 						// Enter First Name and Last Name
 						try {
-							WebElement firstNameField = driver.findElement(By.xpath("(//input[@name='firstname'])["+xpathIndex+"]"));
+							WebElement firstNameField = driver
+									.findElement(By.xpath("(//input[@name='firstname'])[" + xpathIndex + "]"));
 							firstNameField.clear();
 							firstNameField.sendKeys(first);
-							WebElement lastNameField = driver.findElement(By.xpath("(//input[@name='lastname'])["+xpathIndex+"]"));
+							WebElement lastNameField = driver
+									.findElement(By.xpath("(//input[@name='lastname'])[" + xpathIndex + "]"));
 							lastNameField.clear();
 							lastNameField.sendKeys(last);
 						} catch (Exception e) {
@@ -1292,7 +1304,7 @@ public class Tripgain_BookingPage_Flights {
 
 						// Select Date of Birth
 						try {
-							selectDateOfBirthDate(birthYear, birthMonth, birthDay,xpathIndex);
+							selectDateOfBirthDate(birthYear, birthMonth, birthDay, xpathIndex);
 						} catch (Exception e) {
 							Log.ReportEvent("FAIL", "Failed to select Date of Birth for Adult " + (i + 1));
 							throw e;
@@ -1300,7 +1312,8 @@ public class Tripgain_BookingPage_Flights {
 
 						// Enter Passport Number
 						try {
-							WebElement passportNumber = driver.findElement(By.xpath("(//input[@name='passportnumber'])["+xpathIndex+"]"));
+							WebElement passportNumber = driver
+									.findElement(By.xpath("(//input[@name='passportnumber'])[" + xpathIndex + "]"));
 							passportNumber.clear();
 							String randomNumber = generateRandomDigits(6);
 							System.out.println("Random Number: " + randomNumber);
@@ -1312,7 +1325,7 @@ public class Tripgain_BookingPage_Flights {
 
 						// Select Expiry Date
 						try {
-							selectExpireDate(expireYear, expireMonth, expireDay,xpathIndex);
+							selectExpireDate(expireYear, expireMonth, expireDay, xpathIndex);
 						} catch (Exception e) {
 							Log.ReportEvent("FAIL", "Failed to select Expiry Date for Adult " + (i + 1));
 							throw e;
@@ -1320,7 +1333,7 @@ public class Tripgain_BookingPage_Flights {
 
 						// Select Issue Date
 						try {
-							selectIssueDate(issueYear, issueMonth, issueDay,xpathIndex);
+							selectIssueDate(issueYear, issueMonth, issueDay, xpathIndex);
 						} catch (Exception e) {
 							Log.ReportEvent("FAIL", "Failed to select Issue Date for Adult " + (i + 1));
 							throw e;
@@ -1332,23 +1345,25 @@ public class Tripgain_BookingPage_Flights {
 							JavascriptExecutor js = (JavascriptExecutor) driver;
 							Actions actions = new Actions(driver);
 
-							WebElement titleDropDownForPassportIssue = wait.until(ExpectedConditions.elementToBeClickable(
-									By.xpath("(//span[text()='Passport Issue Country']/parent::div//div[contains(@class,'tg-select-box__dropdown-indicator')])["+xpathIndex+"]")
-							));
-							js.executeScript("arguments[0].scrollIntoView({block: 'center'});", titleDropDownForPassportIssue);
+							WebElement titleDropDownForPassportIssue = wait
+									.until(ExpectedConditions.elementToBeClickable(By.xpath(
+											"(//span[text()='Passport Issue Country']/parent::div//div[contains(@class,'tg-select-box__dropdown-indicator')])["
+													+ xpathIndex + "]")));
+							js.executeScript("arguments[0].scrollIntoView({block: 'center'});",
+									titleDropDownForPassportIssue);
 							Thread.sleep(200);
 							wait.until(ExpectedConditions.elementToBeClickable(titleDropDownForPassportIssue));
 							actions.moveToElement(titleDropDownForPassportIssue).click().perform();
 
-							WebElement countryElement = wait.until(ExpectedConditions.presenceOfElementLocated(
-									By.xpath("//span[text()='" + countryCode + "']")
-							));
+							WebElement countryElement = wait.until(ExpectedConditions
+									.presenceOfElementLocated(By.xpath("//span[text()='" + countryCode + "']")));
 							js.executeScript("arguments[0].scrollIntoView({block: 'center'});", countryElement);
 							wait.until(ExpectedConditions.elementToBeClickable(countryElement));
 							actions.moveToElement(countryElement).click().perform();
 							Thread.sleep(1000);
 						} catch (Exception e) {
-							Log.ReportEvent("FAIL", "Failed to select Passport Issue Country '" + countryCode + "' for Adult " + (i + 1));
+							Log.ReportEvent("FAIL", "Failed to select Passport Issue Country '" + countryCode
+									+ "' for Adult " + (i + 1));
 							throw e;
 						}
 					} catch (Exception e) {
@@ -1368,11 +1383,11 @@ public class Tripgain_BookingPage_Flights {
 		}
 	}
 
-
 	public void selectAdultToEnterDetails(Log Log, ScreenShots ScreenShots) throws InterruptedException {
 		// Select Adult dropdown
 		try {
-			String xpath = "(//div[contains(@class,'tg-label_white tg-label_sm') and text()='Adult " + "1" +" "+"']/parent::div/following-sibling::div)[2]/*";
+			String xpath = "(//div[contains(@class,'tg-label_white tg-label_sm') and text()='Adult " + "1" + " "
+					+ "']/parent::div/following-sibling::div)[2]/*";
 			WebElement element = driver.findElement(By.xpath(xpath));
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 			element = wait.until(ExpectedConditions.elementToBeClickable(element));
@@ -1387,8 +1402,7 @@ public class Tripgain_BookingPage_Flights {
 		}
 	}
 
-	public void enterPassportNumber(Log Log, ScreenShots ScreenShots)
-	{
+	public void enterPassportNumber(Log Log, ScreenShots ScreenShots) {
 		try {
 			WebElement passportNumber = driver.findElement(By.xpath("//input[@name='passportnumber']"));
 			passportNumber.clear();
@@ -1402,25 +1416,22 @@ public class Tripgain_BookingPage_Flights {
 		}
 	}
 
-	public void selectPassportIssuedCountry(String countryCode,Log Log, ScreenShots ScreenShots)
-	{
+	public void selectPassportIssuedCountry(String countryCode, Log Log, ScreenShots ScreenShots) {
 		// Select Passport Issue Country
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 			JavascriptExecutor js = (JavascriptExecutor) driver;
 			Actions actions = new Actions(driver);
 
-			WebElement titleDropDownForPassportIssue = wait.until(ExpectedConditions.elementToBeClickable(
-					By.xpath("//span[text()='Passport Issue Country']/parent::div//div[contains(@class,'tg-select-box__dropdown-indicator')]")
-			));
+			WebElement titleDropDownForPassportIssue = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(
+					"//span[text()='Passport Issue Country']/parent::div//div[contains(@class,'tg-select-box__dropdown-indicator')]")));
 			js.executeScript("arguments[0].scrollIntoView({block: 'center'});", titleDropDownForPassportIssue);
 			Thread.sleep(200);
 			wait.until(ExpectedConditions.elementToBeClickable(titleDropDownForPassportIssue));
 			actions.moveToElement(titleDropDownForPassportIssue).click().perform();
 
-			WebElement countryElement = wait.until(ExpectedConditions.presenceOfElementLocated(
-					By.xpath("//span[text()='" + countryCode + "']")
-			));
+			WebElement countryElement = wait.until(
+					ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='" + countryCode + "']")));
 			js.executeScript("arguments[0].scrollIntoView({block: 'center'});", countryElement);
 			wait.until(ExpectedConditions.elementToBeClickable(countryElement));
 			actions.moveToElement(countryElement).click().perform();
@@ -1432,7 +1443,7 @@ public class Tripgain_BookingPage_Flights {
 		}
 	}
 
-	//Method to generate random numbers
+	// Method to generate random numbers
 	public static String generateRandomString(int length) {
 		String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
 		Random rng = new Random();
@@ -1444,14 +1455,15 @@ public class Tripgain_BookingPage_Flights {
 		return sb.toString();
 	}
 
-
-	public void selectDateOfBirthDate(String year, String month, String day, int xpathIndex) throws InterruptedException {
+	public void selectDateOfBirthDate(String year, String month, String day, int xpathIndex)
+			throws InterruptedException {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		Actions actions = new Actions(driver);
 
-		WebElement dobInput = wait.until(ExpectedConditions.presenceOfElementLocated(
-				By.xpath("(//label[text()='Date of Birth']/parent::div/parent::div//input[@class='custom_datepicker_input'])["+xpathIndex+"]")));
+		WebElement dobInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+				"(//label[text()='Date of Birth']/parent::div/parent::div//input[@class='custom_datepicker_input'])["
+						+ xpathIndex + "]")));
 
 		js.executeScript("arguments[0].scrollIntoView(true);", dobInput);
 		Thread.sleep(300);
@@ -1463,14 +1475,14 @@ public class Tripgain_BookingPage_Flights {
 		yearDropdown.click();
 
 		// 2. Scroll to and click the year (e.g., "1953")
-		WebElement yearElement = wait.until(ExpectedConditions.presenceOfElementLocated(
-				By.xpath("//span[text()='" + year + "']")));
+		WebElement yearElement = wait
+				.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='" + year + "']")));
 		js.executeScript("arguments[0].scrollIntoView(true);", yearElement);
 		actions.moveToElement(yearElement).click().perform();
 
 		// 3. Check if the desired month is visible, if not click next until it is
 		boolean monthVisible = false;
-		int maxTries = 12;  // Avoid infinite loop
+		int maxTries = 12; // Avoid infinite loop
 
 		for (int i = 0; i < maxTries; i++) {
 			try {
@@ -1481,8 +1493,7 @@ public class Tripgain_BookingPage_Flights {
 				}
 			} catch (Exception e) {
 				// Month not found, click "Next"
-				WebElement nextButton = driver.findElement(
-						By.xpath("(//div[@class='custom-header']/button)[1]"));
+				WebElement nextButton = driver.findElement(By.xpath("(//div[@class='custom-header']/button)[1]"));
 				nextButton.click();
 				Thread.sleep(400); // Small delay for calendar to update
 			}
@@ -1493,19 +1504,20 @@ public class Tripgain_BookingPage_Flights {
 		}
 
 		// 4. Select the day (e.g., "16")
-		WebElement dayElement = wait.until(ExpectedConditions.elementToBeClickable(
-				By.xpath("//span[text()='" + day + "']")));
+		WebElement dayElement = wait
+				.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='" + day + "']")));
 		js.executeScript("arguments[0].scrollIntoView(true);", dayElement);
 		actions.moveToElement(dayElement).click().perform();
 	}
 
-	public void selectExpireDate(String year, String month, String day,int xpathIndex) throws InterruptedException {
+	public void selectExpireDate(String year, String month, String day, int xpathIndex) throws InterruptedException {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		Actions actions = new Actions(driver);
 
-		WebElement dobInput = wait.until(ExpectedConditions.presenceOfElementLocated(
-				By.xpath("(//label[text()='Expiry Date']/parent::div/parent::div//input[@class='custom_datepicker_input'])["+xpathIndex+"]")));
+		WebElement dobInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+				"(//label[text()='Expiry Date']/parent::div/parent::div//input[@class='custom_datepicker_input'])["
+						+ xpathIndex + "]")));
 
 		js.executeScript("arguments[0].scrollIntoView(true);", dobInput);
 		Thread.sleep(300);
@@ -1517,14 +1529,14 @@ public class Tripgain_BookingPage_Flights {
 		yearDropdown.click();
 
 		// 2. Scroll to and click the year (e.g., "1953")
-		WebElement yearElement = wait.until(ExpectedConditions.presenceOfElementLocated(
-				By.xpath("//span[text()='" + year + "']")));
+		WebElement yearElement = wait
+				.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='" + year + "']")));
 		js.executeScript("arguments[0].scrollIntoView(true);", yearElement);
 		actions.moveToElement(yearElement).click().perform();
 
 		// 3. Check if the desired month is visible, if not click next until it is
 		boolean monthVisible = false;
-		int maxTries = 12;  // Avoid infinite loop
+		int maxTries = 12; // Avoid infinite loop
 
 		for (int i = 0; i < maxTries; i++) {
 			try {
@@ -1535,8 +1547,7 @@ public class Tripgain_BookingPage_Flights {
 				}
 			} catch (Exception e) {
 				// Month not found, click "Next"
-				WebElement nextButton = driver.findElement(
-						By.xpath("(//div[@class='custom-header']/button)[2]"));
+				WebElement nextButton = driver.findElement(By.xpath("(//div[@class='custom-header']/button)[2]"));
 				nextButton.click();
 				Thread.sleep(400); // Small delay for calendar to update
 			}
@@ -1547,8 +1558,8 @@ public class Tripgain_BookingPage_Flights {
 		}
 
 		// 4. Select the day (e.g., "16")
-		WebElement dayElement = wait.until(ExpectedConditions.elementToBeClickable(
-				By.xpath("//span[text()='" + day + "']")));
+		WebElement dayElement = wait
+				.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='" + day + "']")));
 		js.executeScript("arguments[0].scrollIntoView(true);", dayElement);
 		actions.moveToElement(dayElement).click().perform();
 	}
@@ -1558,8 +1569,9 @@ public class Tripgain_BookingPage_Flights {
 		JavascriptExecutor js = (JavascriptExecutor) driver;
 		Actions actions = new Actions(driver);
 
-		WebElement dobInput = wait.until(ExpectedConditions.presenceOfElementLocated(
-				By.xpath("(//label[text()='Issue Date']/parent::div/parent::div//input[@class='custom_datepicker_input'])["+xpathIndex+"]")));
+		WebElement dobInput = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath(
+				"(//label[text()='Issue Date']/parent::div/parent::div//input[@class='custom_datepicker_input'])["
+						+ xpathIndex + "]")));
 
 		js.executeScript("arguments[0].scrollIntoView(true);", dobInput);
 		Thread.sleep(300);
@@ -1571,14 +1583,14 @@ public class Tripgain_BookingPage_Flights {
 		yearDropdown.click();
 
 		// 2. Scroll to and click the year (e.g., "1953")
-		WebElement yearElement = wait.until(ExpectedConditions.presenceOfElementLocated(
-				By.xpath("//span[text()='" + year + "']")));
+		WebElement yearElement = wait
+				.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//span[text()='" + year + "']")));
 		js.executeScript("arguments[0].scrollIntoView(true);", yearElement);
 		actions.moveToElement(yearElement).click().perform();
 
 		// 3. Check if the desired month is visible, if not click next until it is
 		boolean monthVisible = false;
-		int maxTries = 12;  // Avoid infinite loop
+		int maxTries = 12; // Avoid infinite loop
 
 		for (int i = 0; i < maxTries; i++) {
 			try {
@@ -1589,8 +1601,7 @@ public class Tripgain_BookingPage_Flights {
 				}
 			} catch (Exception e) {
 				// Month not found, click "Next"
-				WebElement nextButton = driver.findElement(
-						By.xpath("(//div[@class='custom-header']/button)[1]"));
+				WebElement nextButton = driver.findElement(By.xpath("(//div[@class='custom-header']/button)[1]"));
 				nextButton.click();
 				Thread.sleep(400); // Small delay for calendar to update
 			}
@@ -1601,15 +1612,15 @@ public class Tripgain_BookingPage_Flights {
 		}
 
 		// 4. Select the day (e.g., "16")
-		WebElement dayElement = wait.until(ExpectedConditions.elementToBeClickable(
-				By.xpath("//span[text()='" + day + "']")));
+		WebElement dayElement = wait
+				.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='" + day + "']")));
 		js.executeScript("arguments[0].scrollIntoView(true);", dayElement);
 		actions.moveToElement(dayElement).click().perform();
 	}
 
-
-	//Method to Enter Adult Details.
-	public void enterAdultDetailsForDomestic(String[] title,int adults,Log Log, ScreenShots ScreenShots) throws InterruptedException {
+	// Method to Enter Adult Details.
+	public void enterAdultDetailsForDomestic(String[] title, int adults, Log Log, ScreenShots ScreenShots)
+			throws InterruptedException {
 		try {
 			TestExecutionNotifier.showExecutionPopup();
 
@@ -1642,10 +1653,13 @@ public class Tripgain_BookingPage_Flights {
 
 						// Select Title
 						try {
-							WebElement titleDropDown = driver.findElement(By.xpath("(//span[text()='Title']/parent::div//input[@class='tg-select-box__input'])["+xpathIndex+"]"));
+							WebElement titleDropDown = driver.findElement(By
+									.xpath("(//span[text()='Title']/parent::div//input[@class='tg-select-box__input'])["
+											+ xpathIndex + "]"));
 							titleDropDown.click();
 							WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-							WebElement option = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()='" + titleNames + "']")));
+							WebElement option = wait.until(ExpectedConditions
+									.elementToBeClickable(By.xpath("//span[text()='" + titleNames + "']")));
 							((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", option);
 							Actions actions = new Actions(driver);
 							actions.moveToElement(option).click().perform();
@@ -1656,10 +1670,12 @@ public class Tripgain_BookingPage_Flights {
 
 						// Enter First Name and Last Name
 						try {
-							WebElement firstNameField = driver.findElement(By.xpath("(//input[@name='firstname'])["+xpathIndex+"]"));
+							WebElement firstNameField = driver
+									.findElement(By.xpath("(//input[@name='firstname'])[" + xpathIndex + "]"));
 							firstNameField.clear();
 							firstNameField.sendKeys(first);
-							WebElement lastNameField = driver.findElement(By.xpath("(//input[@name='lastname'])["+xpathIndex+"]"));
+							WebElement lastNameField = driver
+									.findElement(By.xpath("(//input[@name='lastname'])[" + xpathIndex + "]"));
 							lastNameField.clear();
 							lastNameField.sendKeys(last);
 						} catch (Exception e) {
@@ -1682,10 +1698,112 @@ public class Tripgain_BookingPage_Flights {
 			Assert.fail();
 		}
 	}
-	
-	
-	
-	
-	
-}
 
+	public int selectAddOnsFlowForRTCombinedFts(Log Log, ScreenShots ScreenShots, String body4, String body5) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+		int totalAddOnPrice = 0;
+
+		List<WebElement> addOnsElements = driver.findElements(By.xpath("//*[text()='Select Add-Ons']"));
+
+		for (int addonIndex = 0; addonIndex < addOnsElements.size(); addonIndex++) {
+			try {
+				WebElement addOnButton = wait
+						.until(ExpectedConditions.elementToBeClickable(addOnsElements.get(addonIndex)));
+				((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView({block: 'center'});",
+						addOnButton);
+				addOnButton.click();
+
+				// Use body4 for Seats
+				processTabForCombinedRT("Seat Selection", () -> selectFirstAvailableSeat(Log), Log, ScreenShots, body4);
+
+				// Use body5 for everything else
+				processTabForCombinedRT("Meal Preferences", () -> selectFirstAvailableMeal(), Log, ScreenShots, body5);
+				processTabForCombinedRT("Baggage", () -> selectFirstAvailableBaggage(), Log, ScreenShots, body5);
+				processTabForCombinedRT("Special Requests", () -> selectFirstAvailableSsr(), Log, ScreenShots, body5);
+
+				totalAddOnPrice += sumAddOnPrices();
+				clickConfirmButton();
+
+				if (addonIndex + 1 < addOnsElements.size()) {
+					addOnsElements = driver.findElements(By.xpath("//*[text()='Select Add-Ons']"));
+				}
+			} catch (Exception e) {
+				Log.ReportEvent("FAIL", "Add-On processing failed: " + e.getMessage());
+			}
+		}
+		return totalAddOnPrice;
+	}
+
+	private void processTabForCombinedRT(String tabName, Runnable selectionAction, Log Log, ScreenShots ScreenShots,
+			String responseBody) {
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+		Tripgain_HomePage_Flights homePage = new Tripgain_HomePage_Flights(driver);
+
+		try {
+			// 1. Click the main Tab (Seats, Meals, etc.)
+			WebElement tab = wait
+					.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[text()='" + tabName + "']")));
+			tab.click();
+
+			if (isNotFoundMessageDisplayed()) {
+				Log.ReportEvent("INFO", tabName + " not available. Skipping...");
+				return;
+			}
+
+			String sectorBaseXpath = "(//div[contains(@class,'special-service-request_sector-tabs')])[2]/div";
+			List<WebElement> sectors = driver.findElements(By.xpath(sectorBaseXpath));
+
+			for (int i = 1; i <= sectors.size(); i++) {
+				// 2. Click the specific Sector
+				WebElement sector = wait.until(
+						ExpectedConditions.elementToBeClickable(By.xpath("(" + sectorBaseXpath + ")[" + i + "]")));
+				sector.click();
+
+				// 3. DYNAMIC WAIT: Wait for the specific data cards to appear
+				String itemCardXpath = tabName.equals("Seat Selection")
+						? "//div[contains(@class,'flight-seat-map_seat')]"
+						: "//div[contains(@class,'meal-selection_meal-tab_info')]";
+
+				try {
+					// We use a short wait here. If it fails, the sector is truly empty.
+					wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(itemCardXpath)));
+
+					List<WebElement> itemCards = driver.findElements(By.xpath(itemCardXpath));
+					List<Map<String, String>> uiData = new ArrayList<>();
+
+					// 4. Scrape & Validate
+					if (tabName.equals("Seat Selection")) {
+						uiData = homePage.getOnewayBookingpgAllSeatData(Log, ScreenShots, i);
+						if (!uiData.isEmpty())
+							homePage.validateRTCombinedBookingPageSeatData(uiData, responseBody, Log, ScreenShots);
+					} else if (tabName.equals("Meal Preferences")) {
+						uiData = homePage.getOnewayBookingpgAllAvailableMeals(Log, ScreenShots, i);
+						if (!uiData.isEmpty())
+							homePage.validateOnewayBookingPageMealData(uiData, responseBody, Log, ScreenShots);
+					} else if (tabName.equals("Baggage")) {
+						uiData = homePage.getOnewayBookingpgAllAvailableBaggage(Log, ScreenShots, i);
+						if (!uiData.isEmpty())
+							homePage.validateOnewayBookingPageBaggageData(uiData, responseBody, Log, ScreenShots);
+					} else if (tabName.equals("Special Requests")) {
+						uiData = homePage.getOnewayBookingpgAllAvailableSpecialRequests(Log, ScreenShots, i);
+						if (!uiData.isEmpty())
+							homePage.validateOnewayBookingPageSpecialRequests(uiData, responseBody, Log, ScreenShots);
+					}
+
+					// 5. Select the first item
+					// Log.ReportEvent("INFO", "Performing selection for " + tabName + " in Sector "
+					// + i);
+					selectionAction.run();
+
+				} catch (Exception e) {
+					// Log.ReportEvent("INFO", "No items found for " + tabName + " in Sector " + i +
+					// " after waiting.");
+				}
+			}
+		} catch (Exception e) {
+			Log.ReportEvent("FAIL", tabName + " processing failed: " + e.getMessage());
+			ScreenShots.takeScreenShot();
+		}
+	}
+
+}

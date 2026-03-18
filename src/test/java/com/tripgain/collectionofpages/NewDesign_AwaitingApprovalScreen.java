@@ -47,7 +47,7 @@ public class NewDesign_AwaitingApprovalScreen {
 	}
 	
 	public String[] getLocationDetailsFromAwaitingScreen() {
-	    String text = driver.findElement(By.xpath("(//div[contains(@class,'trip_card__container')])[1]//div[contains(@class,'tg-start')]")).getText();
+	    String text = driver.findElement(By.xpath("(//div[contains(@class,'trip_card__container')]//div[contains(@class,'trip_card__trip_info')]//div[contains(@class,'tg-start')])[1]")).getText();
 	    System.out.println("Location names from Awaiting Page: " + text);
 
 	    String[] parts = text.split("-");
@@ -563,20 +563,16 @@ public String[] getApproverNameInAwaitingScreen(Log log) {
         return new String[0]; // empty array
     }
 
-    // Extract text from all approver elements
     String[] approverNames = new String[approverElements.size()];
     for (int i = 0; i < approverElements.size(); i++) {
         approverNames[i] = approverElements.get(i).getText().trim();
     }
 
-    // Log result summary
     log.ReportEvent("INFO", approverNames.length + " approver names found on Awaiting screen: " 
         + String.join(", ", approverNames));
 
     return approverNames;
 }
-
-
 
 public void clickApprovalDetailsButtonInViewtrip() {
 	driver.findElement(By.xpath("//button[text()='Approval Details']")).click();
@@ -593,7 +589,7 @@ public String[] getApproverTimeInAwaitingScreen(Log log) {
 
 //Method to logout 
 public void clickOnLogout() throws InterruptedException {
-	driver.findElement(By.xpath("//div[@class='MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault css-1vhh6nc']")).click();
+	driver.findElement(By.xpath("//button[@class='MuiButtonBase-root MuiIconButton-root MuiIconButton-sizeMedium css-15eml5n']")).click();
 	Thread.sleep(1000);
 	driver.findElement(By.xpath("//span[text()='Logout']")).click();
 }
@@ -1122,52 +1118,6 @@ public void validatePriceFromBookingToAwaitingPage(
 }
 
 
-
-//public void validateCheckInDateBetweenBookingToAwaitingPage(
-//        String[] bookingPageDateText,
-//        String[] AwaitingPageDateText,
-//
-//        Log log,
-//        ScreenShots screenshots) {
-//
-//    // Validate Result Page date parts
-//    if (AwaitingPageDateText == null || AwaitingPageDateText.length != 3) {
-//        log.ReportEvent("FAIL", "Check-in date from Awaiting Page is missing or not in expected format.");
-//        screenshots.takeScreenShot1();
-//        return;
-//    }
-//
-//    // Validate Booking Page date
-//    if (bookingPageDateText == null || bookingPageDateText.length == 0 || bookingPageDateText[0].trim().isEmpty()) {
-//        log.ReportEvent("FAIL", "Check-in date from Booking Page is missing or empty.");
-//        screenshots.takeScreenShot1();
-//        return;
-//    }
-//
-//    String resultDay = AwaitingPageDateText[0];
-//    String resultMonth = AwaitingPageDateText[1].replace(",", "");  // Remove comma if present
-//    String resultYear = AwaitingPageDateText[2];
-//
-//    String normalizedAwaitingDate = resultDay + " " + resultMonth + " " + resultYear;  // e.g., "20 Sep 2025"
-//    String bookingDateRaw = bookingPageDateText[0].trim();
-//
-//    // Normalize booking page text by removing suffixes, commas, and trimming
-//    String bookingDate = bookingDateRaw
-//            .replaceAll("(?<=\\d)(st|nd|rd|th)", "")
-//            .replace(",", "")
-//            .trim();  // e.g., "20 Sep 2025"
-//
-//    // Compare (case-insensitive)
-//    if (!bookingDate.equalsIgnoreCase(normalizedAwaitingDate)) {
-//        log.ReportEvent("FAIL", "Check-in date mismatch! Booking Page: '" + bookingDate + "', Awaiting Page: '" + normalizedAwaitingDate + "'");
-//        screenshots.takeScreenShot1();
-//        Assert.fail("Check-in date mismatch between Booking and awaiting Pages.");
-//    } else {
-//        log.ReportEvent("PASS", "Check-in date matches on both Booking and awaiting pages. Date: '" + normalizedAwaitingDate + "'");
-//    }
-//}
-
-
 public void validateCheckInDateBetweenBookingToAwaitingPage(
         String[] bookingPageDateText,
         String[] awaitingPageDateText,
@@ -1188,7 +1138,6 @@ public void validateCheckInDateBetweenBookingToAwaitingPage(
         return;
     }
 
-    // ---- Extract parts ----
     String resultDay = awaitingPageDateText[0].replaceAll("[^0-9]", ""); // remove suffixes like 20th → 20
     String resultMonth = awaitingPageDateText[1].replace(",", "");
     String resultYear = awaitingPageDateText[2];
@@ -1270,15 +1219,4 @@ public void validateCheckOutDateBetweenBookingAndAwaitingPage(
 }
 
   
-
-
-
-
-
-
-
-
-
-
-
 }

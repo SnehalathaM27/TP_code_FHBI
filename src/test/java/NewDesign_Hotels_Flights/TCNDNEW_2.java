@@ -152,7 +152,7 @@ try {
 		NewDesignHotels_DescPage.waitUntilHotelBookingPageDisplayed();
 		
 		//NewDesign_HotelsBookingPage.addTravellerDetails();
-		NewDesign_HotelsBookingPage.clickSendForApprovalBtn(Log);
+		NewDesign_HotelsBookingPage.clickSendForApproval(Log, screenShots);
 	
 		
 	

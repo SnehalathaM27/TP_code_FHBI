@@ -126,7 +126,7 @@ public class TCNDBUNEW_4 extends BaseClass{
             NewDesignBusesSerachPage.enterfromLocForBuses(origin, Log);
             Thread.sleep(2000);
             NewDesignBusesSerachPage.enterToLocForBuses(dest, Log);
-            NewDesign_HotelsSearchPage.selectBusDate(fromDate, fromMonthYear, Log);
+			NewDesign_HotelsSearchPage.selectBusJourneyDate(fromDate, fromMonthYear);
             NewDesignBusesSerachPage.SearchBus(Log, screenShots);
             Thread.sleep(3000);
                        

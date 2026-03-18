@@ -1,8 +1,12 @@
 package com.tripgain.collectionofpages;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
@@ -195,30 +199,96 @@ public class NewDesignHotelsSearchPage {
 	    Log.ReportEvent("INFO", "Selected date: " + returnDate + " " + returnMonthAndYear);
 	}
 	
-	public void selectBusDate(String returnDate, String returnMonthAndYear, Log Log) throws InterruptedException {
-	    clickBusDate();
+	
+	@FindBy(xpath = "//div[contains(@class,'field date-range tg-fs-dp')]")
+	WebElement selectjourdate;
 
-	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
-	    wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='custom-header']")));
+	public String selectBusJourneyDate(String returnDate, String MonthandYear) throws InterruptedException {
 
-	    String currentMonthYear = driver.findElement(By.xpath("//div[@class='custom-header']")).getText();
-	    System.out.println("Current calendar: " + currentMonthYear);
+		JavascriptExecutor js = (JavascriptExecutor) driver;
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
-	    // Navigate to correct month if needed
-	    while (!currentMonthYear.trim().equalsIgnoreCase(returnMonthAndYear.trim())) {
-	        driver.findElement(By.xpath("(//button[contains(@class,'nav-arrow')])[2]")).click();
-	        wait.until(ExpectedConditions.textToBePresentInElementLocated(
-	            By.xpath("//div[@class='custom-header']"),
-	            returnMonthAndYear
-	        ));
-	        currentMonthYear = driver.findElement(By.xpath("//div[@class='custom-header']")).getText();
-	    }
+		// Zoom out (your logic kept)
+		js.executeScript("document.body.style.zoom='80%'");
 
-        driver.findElement(By.xpath("//div[contains(@class, 'react-datepicker__day') and not(contains(@class, 'outside-month')) and not(contains(@class, 'disabled'))]//span[@class='day' and text()='" + returnDate + "']")).click();
+		// ===== CLICK DATE FIELD TO OPEN CALENDAR =====
+		wait.until(ExpectedConditions.visibilityOf(selectjourdate));
+		wait.until(ExpectedConditions.elementToBeClickable(selectjourdate));
 
+		// Scroll to element
+		js.executeScript("arguments[0].scrollIntoView({block:'center'});", selectjourdate);
+		Thread.sleep(500);
 
-	    Log.ReportEvent("INFO", "Selected date: " + returnDate + " " + returnMonthAndYear);
+		// IMPORTANT: Click the actual clickable child inside wrapper
+		js.executeScript("arguments[0].querySelector('.custom_datepicker_input_wrapper').click();", selectjourdate);
+
+		// ===== WAIT FOR CALENDAR HEADER =====
+		By monthYearHeader = By.xpath("//div[@class='custom-header']");
+		wait.until(ExpectedConditions.visibilityOfElementLocated(monthYearHeader));
+
+		String currentMonthYear = driver.findElement(monthYearHeader).getText();
+
+		// ===== NAVIGATE TO CORRECT MONTH =====
+		while (!currentMonthYear.equals(MonthandYear)) {
+
+			WebElement nextArrow = driver.findElement(By.xpath("(//button[contains(@class,'nav-arrow')])[2]"));
+			js.executeScript("arguments[0].click();", nextArrow);
+
+			wait.until(ExpectedConditions.visibilityOfElementLocated(monthYearHeader));
+			currentMonthYear = driver.findElement(monthYearHeader).getText();
+		}
+
+		// ===== SELECT DATE =====
+		By dayLocator = By.xpath(
+				"//div[contains(@class, 'react-datepicker__day') and not(contains(@class, 'outside-month')) and not(contains(@class, 'disabled'))]//span[@class='day' and text()='"
+						+ returnDate + "']");
+
+		WebElement dayElement = wait.until(ExpectedConditions.visibilityOfElementLocated(dayLocator));
+
+		js.executeScript("arguments[0].scrollIntoView({block:'center'});", dayElement);
+		Thread.sleep(500);
+
+		js.executeScript("arguments[0].click();", dayElement);
+
+		// Restore zoom
+		js.executeScript("document.body.style.zoom='100%'");
+
+		String rawDate = returnDate + " " + MonthandYear;
+		return normalizeDate(rawDate);
 	}
+
+	public String normalizeDate(String rawDate) {
+		// Remove ordinal suffixes: st, nd, rd, th
+		rawDate = rawDate.replaceAll("(?<=\\d)(st|nd|rd|th)", "");
+		rawDate = rawDate.replaceAll(",", "").trim(); // Remove commas if any
+
+		String[] possibleFormats = { "dd MMMM yyyy", // 13 August 2025
+				"MMM dd yyyy", // Aug 13 2025
+				"yyyy-MM-dd", // 2025-08-13
+				"dd-MM-yyyy", // 13-08-2025
+				"dd/MM/yyyy", // 13/08/2025
+				"dd MMM yyyy" // 13 Aug 2025
+		};
+
+		for (String format : possibleFormats) {
+			try {
+				SimpleDateFormat inputFormat = new SimpleDateFormat(format, Locale.ENGLISH);
+				Date date = inputFormat.parse(rawDate);
+
+				// Desired output format
+				SimpleDateFormat outputFormat = new SimpleDateFormat("dd-MMM-yyyy", Locale.ENGLISH);
+				return outputFormat.format(date);
+
+			} catch (ParseException e) {
+				// Try next format
+			}
+		}
+
+		System.err.println("⚠ Could not normalize date: " + rawDate);
+		return rawDate;
+	}
+
+
 
 
 		//Method to Click on Check-Out  Date

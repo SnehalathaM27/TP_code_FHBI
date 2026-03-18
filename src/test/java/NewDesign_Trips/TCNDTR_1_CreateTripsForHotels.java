@@ -34,6 +34,7 @@ import com.tripgain.collectionofpages.SkyTravelers_Hotels_SearchPage;
 import com.tripgain.collectionofpages.SkyTravelers_Hotels_confirmBookingPage;
 import com.tripgain.collectionofpages.TripPlanner;
 import com.tripgain.collectionofpages.Tripgain_FutureDates;
+import com.tripgain.collectionofpages.Tripgain_HomePage_Flights;
 import com.tripgain.collectionofpages.Tripgain_Login;
 import com.tripgain.collectionofpages.Tripgain_RoundTripResultsScreen;
 import com.tripgain.collectionofpages.Tripgain_homepage;
@@ -91,11 +92,14 @@ try {
 		NewDesign_Login NewDesignLogin = new NewDesign_Login(driver);
 
 		SkyTravelers_Hotels_Login SkyTravelersHotelsLogin = new SkyTravelers_Hotels_Login(driver);
+		Tripgain_HomePage_Flights tripgain_HomePage = new Tripgain_HomePage_Flights(driver);
+
 		NewDesignLogin.enterUserName(username);
 		NewDesignLogin.enterPasswordName(pwd);
 		NewDesignLogin.clickButton();
 		Log.ReportEvent("PASS", "Enter UserName and Password is Successful");
-		Thread.sleep(2000);
+		tripgain_HomePage.clickIfPresentCloseBtn();
+		
 
 		NewDesign_Trips NewDesignTrips = new NewDesign_Trips(driver);
 		NewDesign_Hotels_ResultsPage NewDesignHotelsResultsPage=new NewDesign_Hotels_ResultsPage(driver);
@@ -106,6 +110,7 @@ try {
 
 		NewDesignTrips.clcikOnTrips();
 		NewDesignTrips.createTrip();
+		Thread.sleep(3000);
 		NewDesignTrips.enterNameThisTrip(tripName, Log);
 		String origindetails = NewDesignTrips.enterfrom(origin);
 		String destdetails = NewDesignTrips.enterTo(destination);
@@ -113,6 +118,7 @@ try {
 		String journeydatedetails = NewDesignTrips.selectJourneyDate(fromDate, fromMonthYear);
 
 		String returndatedetails = NewDesignTrips.selectReturnDate(returnDate, returnMonthYear);
+		NewDesignTrips.selectTripTypeDropdown("Business Travel");
 
 		// List<String> servicesdetails = Trip_Planner.selectServices("Flight","Hotel");
 		List<String> servicesdetails = NewDesignTrips.selectServices("Bus","Hotel");
@@ -122,8 +128,9 @@ try {
 		List<String> servicesTextFromPopup = NewDesignTrips.getSelectedServicesTextFromPopup();
 
 		NewDesignTrips.validateSelectedServicesInSelectedAndPopup(servicesdetails, servicesTextFromPopup, Log,screenShots);
-		String[] tripIdFromPop = NewDesignTrips.getTripIdFromPopup(Log);
-		NewDesignTrips.clickOnContinueToAddServicesBtn();
+		
+	//	String[] tripIdFromPop = NewDesignTrips.getTripIdFromPopup(Log);
+	//	NewDesignTrips.clickOnContinueToAddServicesBtn();
 
 		String[] TripIdFromNextPage = NewDesignTrips.getTripIdFromTripDetailsPage(Log);
 

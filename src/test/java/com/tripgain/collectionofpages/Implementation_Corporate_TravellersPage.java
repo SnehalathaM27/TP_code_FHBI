@@ -35,24 +35,29 @@ public class Implementation_Corporate_TravellersPage {
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
 		WebElement viewDetailBtn = wait
-				.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[normalize-space(text())='" + email+ "']/ancestor::div[contains(@class,'corporate_traveller__detail_container')]//button[normalize-space(text())='View Detail']")));
+				.until(ExpectedConditions.elementToBeClickable(By.xpath("//div[normalize-space(text())='" + email
+						+ "']/ancestor::div[contains(@class,'corporate_traveller__detail_container')]//button[normalize-space(text())='View Detail']")));
 		viewDetailBtn.click();
 		System.out.println(" Clicked on 'View Detail' for: " + email);
 	}
+
 	public String[] clickOnTravellerProfile() throws InterruptedException {
-	    Thread.sleep(1000);
+		Thread.sleep(1000);
 
-	    driver.findElement(By.xpath("//div[@class='MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault css-1vhh6nc']/following-sibling::button")).click();
-	    Thread.sleep(1000);
+		driver.findElement(By.xpath(
+				"//div[@class='MuiAvatar-root MuiAvatar-circular MuiAvatar-colorDefault css-1vhh6nc']/following-sibling::button"))
+				.click();
+		Thread.sleep(1000);
 
-	    driver.findElement(By.xpath("//span[normalize-space(text())='Profile']")).click();
-	    Thread.sleep(3000);
+		driver.findElement(By.xpath("//span[normalize-space(text())='Profile']")).click();
+		Thread.sleep(3000);
 
-	    WebElement gradeTextElement = driver.findElement(By.xpath("//div[normalize-space(text())='Grade']/following-sibling::div"));
-	    String gradeText = gradeTextElement.getText().trim();
+		WebElement gradeTextElement = driver
+				.findElement(By.xpath("//div[normalize-space(text())='Grade']/following-sibling::div"));
+		String gradeText = gradeTextElement.getText().trim();
 
-	    System.out.println("Grade from Traveller Profile: " + gradeText);
-	    return new String[]{gradeText};
+		System.out.println("Grade from Traveller Profile: " + gradeText);
+		return new String[] { gradeText };
 	}
 
 	public void clcikOnEditBtn() throws Exception {
@@ -417,551 +422,552 @@ public class Implementation_Corporate_TravellersPage {
 		}
 	}
 
-	
-	
-	public void validateHotelDaysPolicyForInternational(String[] checkindateResultPage, Log log, ScreenShots screenshots) {
-	    try {
-	        // Construct check-in date string
-	        String checkInDay = checkindateResultPage[0];
-	        String checkInMonth = checkindateResultPage[1];
-	        String checkInYear = checkindateResultPage[2];
+	public void validateHotelDaysPolicyForInternational(String[] checkindateResultPage, Log log,
+			ScreenShots screenshots) {
+		try {
+			// Construct check-in date string
+			String checkInDay = checkindateResultPage[0];
+			String checkInMonth = checkindateResultPage[1];
+			String checkInYear = checkindateResultPage[2];
 
-	        String checkInDateStr = checkInDay + " " + checkInMonth + " " + checkInYear;
-	        System.out.println("Check-in full date: " + checkInDateStr);
+			String checkInDateStr = checkInDay + " " + checkInMonth + " " + checkInYear;
+			System.out.println("Check-in full date: " + checkInDateStr);
 
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-	        LocalDate checkInDate = LocalDate.parse(checkInDateStr, formatter);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+			LocalDate checkInDate = LocalDate.parse(checkInDateStr, formatter);
 
-	        // Calculate days from TODAY to CHECK-IN (inclusive)
-	        LocalDate today = LocalDate.now();
-	        int daysUntilCheckIn = (int) ChronoUnit.DAYS.between(today, checkInDate) + 1;
+			// Calculate days from TODAY to CHECK-IN (inclusive)
+			LocalDate today = LocalDate.now();
+			int daysUntilCheckIn = (int) ChronoUnit.DAYS.between(today, checkInDate) + 1;
 
-	        log.ReportEvent("INFO", "Starting INTERNATIONAL hotel policy validation. Days until check-in (inclusive): " + daysUntilCheckIn);
+			log.ReportEvent("INFO", "Starting INTERNATIONAL hotel policy validation. Days until check-in (inclusive): "
+					+ daysUntilCheckIn);
 
-	        List<WebElement> hotelCards = driver.findElements(By.xpath("//div[@class='hcard ']"));
-	        log.ReportEvent("INFO", "Total international hotels found: " + hotelCards.size());
+			List<WebElement> hotelCards = driver.findElements(By.xpath("//div[@class='hcard ']"));
+			log.ReportEvent("INFO", "Total international hotels found: " + hotelCards.size());
 
-	        boolean allCorrect = true;
+			boolean allCorrect = true;
 
-	        for (int i = 0; i < hotelCards.size(); i++) {
-	            WebElement hotelCard = hotelCards.get(i);
+			for (int i = 0; i < hotelCards.size(); i++) {
+				WebElement hotelCard = hotelCards.get(i);
 
-	            // Get policy text
-	            WebElement policyElement = hotelCard.findElement(By.xpath(".//div[contains(@class,'tg-policy')]"));
-	            String actualPolicy = policyElement.getText().toLowerCase();
-	            
-	            // Get hotel price
-	            int hotelPrice;
-	            
-	            // Try to get price element
-	            try {
-	                WebElement priceElement = hotelCard.findElement(By.xpath(".//*[contains(@class,'tg-hl-price')]"));
-	                String priceText = priceElement.getText().replace("$", "").replace(",", "").trim();
-	                if (priceText.contains("₹")) {
-	                    priceText = priceText.replace("₹", "").replace(",", "").trim();
-	                }
-	                hotelPrice = Integer.parseInt(priceText);
-	            } catch (Exception e) {
-	                // Try alternative price locator
-	                WebElement priceElement = hotelCard.findElement(By.xpath(".//*[contains(@class,'price')]"));
-	                String priceText = priceElement.getText().replaceAll("[^0-9]", "").trim();
-	                hotelPrice = Integer.parseInt(priceText);
-	            }
+				// Get policy text
+				WebElement policyElement = hotelCard.findElement(By.xpath(".//div[contains(@class,'tg-policy')]"));
+				String actualPolicy = policyElement.getText().toLowerCase();
 
-	            // STEP 1: First validate DAYS-BASED policy
-	            String expectedDaysPolicy = (daysUntilCheckIn <= 15) ? "out of policy" : "in policy";
-	            
-	            // STEP 2: Then validate AMOUNT-BASED policy (0-13600 = in policy, above = out of policy)
-	            String expectedAmountPolicy = (hotelPrice >= 0 && hotelPrice <= 13600) ? "in policy" : "out of policy";
-	            
-	            // The final expected policy should match BOTH conditions
-	            // But we need to know how these two combine
-	            // For now, I'll check both separately
-	            
-	            log.ReportEvent("INFO", "Hotel " + (i + 1) + " | Days: " + daysUntilCheckIn + " | Expected Days Policy: " + expectedDaysPolicy);
-	            log.ReportEvent("INFO", "Hotel " + (i + 1) + " | Price: " + hotelPrice + " | Expected Amount Policy: " + expectedAmountPolicy);
-	            
-	            // Check if actual policy contains both expected policies
-	            boolean daysPolicyMatch = actualPolicy.contains(expectedDaysPolicy);
-	            boolean amountPolicyMatch = actualPolicy.contains(expectedAmountPolicy);
-	            
-	            if (!daysPolicyMatch) {
-	                log.ReportEvent("FAIL", "Hotel " + (i + 1) + " | DAYS POLICY MISMATCH | Days: " + daysUntilCheckIn 
-	                        + " | Expected: " + expectedDaysPolicy + " | Found: " + actualPolicy);
-	                allCorrect = false;
-	            }
-	            
-	            if (!amountPolicyMatch) {
-	                log.ReportEvent("FAIL", "Hotel " + (i + 1) + " | AMOUNT POLICY MISMATCH | Price: " + hotelPrice 
-	                        + " | Expected: " + expectedAmountPolicy + " | Found: " + actualPolicy);
-	                allCorrect = false;
-	            }
-	            
-	            if (daysPolicyMatch && amountPolicyMatch) {
-	                log.ReportEvent("PASS", "Hotel " + (i + 1) + " | BOTH POLICIES CORRECT | Days: " + daysUntilCheckIn 
-	                        + " | Price: " + hotelPrice + " | Policy: " + actualPolicy);
-	            }
-	        }
+				// Get hotel price
+				int hotelPrice;
 
-	        if (allCorrect) {
-	            log.ReportEvent("PASS", "✓ ALL INTERNATIONAL HOTELS VALIDATED SUCCESSFULLY | Days until check-in: " + daysUntilCheckIn);
-	        } else {
-	            screenshots.takeScreenShot1();
-	            Assert.fail("International hotel policy validation failed. Days until check-in: " + daysUntilCheckIn);
-	        }
+				// Try to get price element
+				try {
+					WebElement priceElement = hotelCard.findElement(By.xpath(".//*[contains(@class,'tg-hl-price')]"));
+					String priceText = priceElement.getText().replace("$", "").replace(",", "").trim();
+					if (priceText.contains("₹")) {
+						priceText = priceText.replace("₹", "").replace(",", "").trim();
+					}
+					hotelPrice = Integer.parseInt(priceText);
+				} catch (Exception e) {
+					// Try alternative price locator
+					WebElement priceElement = hotelCard.findElement(By.xpath(".//*[contains(@class,'price')]"));
+					String priceText = priceElement.getText().replaceAll("[^0-9]", "").trim();
+					hotelPrice = Integer.parseInt(priceText);
+				}
 
-	    } catch (Exception e) {
-	        log.ReportEvent("FAIL", "Error during international hotel validation: " + e.getMessage());
-	        screenshots.takeScreenShot1();
-	        Assert.fail("Error during international hotel validation: " + e.getMessage());
-	    }
+				// STEP 1: First validate DAYS-BASED policy
+				String expectedDaysPolicy = (daysUntilCheckIn <= 15) ? "out of policy" : "in policy";
+
+				// STEP 2: Then validate AMOUNT-BASED policy (0-13600 = in policy, above = out
+				// of policy)
+				String expectedAmountPolicy = (hotelPrice >= 0 && hotelPrice <= 13600) ? "in policy" : "out of policy";
+
+				log.ReportEvent("INFO", "Hotel " + (i + 1) + " | Days: " + daysUntilCheckIn
+						+ " | Expected Days Policy: " + expectedDaysPolicy);
+				log.ReportEvent("INFO", "Hotel " + (i + 1) + " | Price: " + hotelPrice + " | Expected Amount Policy: "
+						+ expectedAmountPolicy);
+
+				// Check if actual policy contains both expected policies
+				boolean daysPolicyMatch = actualPolicy.contains(expectedDaysPolicy);
+				boolean amountPolicyMatch = actualPolicy.contains(expectedAmountPolicy);
+
+				if (!daysPolicyMatch) {
+					log.ReportEvent("FAIL", "Hotel " + (i + 1) + " | DAYS POLICY MISMATCH | Days: " + daysUntilCheckIn
+							+ " | Expected: " + expectedDaysPolicy + " | Found: " + actualPolicy);
+					allCorrect = false;
+				}
+
+				if (!amountPolicyMatch) {
+					log.ReportEvent("FAIL", "Hotel " + (i + 1) + " | AMOUNT POLICY MISMATCH | Price: " + hotelPrice
+							+ " | Expected: " + expectedAmountPolicy + " | Found: " + actualPolicy);
+					allCorrect = false;
+				}
+
+				if (daysPolicyMatch && amountPolicyMatch) {
+					log.ReportEvent("PASS", "Hotel " + (i + 1) + " | BOTH POLICIES CORRECT | Days: " + daysUntilCheckIn
+							+ " | Price: " + hotelPrice + " | Policy: " + actualPolicy);
+				}
+			}
+
+			if (allCorrect) {
+				log.ReportEvent("PASS",
+						"✓ ALL INTERNATIONAL HOTELS VALIDATED SUCCESSFULLY | Days until check-in: " + daysUntilCheckIn);
+			} else {
+				screenshots.takeScreenShot1();
+				Assert.fail("International hotel policy validation failed. Days until check-in: " + daysUntilCheckIn);
+			}
+
+		} catch (Exception e) {
+			log.ReportEvent("FAIL", "Error during international hotel validation: " + e.getMessage());
+			screenshots.takeScreenShot1();
+			Assert.fail("Error during international hotel validation: " + e.getMessage());
+		}
 	}
+
 	public void validateHotelPolicyBasedOnGradeOrPriceForDomestic(String[] selectedGradeFromDropdown,
-	        String[] checkindateResultPage, Log log, ScreenShots screenshots) {
+			String[] checkindateResultPage, Log log, ScreenShots screenshots) {
 
-	    try {
-	        // Construct check-in date string
-	        String checkInDay = checkindateResultPage[0];
-	        String checkInMonth = checkindateResultPage[1];
-	        String checkInYear = checkindateResultPage[2];
+		try {
+			// Construct check-in date string
+			String checkInDay = checkindateResultPage[0];
+			String checkInMonth = checkindateResultPage[1];
+			String checkInYear = checkindateResultPage[2];
 
-	        String checkInDateStr = checkInDay + " " + checkInMonth + " " + checkInYear;
-	        System.out.println("Check-in full date: " + checkInDateStr);
+			String checkInDateStr = checkInDay + " " + checkInMonth + " " + checkInYear;
+			System.out.println("Check-in full date: " + checkInDateStr);
 
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-	        LocalDate checkInDate = LocalDate.parse(checkInDateStr, formatter);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+			LocalDate checkInDate = LocalDate.parse(checkInDateStr, formatter);
 
-	        // Calculate days from TODAY to CHECK-IN (inclusive)
-	        LocalDate today = LocalDate.now();
-	        int daysUntilCheckIn = (int) ChronoUnit.DAYS.between(today, checkInDate) + 1;
+			// Calculate days from TODAY to CHECK-IN (inclusive)
+			LocalDate today = LocalDate.now();
+			int daysUntilCheckIn = (int) ChronoUnit.DAYS.between(today, checkInDate) + 1;
 
-	        log.ReportEvent("INFO", "Starting hotel policy validation. Days until check-in (inclusive): " + daysUntilCheckIn 
-	                + ", Selected Grade: " + Arrays.toString(selectedGradeFromDropdown));
+			log.ReportEvent("INFO", "Starting hotel policy validation. Days until check-in (inclusive): "
+					+ daysUntilCheckIn + ", Selected Grade: " + Arrays.toString(selectedGradeFromDropdown));
 
-	        List<WebElement> hotelCards = driver.findElements(By.xpath("//div[@class='hcard ']"));
-	        log.ReportEvent("INFO", "Total hotels found: " + hotelCards.size());
+			List<WebElement> hotelCards = driver.findElements(By.xpath("//div[@class='hcard ']"));
+			log.ReportEvent("INFO", "Total hotels found: " + hotelCards.size());
 
-	        boolean allCorrect = true;
+			boolean allCorrect = true;
 
-	        // Grades that use DAYS-based policy
-	        List<String> daysPolicyGrades = Arrays.asList("M-7 - ", "M-8 - ", "C-1 - ", "C-2 - ", "C-3 - ",
-	                "C-4 - Senior Vice President", "C-5 - ");
+			// Grades that use DAYS-based policy
+			List<String> daysPolicyGrades = Arrays.asList("M-7 - ", "M-8 - ", "C-1 - ", "C-2 - ", "C-3 - ",
+					"C-4 - Senior Vice President", "C-5 - ");
 
-	        // Check if selected grade matches days-based policy grades
-	        boolean isDaysPolicyGrade = Arrays.stream(selectedGradeFromDropdown).anyMatch(daysPolicyGrades::contains);
+			// Check if selected grade matches days-based policy grades
+			boolean isDaysPolicyGrade = Arrays.stream(selectedGradeFromDropdown).anyMatch(daysPolicyGrades::contains);
 
-	        for (int i = 0; i < hotelCards.size(); i++) {
-	            WebElement hotelCard = hotelCards.get(i);
+			for (int i = 0; i < hotelCards.size(); i++) {
+				WebElement hotelCard = hotelCards.get(i);
 
-	            WebElement policyElement = hotelCard.findElement(By.xpath(".//div[contains(@class,'tg-policy')]"));
-	            String actualPolicy = policyElement.getText().toLowerCase();
+				WebElement policyElement = hotelCard.findElement(By.xpath(".//div[contains(@class,'tg-policy')]"));
+				String actualPolicy = policyElement.getText().toLowerCase();
 
-	            if (isDaysPolicyGrade) {
-	                // ✅ DAYS-BASED POLICY (for specific grades)
-	                // If days until check-in ≤ 7 → out of policy
-	                // If days until check-in > 7 → in policy
-	                String expectedPolicy = (daysUntilCheckIn <= 7) ? "out of policy" : "in policy";
+				if (isDaysPolicyGrade) {
+					// ✅ DAYS-BASED POLICY (for specific grades)
+					// If days until check-in ≤ 7 → out of policy
+					// If days until check-in > 7 → in policy
+					String expectedPolicy = (daysUntilCheckIn <= 7) ? "out of policy" : "in policy";
 
-	                if (!actualPolicy.contains(expectedPolicy)) {
-	                    log.ReportEvent("FAIL", "Hotel " + (i + 1) + " | DAYS POLICY | Days until check-in: " + daysUntilCheckIn 
-	                            + " | Expected: " + expectedPolicy + " | Found: " + actualPolicy);
-	                    allCorrect = false;
-	                } else {
-	                    log.ReportEvent("PASS", "Hotel " + (i + 1) + " | DAYS POLICY | Correct: " + actualPolicy 
-	                            + " for " + daysUntilCheckIn + " days until check-in");
-	                }
+					if (!actualPolicy.contains(expectedPolicy)) {
+						log.ReportEvent("FAIL", "Hotel " + (i + 1) + " | DAYS POLICY | Days until check-in: "
+								+ daysUntilCheckIn + " | Expected: " + expectedPolicy + " | Found: " + actualPolicy);
+						allCorrect = false;
+					} else {
+						log.ReportEvent("PASS", "Hotel " + (i + 1) + " | DAYS POLICY | Correct: " + actualPolicy
+								+ " for " + daysUntilCheckIn + " days until check-in");
+					}
 
-	            } else {
-	                // ✅ PRICE-BASED POLICY (for all other grades)
-	                // Get hotel price
-	                int hotelPrice;
-	                
-	                // Try to get price element
-	                WebElement priceElement = hotelCard.findElement(By.xpath(".//*[contains(@class,'tg-hl-price')]"));
-	                String priceText = priceElement.getText().replace("₹", "").replace(",", "").trim();
-	                hotelPrice = Integer.parseInt(priceText);
+				} else {
+					// ✅ PRICE-BASED POLICY (for all other grades)
+					// Get hotel price
+					int hotelPrice;
 
-	                // If price between 0-4000 → in policy, else → out of policy
-	                String expectedPolicy = (hotelPrice >= 0 && hotelPrice <= 4000) ? "in policy" : "out of policy";
+					// Try to get price element
+					WebElement priceElement = hotelCard.findElement(By.xpath(".//*[contains(@class,'tg-hl-price')]"));
+					String priceText = priceElement.getText().replace("₹", "").replace(",", "").trim();
+					hotelPrice = Integer.parseInt(priceText);
 
-	                if (!actualPolicy.contains(expectedPolicy)) {
-	                    log.ReportEvent("FAIL", "Hotel " + (i + 1) + " | PRICE POLICY | Price: ₹" + hotelPrice 
-	                            + " | Expected: " + expectedPolicy + " | Found: " + actualPolicy);
-	                    allCorrect = false;
-	                } else {
-	                    log.ReportEvent("PASS", "Hotel " + (i + 1) + " | PRICE POLICY | Correct: " + actualPolicy 
-	                            + " for price: ₹" + hotelPrice);
-	                }
-	            }
-	        }
+					// If price between 0-4000 → in policy, else → out of policy
+					String expectedPolicy = (hotelPrice >= 0 && hotelPrice <= 4000) ? "in policy" : "out of policy";
 
-	        if (allCorrect) {
-	            log.ReportEvent("PASS", "✓ ALL HOTELS VALIDATED SUCCESSFULLY | Selected Grade: "
-	                    + Arrays.toString(selectedGradeFromDropdown) + " | Days until check-in: " + daysUntilCheckIn);
-	        } else {
-	            screenshots.takeScreenShot1();
-	            Assert.fail("Hotel policy validation failed. Selected Grade: " + Arrays.toString(selectedGradeFromDropdown));
-	        }
+					if (!actualPolicy.contains(expectedPolicy)) {
+						log.ReportEvent("FAIL", "Hotel " + (i + 1) + " | PRICE POLICY | Price: ₹" + hotelPrice
+								+ " | Expected: " + expectedPolicy + " | Found: " + actualPolicy);
+						allCorrect = false;
+					} else {
+						log.ReportEvent("PASS", "Hotel " + (i + 1) + " | PRICE POLICY | Correct: " + actualPolicy
+								+ " for price: ₹" + hotelPrice);
+					}
+				}
+			}
 
-	    } catch (Exception e) {
-	        log.ReportEvent("FAIL", "Error during validation: " + e.getMessage());
-	        screenshots.takeScreenShot1();
-	        Assert.fail("Error during validation: " + e.getMessage());
-	    }
+			if (allCorrect) {
+				log.ReportEvent("PASS", "✓ ALL HOTELS VALIDATED SUCCESSFULLY | Selected Grade: "
+						+ Arrays.toString(selectedGradeFromDropdown) + " | Days until check-in: " + daysUntilCheckIn);
+			} else {
+				screenshots.takeScreenShot1();
+				Assert.fail("Hotel policy validation failed. Selected Grade: "
+						+ Arrays.toString(selectedGradeFromDropdown));
+			}
+
+		} catch (Exception e) {
+			log.ReportEvent("FAIL", "Error during validation: " + e.getMessage());
+			screenshots.takeScreenShot1();
+			Assert.fail("Error during validation: " + e.getMessage());
+		}
 	}
 
-	public void validateHoteldaysPolicyForInternational(String[] checkindateResultPage, Log log, ScreenShots screenshots) {
-	    try {
-	        // Construct check-in date string
-	        String checkInDay = checkindateResultPage[0];
-	        String checkInMonth = checkindateResultPage[1];
-	        String checkInYear = checkindateResultPage[2];
+	public void validateHoteldaysPolicyForInternational(String[] checkindateResultPage, Log log,
+			ScreenShots screenshots) {
+		try {
+			// Construct check-in date string
+			String checkInDay = checkindateResultPage[0];
+			String checkInMonth = checkindateResultPage[1];
+			String checkInYear = checkindateResultPage[2];
 
-	        String checkInDateStr = checkInDay + " " + checkInMonth + " " + checkInYear;
-	        System.out.println("Check-in full date: " + checkInDateStr);
+			String checkInDateStr = checkInDay + " " + checkInMonth + " " + checkInYear;
+			System.out.println("Check-in full date: " + checkInDateStr);
 
-	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-	        LocalDate checkInDate = LocalDate.parse(checkInDateStr, formatter);
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+			LocalDate checkInDate = LocalDate.parse(checkInDateStr, formatter);
 
-	        // Calculate days from TODAY to CHECK-IN (inclusive)
-	        LocalDate today = LocalDate.now();
-	        int daysUntilCheckIn = (int) ChronoUnit.DAYS.between(today, checkInDate) + 1;
+			// Calculate days from TODAY to CHECK-IN (inclusive)
+			LocalDate today = LocalDate.now();
+			int daysUntilCheckIn = (int) ChronoUnit.DAYS.between(today, checkInDate) + 1;
 
-	        log.ReportEvent("INFO", "Starting INTERNATIONAL hotel policy validation. Days until check-in (inclusive): " + daysUntilCheckIn);
+			log.ReportEvent("INFO", "Starting INTERNATIONAL hotel policy validation. Days until check-in (inclusive): "
+					+ daysUntilCheckIn);
 
-	        List<WebElement> hotelCards = driver.findElements(By.xpath("//div[@class='hcard ']"));
-	        log.ReportEvent("INFO", "Total international hotels found: " + hotelCards.size());
+			List<WebElement> hotelCards = driver.findElements(By.xpath("//div[@class='hcard ']"));
+			log.ReportEvent("INFO", "Total international hotels found: " + hotelCards.size());
 
-	        boolean allCorrect = true;
+			boolean allCorrect = true;
 
-	        for (int i = 0; i < hotelCards.size(); i++) {
-	            WebElement hotelCard = hotelCards.get(i);
+			for (int i = 0; i < hotelCards.size(); i++) {
+				WebElement hotelCard = hotelCards.get(i);
 
-	            // Get policy text
-	            WebElement policyElement = hotelCard.findElement(By.xpath(".//div[contains(@class,'tg-policy')]"));
-	            String actualPolicy = policyElement.getText().toLowerCase();
-	            
-	            // Get hotel price
-	            int hotelPrice;
-	            
-	            // Try to get price element (international hotels might have different price format)
-	            try {
-	                WebElement priceElement = hotelCard.findElement(By.xpath(".//*[contains(@class,'tg-hl-price')]"));
-	                String priceText = priceElement.getText().replace("$", "").replace(",", "").trim(); // For USD
-	                // If it's in other currencies, adjust accordingly
-	                if (priceText.contains("₹")) {
-	                    priceText = priceText.replace("₹", "").replace(",", "").trim();
-	                }
-	                hotelPrice = Integer.parseInt(priceText);
-	            } catch (Exception e) {
-	                // Try alternative price locator
-	                WebElement priceElement = hotelCard.findElement(By.xpath(".//*[contains(@class,'price')]"));
-	                String priceText = priceElement.getText().replaceAll("[^0-9]", "").trim();
-	                hotelPrice = Integer.parseInt(priceText);
-	            }
+				// Get policy text
+				WebElement policyElement = hotelCard.findElement(By.xpath(".//div[contains(@class,'tg-policy')]"));
+				String actualPolicy = policyElement.getText().toLowerCase();
 
-	            // LOGIC: First calculate days, then check amount
-	            // If amount is 0-13600 → in policy, else → out of policy
-	            // (Days calculation is already done above for logging purposes)
-	            
-	            String expectedPolicy = (hotelPrice >= 0 && hotelPrice <= 13600) ? "in policy" : "out of policy";
+				// Get hotel price
+				int hotelPrice;
 
-	            log.ReportEvent("INFO", "Hotel " + (i + 1) + " | Days until check-in: " + daysUntilCheckIn 
-	                    + " | Price: " + hotelPrice + " | Expected: " + expectedPolicy);
+				// Try to get price element (international hotels might have different price
+				// format)
+				try {
+					WebElement priceElement = hotelCard.findElement(By.xpath(".//*[contains(@class,'tg-hl-price')]"));
+					String priceText = priceElement.getText().replace("$", "").replace(",", "").trim(); // For USD
+					// If it's in other currencies, adjust accordingly
+					if (priceText.contains("₹")) {
+						priceText = priceText.replace("₹", "").replace(",", "").trim();
+					}
+					hotelPrice = Integer.parseInt(priceText);
+				} catch (Exception e) {
+					// Try alternative price locator
+					WebElement priceElement = hotelCard.findElement(By.xpath(".//*[contains(@class,'price')]"));
+					String priceText = priceElement.getText().replaceAll("[^0-9]", "").trim();
+					hotelPrice = Integer.parseInt(priceText);
+				}
 
-	            if (!actualPolicy.contains(expectedPolicy)) {
-	                log.ReportEvent("FAIL", "Hotel " + (i + 1) + " | Days until check-in: " + daysUntilCheckIn 
-	                        + " | Price: " + hotelPrice 
-	                        + " | Expected Policy: " + expectedPolicy + " | Found: " + actualPolicy);
-	                allCorrect = false;
-	            } else {
-	                log.ReportEvent("PASS", "Hotel " + (i + 1) + " | Correct policy: " + actualPolicy 
-	                        + " for price: " + hotelPrice + " | Days until check-in: " + daysUntilCheckIn);
-	            }
-	        }
+				String expectedPolicy = (hotelPrice >= 0 && hotelPrice <= 13600) ? "in policy" : "out of policy";
 
-	        if (allCorrect) {
-	            log.ReportEvent("PASS", "✓ ALL INTERNATIONAL HOTELS VALIDATED SUCCESSFULLY | Days until check-in: " + daysUntilCheckIn);
-	        } else {
-	            screenshots.takeScreenShot1();
-	            Assert.fail("International hotel policy validation failed. Days until check-in: " + daysUntilCheckIn);
-	        }
+				log.ReportEvent("INFO", "Hotel " + (i + 1) + " | Days until check-in: " + daysUntilCheckIn
+						+ " | Price: " + hotelPrice + " | Expected: " + expectedPolicy);
 
-	    } catch (Exception e) {
-	        log.ReportEvent("FAIL", "Error during international hotel validation: " + e.getMessage());
-	        screenshots.takeScreenShot1();
-	        Assert.fail("Error during international hotel validation: " + e.getMessage());
-	    }
+				if (!actualPolicy.contains(expectedPolicy)) {
+					log.ReportEvent("FAIL",
+							"Hotel " + (i + 1) + " | Days until check-in: " + daysUntilCheckIn + " | Price: "
+									+ hotelPrice + " | Expected Policy: " + expectedPolicy + " | Found: "
+									+ actualPolicy);
+					allCorrect = false;
+				} else {
+					log.ReportEvent("PASS", "Hotel " + (i + 1) + " | Correct policy: " + actualPolicy + " for price: "
+							+ hotelPrice + " | Days until check-in: " + daysUntilCheckIn);
+				}
+			}
+
+			if (allCorrect) {
+				log.ReportEvent("PASS",
+						"✓ ALL INTERNATIONAL HOTELS VALIDATED SUCCESSFULLY | Days until check-in: " + daysUntilCheckIn);
+			} else {
+				screenshots.takeScreenShot1();
+				Assert.fail("International hotel policy validation failed. Days until check-in: " + daysUntilCheckIn);
+			}
+
+		} catch (Exception e) {
+			log.ReportEvent("FAIL", "Error during international hotel validation: " + e.getMessage());
+			screenshots.takeScreenShot1();
+			Assert.fail("Error during international hotel validation: " + e.getMessage());
+		}
 	}
 
-	
 	// ---------------flights -------------------
-	
+
 	public List<String> getAllPolicyTextsFromFlightCards() {
 
-	    By policyLocator = By.xpath("//div[contains(@class,'tg-policy')]");
+		By policyLocator = By.xpath("//div[contains(@class,'tg-policy')]");
 
-	    List<WebElement> elements = driver.findElements(policyLocator);
+		List<WebElement> elements = driver.findElements(policyLocator);
 
-	    List<String> texts = new ArrayList<>();
+		List<String> texts = new ArrayList<>();
 
-	    for (WebElement element : elements) {
-	        texts.add(element.getText());
-	    }
+		for (WebElement element : elements) {
+			texts.add(element.getText());
+		}
 
-	    return texts;
+		return texts;
 	}
 
-
-
-	
-	
 	public String getFlightCardPolicyByIndex(int index) {
-	    try {
-	        // Wait until at least one policy element is visible
-	        List<WebElement> policyElements = new WebDriverWait(driver, Duration.ofSeconds(10))
-	                .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
-	                        By.xpath("//div[contains(@class,'tg-policy')]")
-	                ));
+		try {
+			// Wait until at least one policy element is visible
+			List<WebElement> policyElements = new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions
+					.visibilityOfAllElementsLocatedBy(By.xpath("//div[contains(@class,'tg-policy')]")));
 
-	        // Check index is valid
-	        if (index < 0 || index >= policyElements.size()) {
-	            throw new RuntimeException("Invalid index: " + index 
-	                    + ". Available policies count: " + policyElements.size());
-	        }
+			// Check index is valid
+			if (index < 0 || index >= policyElements.size()) {
+				throw new RuntimeException(
+						"Invalid index: " + index + ". Available policies count: " + policyElements.size());
+			}
 
-	        // Return trimmed text
-	        return policyElements.get(index).getText().trim();
+			// Return trimmed text
+			return policyElements.get(index).getText().trim();
 
-	    } catch (Exception e) {
-	        throw new RuntimeException("Error getting flight card policy at index " + index + ": " + e.getMessage(), e);
-	    }
-	}
-	
-	//---method to get flights policy text
-		public List<String> getAllPolicyTextsFromFlightFareCards(WebDriver driver) {
-		    By policyLocator = By.xpath("//div[contains(@class,'fare-options-container')]//div[contains(@class,'tg-policy')]");
-		    List<WebElement> elements = driver.findElements(policyLocator);
-		    
-		    List<String> texts = new ArrayList<>();
-		    for (WebElement element : elements) {
-		        texts.add(element.getText());
-		    }
-		    
-		    return texts;
+		} catch (Exception e) {
+			throw new RuntimeException("Error getting flight card policy at index " + index + ": " + e.getMessage(), e);
 		}
-	
-		public void validateSelectedFlightCardPolicyAgainstFareCards(int userSelectedCardNumber, Log log, ScreenShots screenshots) {
-		    try {
-		        log.ReportEvent("INFO", "Validating for Card #" + userSelectedCardNumber);
-		        
-		        // Convert user card number (1-based) to code index (0-based)
-		        int codeIndex = userSelectedCardNumber - 1;
-		        
-		        // Get policy from selected flight card using your existing method
-		        String flightCardPolicy = getFlightCardPolicyByIndex(codeIndex);
-		        log.ReportEvent("INFO", "Flight Card #" + userSelectedCardNumber + " Policy: '" + flightCardPolicy + "'");
-		        
-		        // Get all fare card policies using your existing method
-		        List<String> fareCardPolicies = getAllPolicyTextsFromFlightFareCards(driver);
-		        log.ReportEvent("INFO", "Fare Card Policies: " + fareCardPolicies);
-		        
-		        // Check if flight card policy matches ANY fare card policy
-		        boolean matchFound = false;
-		        for (String farePolicy : fareCardPolicies) {
-		            if (flightCardPolicy.equalsIgnoreCase(farePolicy)) {
-		                matchFound = true;
-		                log.ReportEvent("PASS", "✓ Match found! Flight policy '" + flightCardPolicy + 
-		                                       "' matches fare policy '" + farePolicy + "'");
-		                break;
-		            }
-		        }
-		        
-		        // Final result
-		        if (matchFound) {
-		            log.ReportEvent("PASS", "✓ Card #" + userSelectedCardNumber + " validation PASSED");
-		        } else {
-		            log.ReportEvent("FAIL", "✗ Card #" + userSelectedCardNumber + " policy '" + 
-		                                   flightCardPolicy + "' does not match any fare policy: " + fareCardPolicies);
-		            screenshots.takeScreenShot1();
-		            Assert.fail("Policy mismatch for Card #" + userSelectedCardNumber);
-		        }
-		        
-		    } catch (Exception e) {
-		        log.ReportEvent("FAIL", "Error validating flight card policy: " + e.getMessage());
-		        screenshots.takeScreenShot1();
-		        Assert.fail("Error validating flight card policy: " + e.getMessage());
-		    }
-		}
-		
-		public String[] getOnwardDateTextFromResultPage() {
-
-	    WebElement dateElement = new WebDriverWait(driver, Duration.ofSeconds(10))
-	            .until(ExpectedConditions.visibilityOfElementLocated(
-	                    By.xpath("(//div[@class=' tg-typography tg-typography_subtitle-6 fw-600 tg-typography_default'])[2]")));
-
-	    String fullText = dateElement.getText().trim();
-	    System.out.println("Raw text: " + fullText);
-
-	    // Remove ordinal suffix (st, nd, rd, th)
-	    fullText = fullText.replaceAll("(?<=\\d)(st|nd|rd|th)", "");
-
-	    // Remove comma
-	    fullText = fullText.replace(",", "");
-
-	    System.out.println("Cleaned text: " + fullText);
-
-	    return fullText.split("\\s+");
 	}
 
+	// ---method to get flights policy text
+	public List<String> getAllPolicyTextsFromFlightFareCards(WebDriver driver) {
+		By policyLocator = By
+				.xpath("//div[contains(@class,'fare-options-container')]//div[contains(@class,'tg-policy')]");
+		List<WebElement> elements = driver.findElements(policyLocator);
 
-		public void validateFlightPolicyAgainstDaysForDomestic(String[] onwardDate, Log log, ScreenShots screenshots) {
-		    try {
-		        // Get current date
-		        LocalDate currentDate = LocalDate.now();
-		        
-		        // Construct onward date string from user selection
-		        String onwardDateStr = onwardDate[0] + " " + onwardDate[1] + " " + onwardDate[2];
-		        
-		        System.out.println("Current Date: " + currentDate);
-		        System.out.println("Selected Onward Date: " + onwardDateStr);
-		        
-		        // Parse the selected onward date
-		        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-		        LocalDate selectedDate = LocalDate.parse(onwardDateStr, formatter);
-		        
-		        // Calculate days INCLUDING both start and end dates
-		        long daysBetween = ChronoUnit.DAYS.between(currentDate, selectedDate);
-		        int daysCount = (int) daysBetween + 1;  // +1 to make it inclusive
-		        
-		        System.out.println("Days from today to travel (inclusive): " + daysCount);
-		        log.ReportEvent("INFO", "Current Date: " + currentDate + ", Selected Date: " + selectedDate + 
-		                               ", Total Days (inclusive): " + daysCount);
-		        
-		        // Determine expected policy based on days count
-		        String expectedPolicy;
-		        if (daysCount <= 7) {
-		            expectedPolicy = "out of policy";  // If total days (inclusive) ≤ 7 = out of policy
-		        } else {
-		            expectedPolicy = "in policy";       // If total days > 7 = in policy
-		        }
-		        
-		        log.ReportEvent("INFO", "Expected policy based on " + daysCount + " total days (inclusive): " + expectedPolicy);
-		        
-		        // Get all flight card policy texts
-		        List<String> flightPolicies = getAllPolicyTextsFromFlightCards();
-		        log.ReportEvent("INFO", "Total flight cards found: " + flightPolicies.size());
-		        
-		        if (flightPolicies.isEmpty()) {
-		            log.ReportEvent("WARNING", "No flight policies found to validate");
-		            screenshots.takeScreenShot1();
-		            return;
-		        }
-		        
-		        boolean allCorrect = true;
-		        
-		        // Validate each flight card
-		        for (int i = 0; i < flightPolicies.size(); i++) {
-		            String actualPolicy = flightPolicies.get(i).toLowerCase().trim();
-		            
-		            if (actualPolicy.contains(expectedPolicy)) {
-		                log.ReportEvent("PASS", "Flight " + (i + 1) + " correctly shows: " + actualPolicy);
-		            } else {
-		                log.ReportEvent("FAIL", "Flight " + (i + 1) + " | Total days (inclusive): " + daysCount 
-		                        + " | Expected: " + expectedPolicy + " | Found: " + actualPolicy);
-		                allCorrect = false;
-		            }
-		        }
-		        
-		        // Final result
-		        if (allCorrect) {
-		            log.ReportEvent("PASS", "✓ ALL FLIGHT CARDS VALIDATED - Total days (inclusive): " + daysCount 
-		                    + ", Applied Policy: " + expectedPolicy);
-		        } else {
-		            log.ReportEvent("FAIL", "✗ POLICY VALIDATION FAILED - Total days (inclusive): " + daysCount);
-		            screenshots.takeScreenShot1();
-		            Assert.fail("Flight policy validation failed. Expected: " + expectedPolicy + " for " + daysCount + " total days (inclusive)");
-		        }
-		        
-		    } catch (Exception e) {
-		        log.ReportEvent("FAIL", "Error during flight validation: " + e.getMessage());
-		        screenshots.takeScreenShot1();
-		        Assert.fail("Error during flight validation: " + e.getMessage());
-		    }
+		List<String> texts = new ArrayList<>();
+		for (WebElement element : elements) {
+			texts.add(element.getText());
 		}
-		
-		public void validateFlightPolicyAgainstDaysForInternational(String[] onwardDate, Log log, ScreenShots screenshots) {
-		    try {
-		        // Get current date
-		        LocalDate currentDate = LocalDate.now();
-		        
-		        // Construct onward date string from user selection
-		        String onwardDateStr = onwardDate[0] + " " + onwardDate[1] + " " + onwardDate[2];
-		        
-		        System.out.println("Current Date: " + currentDate);
-		        System.out.println("Selected Onward Date: " + onwardDateStr);
-		        
-		        // Parse the selected onward date
-		        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
-		        LocalDate selectedDate = LocalDate.parse(onwardDateStr, formatter);
-		        
-		        // Calculate days INCLUDING both start and end dates
-		        long daysBetween = ChronoUnit.DAYS.between(currentDate, selectedDate);
-		        int daysCount = (int) daysBetween + 1;  // +1 to make it inclusive
-		        
-		        System.out.println("Days from today to travel (inclusive): " + daysCount);
-		        log.ReportEvent("INFO", "Current Date: " + currentDate + ", Selected Date: " + selectedDate + 
-		                               ", Total Days (inclusive): " + daysCount);
-		        
-		        // Determine expected policy based on days count
-		        String expectedPolicy;
-		        if (daysCount <= 15) {
-		            expectedPolicy = "out of policy";  // If total days (inclusive) ≤ 7 = out of policy
-		        } else {
-		            expectedPolicy = "in policy";       // If total days > 7 = in policy
-		        }
-		        
-		        log.ReportEvent("INFO", "Expected policy based on " + daysCount + " total days (inclusive): " + expectedPolicy);
-		        
-		        // Get all flight card policy texts
-		        List<String> flightPolicies = getAllPolicyTextsFromFlightCards();
-		        log.ReportEvent("INFO", "Total flight cards found: " + flightPolicies.size());
-		        
-		        if (flightPolicies.isEmpty()) {
-		            log.ReportEvent("WARNING", "No flight policies found to validate");
-		            screenshots.takeScreenShot1();
-		            return;
-		        }
-		        
-		        boolean allCorrect = true;
-		        
-		        // Validate each flight card
-		        for (int i = 0; i < flightPolicies.size(); i++) {
-		            String actualPolicy = flightPolicies.get(i).toLowerCase().trim();
-		            
-		            if (actualPolicy.contains(expectedPolicy)) {
-		                log.ReportEvent("PASS", "Flight " + (i + 1) + " correctly shows: " + actualPolicy);
-		            } else {
-		                log.ReportEvent("FAIL", "Flight " + (i + 1) + " | Total days (inclusive): " + daysCount 
-		                        + " | Expected: " + expectedPolicy + " | Found: " + actualPolicy);
-		                allCorrect = false;
-		            }
-		        }
-		        
-		        // Final result
-		        if (allCorrect) {
-		            log.ReportEvent("PASS", "✓ ALL FLIGHT CARDS VALIDATED - Total days (inclusive): " + daysCount 
-		                    + ", Applied Policy: " + expectedPolicy);
-		        } else {
-		            log.ReportEvent("FAIL", "✗ POLICY VALIDATION FAILED - Total days (inclusive): " + daysCount);
-		            screenshots.takeScreenShot1();
-		            Assert.fail("Flight policy validation failed. Expected: " + expectedPolicy + " for " + daysCount + " total days (inclusive)");
-		        }
-		        
-		    } catch (Exception e) {
-		        log.ReportEvent("FAIL", "Error during flight validation: " + e.getMessage());
-		        screenshots.takeScreenShot1();
-		        Assert.fail("Error during flight validation: " + e.getMessage());
-		    }
+
+		return texts;
+	}
+
+	public void validateSelectedFlightCardPolicyAgainstFareCards(int userSelectedCardNumber, Log log,
+			ScreenShots screenshots) {
+		try {
+			log.ReportEvent("INFO", "Validating for Card #" + userSelectedCardNumber);
+
+			// Convert user card number (1-based) to code index (0-based)
+			int codeIndex = userSelectedCardNumber - 1;
+
+			// Get policy from selected flight card using your existing method
+			String flightCardPolicy = getFlightCardPolicyByIndex(codeIndex);
+			log.ReportEvent("INFO", "Flight Card #" + userSelectedCardNumber + " Policy: '" + flightCardPolicy + "'");
+
+			// Get all fare card policies using your existing method
+			List<String> fareCardPolicies = getAllPolicyTextsFromFlightFareCards(driver);
+			log.ReportEvent("INFO", "Fare Card Policies: " + fareCardPolicies);
+
+			// Check if flight card policy matches ANY fare card policy
+			boolean matchFound = false;
+			for (String farePolicy : fareCardPolicies) {
+				if (flightCardPolicy.equalsIgnoreCase(farePolicy)) {
+					matchFound = true;
+					log.ReportEvent("PASS", "✓ Match found! Flight policy '" + flightCardPolicy
+							+ "' matches fare policy '" + farePolicy + "'");
+					break;
+				}
+			}
+
+			// Final result
+			if (matchFound) {
+				log.ReportEvent("PASS", "✓ Card #" + userSelectedCardNumber + " validation PASSED");
+			} else {
+				log.ReportEvent("FAIL", "✗ Card #" + userSelectedCardNumber + " policy '" + flightCardPolicy
+						+ "' does not match any fare policy: " + fareCardPolicies);
+				screenshots.takeScreenShot1();
+				Assert.fail("Policy mismatch for Card #" + userSelectedCardNumber);
+			}
+
+		} catch (Exception e) {
+			log.ReportEvent("FAIL", "Error validating flight card policy: " + e.getMessage());
+			screenshots.takeScreenShot1();
+			Assert.fail("Error validating flight card policy: " + e.getMessage());
 		}
+	}
+
+	public String[] getOnwardDateTextFromResultPage() {
+
+		WebElement dateElement = new WebDriverWait(driver, Duration.ofSeconds(10))
+				.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(
+						"(//div[@class=' tg-typography tg-typography_subtitle-6 fw-600 tg-typography_default'])[2]")));
+
+		String fullText = dateElement.getText().trim();
+		System.out.println("Raw text: " + fullText);
+
+		// Remove ordinal suffix (st, nd, rd, th)
+		fullText = fullText.replaceAll("(?<=\\d)(st|nd|rd|th)", "");
+
+		// Remove comma
+		fullText = fullText.replace(",", "");
+
+		System.out.println("Cleaned text: " + fullText);
+
+		return fullText.split("\\s+");
+	}
+
+	public void validateFlightPolicyAgainstDaysForDomestic(String[] onwardDate, Log log, ScreenShots screenshots) {
+		try {
+			// Get current date
+			LocalDate currentDate = LocalDate.now();
+
+			// Construct onward date string from user selection
+			String onwardDateStr = onwardDate[0] + " " + onwardDate[1] + " " + onwardDate[2];
+
+			System.out.println("Current Date: " + currentDate);
+			System.out.println("Selected Onward Date: " + onwardDateStr);
+
+			// Parse the selected onward date
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+			LocalDate selectedDate = LocalDate.parse(onwardDateStr, formatter);
+
+			// Calculate days INCLUDING both start and end dates
+			long daysBetween = ChronoUnit.DAYS.between(currentDate, selectedDate);
+			int daysCount = (int) daysBetween + 1; // +1 to make it inclusive
+
+			System.out.println("Days from today to travel (inclusive): " + daysCount);
+			log.ReportEvent("INFO", "Current Date: " + currentDate + ", Selected Date: " + selectedDate
+					+ ", Total Days (inclusive): " + daysCount);
+
+			// Determine expected policy based on days count
+			String expectedPolicy;
+			if (daysCount <= 7) {
+				expectedPolicy = "out of policy"; // If total days (inclusive) ≤ 7 = out of policy
+			} else {
+				expectedPolicy = "in policy"; // If total days > 7 = in policy
+			}
+
+			log.ReportEvent("INFO",
+					"Expected policy based on " + daysCount + " total days (inclusive): " + expectedPolicy);
+
+			// Get all flight card policy texts
+			List<String> flightPolicies = getAllPolicyTextsFromFlightCards();
+			log.ReportEvent("INFO", "Total flight cards found: " + flightPolicies.size());
+
+			if (flightPolicies.isEmpty()) {
+				log.ReportEvent("WARNING", "No flight policies found to validate");
+				screenshots.takeScreenShot1();
+				return;
+			}
+
+			boolean allCorrect = true;
+
+			// Validate each flight card
+			for (int i = 0; i < flightPolicies.size(); i++) {
+				String actualPolicy = flightPolicies.get(i).toLowerCase().trim();
+
+				if (actualPolicy.contains(expectedPolicy)) {
+					log.ReportEvent("PASS", "Flight " + (i + 1) + " correctly shows: " + actualPolicy);
+				} else {
+					log.ReportEvent("FAIL", "Flight " + (i + 1) + " | Total days (inclusive): " + daysCount
+							+ " | Expected: " + expectedPolicy + " | Found: " + actualPolicy);
+					allCorrect = false;
+				}
+			}
+
+			// Final result
+			if (allCorrect) {
+				log.ReportEvent("PASS", "✓ ALL FLIGHT CARDS VALIDATED - Total days (inclusive): " + daysCount
+						+ ", Applied Policy: " + expectedPolicy);
+			} else {
+				log.ReportEvent("FAIL", "✗ POLICY VALIDATION FAILED - Total days (inclusive): " + daysCount);
+				screenshots.takeScreenShot1();
+				Assert.fail("Flight policy validation failed. Expected: " + expectedPolicy + " for " + daysCount
+						+ " total days (inclusive)");
+			}
+
+		} catch (Exception e) {
+			log.ReportEvent("FAIL", "Error during flight validation: " + e.getMessage());
+			screenshots.takeScreenShot1();
+			Assert.fail("Error during flight validation: " + e.getMessage());
+		}
+	}
+
+	public void validateFlightPolicyAgainstDaysForInternational(String[] onwardDate, Log log, ScreenShots screenshots) {
+		try {
+			// Get current date
+			LocalDate currentDate = LocalDate.now();
+
+			// Construct onward date string from user selection
+			String onwardDateStr = onwardDate[0] + " " + onwardDate[1] + " " + onwardDate[2];
+
+			System.out.println("Current Date: " + currentDate);
+			System.out.println("Selected Onward Date: " + onwardDateStr);
+
+			// Parse the selected onward date
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd MMM yyyy");
+			LocalDate selectedDate = LocalDate.parse(onwardDateStr, formatter);
+
+			// Calculate days INCLUDING both start and end dates
+			long daysBetween = ChronoUnit.DAYS.between(currentDate, selectedDate);
+			int daysCount = (int) daysBetween + 1; // +1 to make it inclusive
+
+			System.out.println("Days from today to travel (inclusive): " + daysCount);
+			log.ReportEvent("INFO", "Current Date: " + currentDate + ", Selected Date: " + selectedDate
+					+ ", Total Days (inclusive): " + daysCount);
+
+			// Determine expected policy based on days count
+			String expectedPolicy;
+			if (daysCount <= 15) {
+				expectedPolicy = "out of policy"; // If total days (inclusive) ≤ 7 = out of policy
+			} else {
+				expectedPolicy = "in policy"; // If total days > 7 = in policy
+			}
+
+			log.ReportEvent("INFO",
+					"Expected policy based on " + daysCount + " total days (inclusive): " + expectedPolicy);
+
+			// Get all flight card policy texts
+			List<String> flightPolicies = getAllPolicyTextsFromFlightCards();
+			log.ReportEvent("INFO", "Total flight cards found: " + flightPolicies.size());
+
+			if (flightPolicies.isEmpty()) {
+				log.ReportEvent("WARNING", "No flight policies found to validate");
+				screenshots.takeScreenShot1();
+				return;
+			}
+
+			boolean allCorrect = true;
+
+			// Validate each flight card
+			for (int i = 0; i < flightPolicies.size(); i++) {
+				String actualPolicy = flightPolicies.get(i).toLowerCase().trim();
+
+				if (actualPolicy.contains(expectedPolicy)) {
+					log.ReportEvent("PASS", "Flight " + (i + 1) + " correctly shows: " + actualPolicy);
+				} else {
+					log.ReportEvent("FAIL", "Flight " + (i + 1) + " | Total days (inclusive): " + daysCount
+							+ " | Expected: " + expectedPolicy + " | Found: " + actualPolicy);
+					allCorrect = false;
+				}
+			}
+
+			// Final result
+			if (allCorrect) {
+				log.ReportEvent("PASS", "✓ ALL FLIGHT CARDS VALIDATED - Total days (inclusive): " + daysCount
+						+ ", Applied Policy: " + expectedPolicy);
+			} else {
+				log.ReportEvent("FAIL", "✗ POLICY VALIDATION FAILED - Total days (inclusive): " + daysCount);
+				screenshots.takeScreenShot1();
+				Assert.fail("Flight policy validation failed. Expected: " + expectedPolicy + " for " + daysCount
+						+ " total days (inclusive)");
+			}
+
+		} catch (Exception e) {
+			log.ReportEvent("FAIL", "Error during flight validation: " + e.getMessage());
+			screenshots.takeScreenShot1();
+			Assert.fail("Error during flight validation: " + e.getMessage());
+		}
+	}
 }

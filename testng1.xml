@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="Suite" thread-count="7" parallel="tests">
- <!-- You can change this to "firefox" or others -->
-  <test name="test">
-  <parameter name="browser" value="chrome"/>
-  
-     <classes>
+	<!-- You can change this to "firefox" or others -->
+	<test name="test">
+		<parameter name="browser" value="chrome" />
 
-     
-      <!--class name="com.tripgain.testscripts.TC_119_OneWay_OneWaySearch"/>
+		<classes>
+
+
+			<!--class name="com.tripgain.testscripts.TC_119_OneWay_OneWaySearch"/>
       <class name="com.tripgain.testscripts.TC_120_OnewayFlightSearch"/>
       <class name="com.tripgain.testscripts.TC_121_DateselectionFunctionality"/>
       <class name="com.tripgain.testscripts.TC_122_TravelerSelectionFunctionality"/>
@@ -104,9 +104,9 @@
                <class name="com.tripgain.testscripts.TC_213_ComplexTestCase4_Oneway"/-->
 
 
-                                      <!--Round Trip-->
- 
-           <!--class name="com.tripgain.testscripts.RoundTrip.TC_1_VerifyRoundTripFlightSearch"/>
+			<!--Round Trip-->
+
+			<!--class name="com.tripgain.testscripts.RoundTrip.TC_1_VerifyRoundTripFlightSearch"/>
       <class name="com.tripgain.testscripts.RoundTrip.TC_2_Searchingforminimumtraveler"/>
       <class name="com.tripgain.testscripts.RoundTrip.TC_3_VerifyTravellerSelectionFunctionality"/>
       <class name="com.tripgain.testscripts.RoundTrip.TC_6_VerifyRoundTripFlightSearchInPeakTime"/>
@@ -193,22 +193,21 @@
                 <class name="com.tripgain.testscripts.RoundTrip.TC_92_EntireTestcasesCode1"/>       
         <class name="com.tripgain.testscripts.RoundTrip.TC_93_EntireTestcasesCode2"/>
         <class name="com.tripgain.testscripts.RoundTrip.TC_94_EntireTestcasesCode3"/>      
-                <class name="com.tripgain.testscripts.RoundTrip.TC_95_EntireTestcasesCode4"/-->  
-                
-    
+                <class name="com.tripgain.testscripts.RoundTrip.TC_95_EntireTestcasesCode4"/-->
 
-                                               <!--expense-->
-                                               
-<!--class name="com.tripgain.testscripts.Expenses.TCE_1_VerifyExpensesModule"/>
+
+			<!--expense-->
+
+			<!--class name="com.tripgain.testscripts.Expenses.TCE_1_VerifyExpensesModule"/>
  <class name="com.tripgain.testscripts.Expenses.TCE_2_VerifyExpensesModule_AddMileage"/>
    <class name="com.tripgain.testscripts.Expenses.TCE_3_VerifyExpensesModule_Automate"/>
 <class name="com.tripgain.testscripts.Expenses.TCE_4_VerifyExpenseByCreatingReport_NonTravelExpenseReport"/>
    <class name="com.tripgain.testscripts.Expenses.TCE_5_VerifyExpenseByCreatingReport_MonthlyAllowanceReimbursementReport"/>
    <class name="com.tripgain.testscripts.Expenses.TCE_6_VerifyExpenseByCreatingReport_MonthlyAllowanceReimbursementReport"/-->
 
-                                        <!--Grades-->
-                                          
- <!--class name="L1_L1GRADE.TC_021_L1_L1Grade_InPolicy"/>
+			<!--Grades-->
+
+			<!--class name="L1_L1GRADE.TC_021_L1_L1Grade_InPolicy"/>
   <class name="L1_L1GRADE.TC_022_L1_L1Grade_OutOfPolicy"/>
     <class name="L1_L1GRADE.TC_023_L1_L1Grade_OutOfPolicy"/>
     <class name="L1_L1GRADE.TC_024_L1_L1Grade_OutOfPolicy"/>
@@ -217,43 +216,43 @@
   <class name="L2_L2GRADE_ROUNDTRIP.TC_054_L2_L2Grade_InPolicy"/>
  <class name="L2_L2GRADE_ROUNDTRIP.TC_055_L2_L2Grade_InPolicy"/>
  <class name="L2_L2GRADE_ROUNDTRIP.TC_056_L2_L2Grade_InPolicy"/-->
- 
-   <!--Trip planner (pre trip flow)-->
- <!--class name="com.tripgain.testscripts.TripPlanner.TCTP_01_VerifyCompleteTripCreationWithAllServicesFlights"/-->     
- 
- 
-                                 <!--skytravelers (hotels)-->
-                                 
-    <!--class name="SkyTravellers_Hotels.TCHO_2_verifyHotelsSearchWithLocationDropdown"/>
+
+			<!--Trip planner (pre trip flow)-->
+			<!--class name="com.tripgain.testscripts.TripPlanner.TCTP_01_VerifyCompleteTripCreationWithAllServicesFlights"/-->
+
+
+			<!--skytravelers (hotels)-->
+
+			<!--class name="SkyTravellers_Hotels.TCHO_2_verifyHotelsSearchWithLocationDropdown"/>
     <class name="SkyTravellers_Hotels.TCHO_3_verifyHotelsSearchwithStarRating"/>
     <class name="SkyTravellers_Hotels.TCHO_4_verifyHotelsSearchwithFacilities"/>
         <class name="SkyTravellers_Hotels.TCHO_1_verifyHotelsSearch1"/-->
 
-                              <!--New design Hotels and buses-->
-    
-           <!--class name="NewDesign_Hotels.TCND_1_verifyHotelsSearch1"/>
-           
-           <class name="NewDesign_Hotels.TCND_2_GetHotelResponseBody"/-->
-           
-           <!--class name="NewDesign_Hotels_Flights.TCNDFL_3_GetOnewayFlightsResponseBody"/-->
-            <class name="NewDesign_Hotels_Flights.TCNDFL_4_GetRoundTrip_Combined_FlightsResponseBody"/>
+			<!--New design Hotels and buses-->
 
-           
-           
-                        
-                        
-                    <!--class name="NewDesign_Trips.TCNDTR_1_CreateTripsForHotels"/>
-               <class name="NewDesign_Trips.TCNDTR_2_CreateTripsForBuses"/>
+			<!--class name="NewDesign_Hotels.TCND_1_verifyHotelsSearch1"/-->
+
+			<!--class name="NewDesign_Hotels.TCND_2_GetHotelResponseBody"/-->
+
+			<!--class name="NewDesign_Hotels_Flights.TCNDFL_3_GetOnewayFlightsResponseBody"/>
+            <class name="NewDesign_Hotels_Flights.TCNDFL_4_GetRoundTrip_Combined_FlightsResponseBody"/-->
+
+
+			<!--class name="NewDesign_Buses.TCNDBU_1_verifyBusesSearch"/-->
+
+
+			<class name="NewDesign_Trips.TCNDTR_1_CreateTripsForHotels"/>
+               <!--class name="NewDesign_Trips.TCNDTR_2_CreateTripsForBuses"/>
      <class name="NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses"/-->
-     
-                                   <!--Implementation -->
-     
-      <!--class name="Implementation.Imp_1_Xpheno_TravelPolicyTesting01"/>
+
+			<!--Implementation -->
+
+			<!--class name="Implementation.Imp_1_Xpheno_TravelPolicyTesting01"/>
             <class name="Implementation.Imp_2_Xpheno_TravelPolicyTestingForHeadGrade"/>
                 <class name="Implementation.Imp_3_Xpheno_TravelPolicyTestingwithDelAndMumbaiLoc"/>
  <class name="Implementation.Imp_4_Xpheno_TravelPolicyTestingwithUdipiLoc"/-->
- 
-<!--class name="PhilipsCorp_Travel_Testing.Ph_1_Philips_Trips_HotelsFlights_Domestic_GradesndDates_Before7days"/>
+
+			<!--class name="PhilipsCorp_Travel_Testing.Ph_1_Philips_Trips_HotelsFlights_Domestic_GradesndDates_Before7days"/>
  <class name="PhilipsCorp_Travel_Testing.Ph_2_Philips_Trips_Hotels_International_GradesndDates_Before15days"/>
  <class name="PhilipsCorp_Travel_Testing.Ph_3_Philips_Trips_Hotels_Domestic_GradesndDates_After7days"/>
  <class name="PhilipsCorp_Travel_Testing.Ph_4_Philips_Trips_Hotels_International_GradesndDates_After15days"/>
@@ -280,17 +279,17 @@
  <class name="PhilipsCorp_Travel_Testing.Ph_25_Philips_NF_Flights_International_RoundTrip_Combined_Before15days"/-->
 
 
-     </classes>
-     
-                    
-     
-  </test> <!-- Test -->
-  
-  
-   <test name="test3">
-   <parameter name="browser" value="chrome"/>
-    <classes>
-<!--class name="NewDesign_Buses.TCNDBUNEW_2"/>
+		</classes>
+
+
+	</test> <!--
+	Test -->
+
+
+	<test name="test3">
+		<parameter name="browser" value="chrome" />
+		<classes>
+			<!--class name="NewDesign_Buses.TCNDBUNEW_2"/>
 <class name="NewDesign_Buses.TCNDBUNEW_3"/>
 <class name="NewDesign_Buses.TCNDBUNEW_4"/>
 
@@ -298,23 +297,23 @@
   <class name="NewDesign_Hotels.TCNDNEW_3"/-->
 
 
-     </classes>
-  </test>
-  
-    <test name="test4">
-   <parameter name="browser" value="chrome"/>
-    <classes>
-     <!--class name="NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses"/-->
+		</classes>
+	</test>
 
-     </classes>
-  </test>
-  
+	<test name="test4">
+		<parameter name="browser" value="chrome" />
+		<classes>
+			<!--class name="NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses"/-->
 
- <test name="test1">
-   <parameter name="browser" value="edge"/>
-   
-    <classes>
-        <!--class name="com.tripgain.testscripts.TC_119_OnewayFlightSearch"/>
+		</classes>
+	</test>
+
+
+	<test name="test1">
+		<parameter name="browser" value="edge" />
+
+		<classes>
+			<!--class name="com.tripgain.testscripts.TC_119_OnewayFlightSearch"/>
       <class name="com.tripgain.testscripts.TC_120_OnewayFlightSearch"/>
       <class name="com.tripgain.testscripts.TC_121_DateselectionFunctionality"/>
       <class name="com.tripgain.testscripts.TC_122_TravelerSelectionFunctionality"/>
@@ -368,7 +367,6 @@
      <class name="com.tripgain.testscripts.TC_172_validatingRegistrationPage"/-->
 
 
-
-    </classes>
-  </test>
+		</classes>
+	</test>
 </suite>

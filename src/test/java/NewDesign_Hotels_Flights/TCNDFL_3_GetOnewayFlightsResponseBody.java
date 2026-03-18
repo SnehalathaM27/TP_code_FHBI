@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -225,6 +227,8 @@ try {
 
           // Perform Validation using the data already captured
           tripgain_HomePage.validateFareCardDetails(uiFareCards, body1, flightNums, Log, screenShots);
+          resetApiResponses(); 
+
       }
       
      
@@ -245,68 +249,49 @@ try {
       tripgain_HomePage.handleReasonAndProceed(reason);
       Thread.sleep(1000);
       
-     String body3 = getResponseBodyByPartialUrl("TGFS&authtoken=", 60);
+   /*  String body3 = getResponseBodyByPartialUrl("opid=TGFS&authtoken", 60);
       System.out.println("Oneway Flight Booking Body found: " + body3);
-      embedApiResponseInReport("Oneway_BookingSearchAPI", body3);
-
-      // resetApiResponses();   
-           
-
-      //Method to Validate Booking Screen is Displayed
-      tripgain_BookingPage.validateBookingScreenIsDisplayed(Log, screenShots);
+      embedApiResponseInReport("Oneway_BookingSearchAPI", body3); */
       
-      List<Map<String, String>> uiFlightBookingDetails = tripgain_HomePage.getOnewayBookingFlightDetails();
-
-     
-      //Methods to get Flight data from Booking Screen and Validate
-   //   Map<String, List<String>> bookingData = tripgain_BookingPage.clickIfPresentAndGetBookingData();
+      String urlIdentifier = "opid=TGFS&authtoken";
+      Map<String, String> markers = new HashMap<>();
+      markers.put("Booking", "ValidateSearchResponse");
+      markers.put("SSR", "CarrierSSR");
+      markers.put("SeatMap", "Status");
       
-      tripgain_HomePage.validateOnewayBookingDataUIToBackend(uiFlightBookingDetails, body3, Log, screenShots);
+   // --- 3. FETCH AND CATEGORIZE (Dynamically) ---
+      Map<String, String> responses = getCategorizedResponses(urlIdentifier, markers, 60);
 
-
-   /*   Log.ReportEvent("INFO", "Validating the Flight Details from Result to Booking Screen");
-      tripgain_BookingPage.validateSearchAndBookingDataByXPath(flightDataFromResultScreen,bookingData,Log, screenShots);
-
-      Map<String, String> flightDetails=tripgain_BookingPage.getDataFromBookingPage();
-      System.out.println("Supplier: " + flightDetails.get("Supplier"));
-      System.out.println("Fare Type: " + flightDetails.get("FareName"));
-      System.out.println("Policy Type: " + flightDetails.get("PolicyType"));
-      String fareName=fareInfo.get("FareType");
-      String actualFareName=fareName +" "+"Fare";
-
-      Log.ReportEvent("INFO", "Validating the Fare Details from Flight info Card to Booking Screen");
-
-      tripgain_HomePage.ValidateActualAndExpectedValuesForFlights(flightDetails.get("Supplier"),fareInfo.get("Supplier"),"Supplier Name from Flight Info and Booking Screen",Log, screenShots);
-      tripgain_HomePage.ValidateActualAndExpectedValuesForFlights(flightDetails.get("FareName"),actualFareName,"Fare Name from Flight Info and Booking Screen",Log, screenShots);
-      tripgain_HomePage.ValidateActualAndExpectedValuesForFlights(flightDetails.get("PolicyType"),fareInfo.get("policyType"),"Policy Type from Flight Info and Booking Screen",Log, screenShots);
-*/
-      Log.ReportEvent("INFO", "Validating the Final fare from Flight info Card to Booking Screen");
-
-      String totalFare=tripgain_BookingPage.getTotalFare();
-      tripgain_HomePage.ValidateActualAndExpectedValuesForFlights(fareInfo.get("FarePrice"),totalFare,"Total Cost from Result to Booking Screen",Log, screenShots);
-
-      String[] titles = title.split(",");
-      tripgain_BookingPage.enterAdultDetailsForDomestic(titles,adults,Log, screenShots);
+      String bodyBooking = responses.getOrDefault("Booking", "");
+      String bodySeatMap = responses.getOrDefault("SeatMap", "");
+      String bodySSR = responses.getOrDefault("SSR", "");
       
-      
-     String body4 = getResponseBodyByPartialUrl("?opid=TGFS", 60);
-      System.out.println("Oneway Flight GetSeatmap Body found: " + body4);
-      embedApiResponseInReport("Oneway_GetSeatmapAPI", body4);
+      if (!bodyBooking.isEmpty()) {
+    	    System.out.println("✅ Processing Booking Body."+bodyBooking);
+    	    embedApiResponseInReport("Oneway_FlightValidateSearchAPI", bodyBooking);
+    	    
+    	    tripgain_BookingPage.validateBookingScreenIsDisplayed(Log, screenShots);
+    	    List<Map<String, String>> uiFlightBookingDetails = tripgain_HomePage.getOnewayBookingFlightDetails();
+    	  //  tripgain_HomePage.validateOnewayBookingDataUIToBackend(uiFlightBookingDetails, bodyBooking, Log, screenShots);
+    	} else {
+    	    Assert.fail("❌ Booking Search API Response not found.");
+    	}
 
-     // resetApiResponses();  
+    	if (!bodySeatMap.isEmpty()) {
+    	    System.out.println("✅ Processing SeatMap Body." +bodySeatMap);
+    	    embedApiResponseInReport("Oneway_GetSeatmapAPI", bodySeatMap);
+    	}
+
+    	if (!bodySSR.isEmpty()) {
+    	    System.out.println("✅ Processing SSR Body."+bodySSR);
+    	    embedApiResponseInReport("Oneway_GETSSRAPI", bodySSR); 
+    	} 
       
-      String body5 = getResponseBodyByPartialUrl("?opid=TGFS", 60);
-      System.out.println("Oneway Flight GETSSR Body found: " + body5);
-      embedApiResponseInReport("Oneway_GETSSRAPI", body5); 
-      
-      
-     
-    //  resetApiResponses();   
+  
 
       //Methods to Select the Add-on's and Validate
       
-      int addonsPricePrice = tripgain_BookingPage.selectAddOnsFlow2(Log, screenShots, body4, body5);  
-      System.out.println("Total price after add-ons selection: ₹ " + addonsPricePrice);    
+    	int addonsPricePrice = tripgain_BookingPage.selectAddOnsFlow2(Log, screenShots, bodySeatMap, bodySSR);      System.out.println("Total price after add-ons selection: ₹ " + addonsPricePrice);    
       String farePrice=fareInfo.get("FarePrice");
       String priceText = farePrice.replaceAll("[^0-9]", "");
       int farePriceInt = Integer.parseInt(priceText);
@@ -324,7 +309,7 @@ try {
       tripgain_HomePage.ValidateNumericValuesForFlights(bookingPrice,finalBookingPrice,"Final Fare from Booking",Log, screenShots);
       tripgain_BookingPage.clickProceedBookingAndValidateToast(Log, screenShots);
 
-	  
+//	  
 		// Function to Logout from Application
 		// tripgainhomepage.logOutFromApplication(Log, screenShots);
 		driver.quit();
@@ -365,7 +350,29 @@ try {
             return rawJson;
         }
     }
+ // 1. Method to fetch ALL responses matching the URL pattern
+  /*  public List<String> getAllResponseBodiesByUrl(String userPassedName, int timeoutSeconds) {
+        System.out.println("🔎 Searching for all API responses containing: " + userPassedName);
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(timeoutSeconds));
+
+        try {
+            // Wait until at least one response is captured
+            wait.until(d -> !allApiResponses.isEmpty());
+
+            // Filter all matching URLs and return their bodies
+            return allApiResponses.entrySet().stream()
+                    .filter(entry -> entry.getKey().contains(userPassedName))
+                    .map(Map.Entry::getValue)
+                    .collect(Collectors.toList());
+
+        } catch (Exception e) {
+            System.out.println("⚠️ Error fetching APIs: " + e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+    */
     
+     
    
 
 //    public String getResponseBodyByPartialUrl(String userPassedName, int timeoutSeconds) {
@@ -454,29 +461,98 @@ try {
         lastResetTime.set(System.currentTimeMillis());
     }
     
+    /**
+     * Fetches all responses for a URL pattern and categorizes them based on unique content markers.
+     */
+    public Map<String, String> getCategorizedResponses(String urlIdentifier, Map<String, String> contentMarkers, int waitSeconds) {
+        System.out.println("🔎 Waiting " + waitSeconds + " seconds to capture responses for: " + urlIdentifier);
+        
+        try {
+            // Wait for asynchronous calls to complete
+            Thread.sleep(waitSeconds * 1000); 
 
-  
+            // Filter all matching URLs from the map
+            Map<String, String> filteredResponses = allApiResponses.entrySet().stream()
+                    .filter(entry -> entry.getKey().contains(urlIdentifier))
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
+            System.out.println("Total responses captured for " + urlIdentifier + ": " + filteredResponses.size());
+
+            Map<String, String> categorizedBodies = new ConcurrentHashMap<>();
+
+            // Categorize based on content markers
+            for (String responseBody : filteredResponses.values()) {
+                for (Map.Entry<String, String> marker : contentMarkers.entrySet()) {
+                    if (responseBody.contains(marker.getValue())) {
+                        categorizedBodies.put(marker.getKey(), responseBody);
+                        System.out.println("🎯 Identified Response: " + marker.getKey());
+                    }
+                }
+            }
+            return categorizedBodies;
+
+        } catch (Exception e) {
+            System.out.println("⚠️ Error fetching APIs: " + e.getMessage());
+            return new ConcurrentHashMap<>();
+        }
+    }
+    
+ 
+
+
+//    private void embedApiResponseInReport(String apiName, String responseBody) {
+//        try {
+//            String formattedJson = formatJson(responseBody);
+//
+//            test.log(Status.INFO,
+//                "<details style='margin-left:15px;'>"
+//              + "<summary style='cursor:pointer;font-weight:bold;'>📄 View "
+//              + apiName + " JSON Response</summary>"
+//              + "<pre style='white-space:pre-wrap; word-wrap:break-word; "
+//              + "max-height:400px; overflow:auto; background:#f4f4f4; "
+//              + "padding:10px; border:1px solid #ccc;'>"
+//              + formattedJson +
+//              "</pre></details>");
+//
+//        } catch (Exception e) {
+//            test.log(Status.WARNING, "Unable to embed API response: " + e.getMessage());
+//        }
+//    }
 
     private void embedApiResponseInReport(String apiName, String responseBody) {
         try {
             String formattedJson = formatJson(responseBody);
+            // We use a unique ID to ensure the script copies the correct text if there are multiple logs
+            String uniqueId = "copy_" + System.currentTimeMillis();
 
             test.log(Status.INFO,
-                "<details style='margin-left:15px;'>"
-              + "<summary style='cursor:pointer;font-weight:bold;'>📄 View "
-              + apiName + " JSON Response</summary>"
-              + "<pre style='white-space:pre-wrap; word-wrap:break-word; "
+                "<details style='margin-left:15px; border:1px solid #ddd; padding:5px; border-radius:4px;'>"
+              + "<summary style='cursor:pointer; font-weight:bold;'>📄 View " + apiName + " JSON Response</summary>"
+              + "<div style='position:relative; margin-top:10px;'>"
+              + "<button onclick=\"copyToClipboard('" + uniqueId + "')\" style='position:absolute; right:10px; top:10px; z-index:1; cursor:pointer; padding:5px 10px; background:#007bff; color:white; border:none; border-radius:3px; font-size:12px;'>Copy</button>"
+              + "<pre id='" + uniqueId + "' style='white-space:pre-wrap; word-wrap:break-word; "
               + "max-height:400px; overflow:auto; background:#f4f4f4; "
-              + "padding:10px; border:1px solid #ccc;'>"
-              + formattedJson +
-              "</pre></details>");
+              + "padding:10px; border:1px solid #ccc; font-family:monospace;'>"
+              + formattedJson + "</pre>"
+              + "</div>"
+              + "<script>"
+              + "function copyToClipboard(elementId) {"
+              + "  var text = document.getElementById(elementId).innerText;"
+              + "  var elem = document.createElement('textarea');"
+              + "  document.body.appendChild(elem);"
+              + "  elem.value = text;"
+              + "  elem.select();"
+              + "  document.execCommand('copy');"
+              + "  document.body.removeChild(elem);"
+              + "  alert('Response copied to clipboard!');"
+              + "}"
+              + "</script>"
+              + "</details>");
 
         } catch (Exception e) {
             test.log(Status.WARNING, "Unable to embed API response: " + e.getMessage());
         }
     }
-
 
 
     @BeforeMethod(alwaysRun = true)
@@ -498,7 +574,7 @@ try {
     extent = extantManager.getReport();
     test.log(Status.INFO, "Execution Started Successfully");
 
-    driver = launchBrowser(browser, url);
+    driver = launchBrowser1(browser, url);
     
     System.out.println("DRIVER CLASS = " + driver.getClass().getName());
 
@@ -513,6 +589,37 @@ try {
  // Thread-safe timestamp to track last reset
     AtomicReference<Long> lastResetTime = new AtomicReference<>(System.currentTimeMillis());
 
+//    if (driver instanceof HasDevTools) {
+//        devTools = ((HasDevTools) driver).getDevTools();
+//        devTools.createSession();
+//        devTools.send(Network.enable(Optional.empty(), Optional.empty(), Optional.empty()));
+//
+//        devTools.addListener(Network.responseReceived(), response -> {
+//            String apiUrl = response.getResponse().getUrl();
+//            RequestId requestId = response.getRequestId();
+//
+//            // Background thread to fetch the body for EVERY request
+//            new Thread(() -> {
+//                try {
+//                    // Short wait to ensure the response body is ready
+//                    Thread.sleep(1500);
+//
+//                    Network.GetResponseBodyResponse body = devTools.send(Network.getResponseBody(requestId));
+//                    String bodyText = body.getBody();
+//
+//                    // ✅ Only store responses captured AFTER the last reset
+//                    long currentTime = System.currentTimeMillis();
+//                    if (bodyText != null && !bodyText.isEmpty() && currentTime > lastResetTime.get()) {
+//                        allApiResponses.put(apiUrl, bodyText);
+//                    }
+//                } catch (Exception e) {
+//                    // Ignore non-XHR failures (images, css, etc.)
+//                }
+//            }).start();
+//        });
+//    }
+    
+ // --- UPDATE THIS PART INSIDE launchApplication ---
     if (driver instanceof HasDevTools) {
         devTools = ((HasDevTools) driver).getDevTools();
         devTools.createSession();
@@ -522,22 +629,23 @@ try {
             String apiUrl = response.getResponse().getUrl();
             RequestId requestId = response.getRequestId();
 
-            // Background thread to fetch the body for EVERY request
+            // Background thread to fetch the body
             new Thread(() -> {
                 try {
                     // Short wait to ensure the response body is ready
-                    Thread.sleep(1500);
+                    Thread.sleep(1000);
 
                     Network.GetResponseBodyResponse body = devTools.send(Network.getResponseBody(requestId));
                     String bodyText = body.getBody();
 
-                    // ✅ Only store responses captured AFTER the last reset
-                    long currentTime = System.currentTimeMillis();
-                    if (bodyText != null && !bodyText.isEmpty() && currentTime > lastResetTime.get()) {
-                        allApiResponses.put(apiUrl, bodyText);
+                    // ✅ Store the response if it matches the URL pattern
+                    if (apiUrl.contains("opid=TGFS") && bodyText != null && !bodyText.isEmpty()) {
+                        // Use a unique key (URL + Timestamp) to prevent overwriting
+                        allApiResponses.put(apiUrl + "_" + System.currentTimeMillis(), bodyText);
+                        System.out.println("✅ Captured TGFS API: " + apiUrl);
                     }
                 } catch (Exception e) {
-                    // Ignore non-XHR failures (images, css, etc.)
+                    // Ignore failures (images, css, etc.)
                 }
             }).start();
         });
@@ -554,3 +662,7 @@ try {
     }
     }
     }
+
+
+
+

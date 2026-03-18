@@ -34,89 +34,64 @@ public class NewDesign_Hotels_ResultsPage {
 		this.driver = driver;
 	}
 
-	// Method to get the check in date text from result page
-	/*
-	 * public String[] getCheckInDateTextFromResultPage() { WebElement dateElement =
-	 * driver.findElement(By.
-	 * xpath("(//div[contains(@class,' tg-typography tg-typography_subtitle-6 ms-1 fw-600 tg-typography_default')])[2]"
-	 * )); String fullText = dateElement.getText(); // e.g.
-	 * "20th Sep, 2025 - 25th Sep, 2025" System.out.println("Full date text: " +
-	 * fullText);
-	 * 
-	 * // Split to get the check-in part String checkIn = fullText.split(" - ")[0];
-	 * // "20th Sep, 2025"
-	 * System.out.println("Check-in part before removing suffix: " + checkIn);
-	 * 
-	 * // Remove ordinal suffixes like 'th', 'st', etc. checkIn =
-	 * checkIn.replaceAll("(?<=\\d)(st|nd|rd|th)", "");
-	 * System.out.println("Check-in part after removing suffix: " + checkIn);
-	 * 
-	 * // Split into parts: [day, month, year] String[] parts =
-	 * checkIn.trim().split(" "); // ["20", "Sep,", "2025"] for (String part :
-	 * parts) { System.out.println("checkin dates"+ part); }
-	 * 
-	 * return parts; }
-	 */
-
 	public String[] getCheckInDateTextFromResultPage() {
 
-	    WebElement dateElement = new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions
-	            .visibilityOfElementLocated(By.xpath("(//div[contains(@class,'search-header-date-width')])[1]")));
+		WebElement dateElement = new WebDriverWait(driver, Duration.ofSeconds(10)).until(ExpectedConditions
+				.visibilityOfElementLocated(By.xpath("(//div[contains(@class,'search-header-date-width')])[1]")));
 
-	    String fullText = dateElement.getAttribute("innerText").trim();
-	    System.out.println("Full raw text: " + fullText);
+		String fullText = dateElement.getAttribute("innerText").trim();
+		System.out.println("Full raw text: " + fullText);
 
-	    // Split for any dash type
-	    String[] dateRange = fullText.split("\\s[-–—]\\s");
-	    if (dateRange.length < 1) {
-	        throw new RuntimeException("Date format not recognized: " + fullText);
-	    }
+		// Split for any dash type
+		String[] dateRange = fullText.split("\\s[-–—]\\s");
+		if (dateRange.length < 1) {
+			throw new RuntimeException("Date format not recognized: " + fullText);
+		}
 
-	    String checkIn = dateRange[0]; // left side
-	    System.out.println("Check-in before suffix removal: " + checkIn);
+		String checkIn = dateRange[0];
+		System.out.println("Check-in before suffix removal: " + checkIn);
 
-	    // Remove ordinal suffixes like 'th', 'st', etc.
-	    checkIn = checkIn.replaceAll("(?<=\\d)(st|nd|rd|th)", "");
-	    // FIX: Remove comma from month
-	    checkIn = checkIn.replace(",", "");
-	    System.out.println("Check-in after suffix removal: " + checkIn);
+		// Remove ordinal suffixes like 'th', 'st', etc.
+		checkIn = checkIn.replaceAll("(?<=\\d)(st|nd|rd|th)", "");
+		// FIX: Remove comma from month
+		checkIn = checkIn.replace(",", "");
+		System.out.println("Check-in after suffix removal: " + checkIn);
 
-	    String[] parts = checkIn.trim().split("\\s+");
-	    for (String p : parts) {
-	        System.out.println("Part: " + p);
-	    }
+		String[] parts = checkIn.trim().split("\\s+");
+		for (String p : parts) {
+			System.out.println("Part: " + p);
+		}
 
-	    return parts;
+		return parts;
 	}
 
 	public String[] getCheckOutDateTextFromResultPage() {
-	    WebElement dateElement = driver
-	            .findElement(By.xpath("(//div[contains(@class,'search-header-date-width')])[1]"));
-	    String fullText = dateElement.getText(); // e.g. "20th Sep, 2025 - 25th Sep, 2025"
-	    System.out.println("Full date text: " + fullText);
+		WebElement dateElement = driver
+				.findElement(By.xpath("(//div[contains(@class,'search-header-date-width')])[1]"));
+		String fullText = dateElement.getText(); // e.g. "20th Sep, 2025 - 25th Sep, 2025"
+		System.out.println("Full date text: " + fullText);
 
-	    // Split to get the check-out part
-	    String checkOut = fullText.split(" - ")[1]; // "25th Sep, 2025"
-	    System.out.println("Check-out part before removing suffix: " + checkOut);
+		// Split to get the check-out part
+		String checkOut = fullText.split(" - ")[1]; // "25th Sep, 2025"
+		System.out.println("Check-out part before removing suffix: " + checkOut);
 
-	    // Remove ordinal suffixes like 'th', 'st', etc.
-	    checkOut = checkOut.replaceAll("(?<=\\d)(st|nd|rd|th)", "");
-	    // FIX: Remove comma from month
-	    checkOut = checkOut.replace(",", "");
-	    System.out.println("Check-out part after removing suffix: " + checkOut);
+		// Remove ordinal suffixes like 'th', 'st', etc.
+		checkOut = checkOut.replaceAll("(?<=\\d)(st|nd|rd|th)", "");
+		// FIX: Remove comma from month
+		checkOut = checkOut.replace(",", "");
+		System.out.println("Check-out part after removing suffix: " + checkOut);
 
-	    // Split into parts: [day, month, year]
-	    String[] parts = checkOut.trim().split(" "); // ["25", "Sep", "2025"]
+		// Split into parts: [day, month, year]
+		String[] parts = checkOut.trim().split(" "); // ["25", "Sep", "2025"]
 
-	    System.out.println("Split parts:");
-	    for (String part : parts) {
-	        System.out.println(part);
-	    }
+		System.out.println("Split parts:");
+		for (String part : parts) {
+			System.out.println(part);
+		}
 
-	    return parts;
+		return parts;
 	}
-	
-	
+
 	public int getHotelCount(WebDriver driver, Log Log) {
 		// Get the text from the paragraph
 		String text = driver.findElement(By.xpath("//p[contains(text(),'We have found')]")).getText();
@@ -401,115 +376,6 @@ public class NewDesign_Hotels_ResultsPage {
 		}
 	}
 
-	// Method to select hotel from card
-//			public String[] selectHotelAndGetDetails(int hotelIndex) {
-//			    try {
-//			        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-//
-//			        // Validate user input (1-based index)
-//			        if (hotelIndex <= 0) {
-//			            System.out.println("Invalid hotel index: " + hotelIndex);
-//			            return new String[]{};
-//			        }
-//
-//			        // Construct dynamic XPath for the specific card
-//			        String cardXPath = "(//div[contains(@class,'hcard')])[" + hotelIndex + "]";
-//
-//			        // Wait for the specific hotel card to be visible
-//			        WebElement card = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(cardXPath)));
-//
-//			        // ✅ Extract hotel details (adjust these based on actual class names or structure)
-//			        String[] details = new String[]{
-//			            getText(card, ".//*[contains(@class,'tg-hl-hotel-name')]"),
-//			            getText(card, ".//*[contains(@class,'tg-hl-star')]"),
-//			            getText(card, ".//*[contains(@class,'tg-hl-address')]"),
-//			            getText(card, ".//*[contains(@class,'tg-hl-distance')]"),
-//			            getText(card, ".//*[contains(@class,'tg-hl-rating')]"),
-//			            getText(card, ".//*[contains(@class,'tg-hl-supplier')]"),
-//			            getText(card, ".//*[contains(@class,'tg-hl-pernight-price')]"),
-//			            getText(card, ".//*[contains(@class,'tg-hl-price')]"),
-//			            getText(card, ".//*[contains(@class,'tg-policy')]")
-//			        };
-//
-//			        // ✅ Click the Select button inside this card
-//			        WebElement selectBtn = card.findElement(By.xpath(".//button[contains(@class,'tg-hl-select-hotel')]"));
-//			        selectBtn.click();
-//
-//			        // Optional: log details
-//			        System.out.println("Hotel card #" + hotelIndex + " details:");
-//			        for (String detail : details) {
-//			            System.out.println(" - " + detail);
-//			        }
-//
-//			        return details;
-//
-//			    } catch (Exception e) {
-//			        System.out.println("Error selecting hotel and extracting details: " + e.getMessage());
-//			        return new String[]{};
-//			    }
-//			}
-//
-//			private String getText(WebElement parent, String xpath) {
-//			    try {
-//			        WebElement el = parent.findElement(By.xpath(xpath));
-//			        String text = el.getText().trim();
-//			        return text.isEmpty() ? "N/A" : text;
-//			    } catch (Exception e) {
-//			        return "N/A";
-//			    }
-//			}
-//
-
-	// Method to select hotel from card
-//			public String[] selectHotelAndGetDetails(int hotelIndex) {
-//			    try {
-//			        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-//
-//			        // Validate user input (1-based index)
-//			        if (hotelIndex <= 0) {
-//			            System.out.println("Invalid hotel index: " + hotelIndex);
-//			            return new String[]{};
-//			        }
-//
-//			        // Construct dynamic XPath for the specific card
-//			        String cardXPath = "(//div[contains(@class,'hcard')])[" + hotelIndex + "]";
-//
-//			        // Wait for the specific hotel card to be visible
-//			        WebElement card = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(cardXPath)));
-//
-//			        String[] details = new String[]{
-//			            getText(card, ".//*[contains(@class,'tg-hl-hotel-name')]"),
-//
-//			            //  Replaced this line with class-based star extraction
-//			            extractStarRatingFromClass(card),
-//
-//			            getText(card, ".//*[contains(@class,'tg-hl-address')]"),
-//			            getText(card, ".//*[contains(@class,'tg-hl-distance')]"),
-//			            getText(card, ".//*[contains(@class,'tg-hl-rating')]"),
-//			            getText(card, ".//*[contains(@class,'tg-hl-supplier')]"),
-//			            getText(card, ".//*[contains(@class,'tg-hl-pernight-price')]"),
-//			            getText(card, ".//*[contains(@class,'tg-hl-price')]"),
-//			            getText(card, ".//*[contains(@class,'tg-policy')]"),
-//			            getText(card, "//span[contains(@class,'tg-hl-amenities-list')]//span[@class='hotel-amenity']"),
-//			            getText(card, ".//span[@class='other-currency-price']")
-//			        };
-//
-//			        WebElement selectBtn = card.findElement(By.xpath(".//button[contains(@class,'tg-hl-select-hotel')]"));
-//			        selectBtn.click();
-//
-//			        System.out.println("Hotel card #" + hotelIndex + " details:");
-//			        for (String detail : details) {
-//			            System.out.println(" - " + detail);
-//			        }
-//
-//			        return details;
-//
-//			    } catch (Exception e) {
-//			        System.out.println("Error selecting hotel and extracting details: " + e.getMessage());
-//			        return new String[]{};
-//			    }
-//			}
-
 	public String[] selectHotelAndGetDetails(int hotelIndex, Log log) {
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
@@ -720,36 +586,6 @@ public class NewDesign_Hotels_ResultsPage {
 
 	}
 
-//			public void validateDistanceAscending() {
-//			    List<WebElement> distanceElements = driver.findElements(By.xpath("//div[contains(@class,'tg-hl-distance')]"));
-//
-//			    List<Double> distances = new ArrayList<>();
-//
-//			    for (WebElement el : distanceElements) {
-//			        String text = el.getText(); 
-//
-//			        String numberStr = "";
-//			        Matcher m = Pattern.compile("\\d+(\\.\\d+)?").matcher(text);
-//			        if (m.find()) {
-//			            numberStr = m.group();
-//			        }
-//
-//			        if (!numberStr.isEmpty()) {
-//			            distances.add(Double.parseDouble(numberStr));
-//			        }
-//			    }
-//
-//			    // Check if distances list is ascending
-//			    for (int i = 0; i < distances.size() - 1; i++) {
-//			        if (distances.get(i) > distances.get(i + 1)) {
-//			            System.out.println("FAIL: Distances are not sorted in ascending order.");
-//			            System.out.println("Distances: " + distances);
-//			            return;
-//			        }
-//			    }
-//
-//			    System.out.println("PASS: Distances are sorted in ascending order.");
-//			}
 	public void validateDistanceAscending(Log log) {
 		List<WebElement> distanceElements = driver.findElements(By.xpath("//div[contains(@class,'tg-hl-distance')]"));
 
@@ -912,43 +748,6 @@ public class NewDesign_Hotels_ResultsPage {
 	public void clcikOnPriceSlider() {
 		driver.findElement(By.xpath("//span[text()='Price']")).click();
 	}
-
-	// Method to select currency from dropdown
-//			public void selectCurrencyFromDropdown(String currencyCode, Log log) {
-//			    try {
-//			    	Thread.sleep(3000);
-//			    	driver.findElement(By.xpath("//div[contains(@class,'tg-currency-change')]//div[@class='tg-select-box__indicators css-1wy0on6']")).click();
-//
-//			        WebElement currencyOption = driver.findElement(
-//			            By.xpath("//span[@class='tg-select-option-label' and text()='" + currencyCode + "']")
-//			        );
-//
-//			        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", currencyOption);
-//			        currencyOption.click();
-//
-//			        String priceText = driver.findElement(
-//			            By.xpath("//span[@class='other-currency-price']")
-//			        ).getText();
-//
-//			        System.out.println("Raw price text: " + priceText);
-//
-//			        String priceCurrencyCode = priceText.split(" ")[0].replaceAll("[^A-Z]", "");
-//
-//			        System.out.println("Extracted currency code: " + priceCurrencyCode);
-//
-//			        if (priceCurrencyCode.equals(currencyCode)) {
-//			            System.out.println("Currency code matches: " + priceCurrencyCode);
-//			            log.ReportEvent("PASS", "Currency code matches: " + priceCurrencyCode);
-//			        } else {
-//			            System.err.println("Currency code does NOT match! Expected: " + currencyCode + ", but found: " + priceCurrencyCode);
-//			            log.ReportEvent("FAIL", "Currency code does NOT match! Expected: " + currencyCode + ", but found: " + priceCurrencyCode);
-//			        }
-//
-//			    } catch (Exception e) {
-//			        System.err.println("Exception occurred while selecting currency: " + e.getMessage());
-//			        log.ReportEvent("ERROR", "Exception occurred: " + e.getMessage());
-//			    }
-//			}
 
 	// Method to select currency from dropdown
 	public void selectCurrencyFromDropdown(String currencyCode, Log log) {
