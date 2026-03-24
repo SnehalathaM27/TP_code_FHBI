@@ -452,7 +452,7 @@ NewDesignHotels_DescPage.goToTop();
 					NewDesignBusesBookingPage.validateDroppingPointLocationFromListingToBookingPage(DroppingPoint, BookingPgdroppingPoint, Log, screenShots);
 					NewDesignBusesBookingPage.validateSeaterTypeFromListingToBookingPage(SeatType, BookingPgSeater, Log, screenShots);
 				//	NewDesignBusesBookingPage.validateCheckInDateBetweenResultAndBookingPages(checkindateResultPage, BookingPgDate, Log, screenShots);
-					NewDesignBusesBookingPage.validateDepartureTimeFromBoardingToBookingPage(BoardingDetails, BookingPgDepartTime, Log, screenShots);
+					NewDesignBusesBookingPage.validateDepartureTimeFromListingToBookingPage(Busdetails, BookingPgDepartTime, Log, screenShots);
 					NewDesignBusesBookingPage.validateArrivalTimeFromListingToBookingPage(Busdetails, BookingPgArrival, Log, screenShots);
 					NewDesignBusesBookingPage.validateDurationFromListingToBookingPage(Busdetails, bookingPgDuration, Log, screenShots);
 				NewDesignBusesBookingPage.validatePolicyFromListingToBookingPage(Busdetails, BookingPgBusPolicy, Log, screenShots);

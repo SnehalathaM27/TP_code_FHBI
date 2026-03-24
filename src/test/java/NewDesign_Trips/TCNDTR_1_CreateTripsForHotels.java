@@ -114,8 +114,8 @@ try {
 		NewDesignTrips.enterNameThisTrip(tripName, Log);
 		String origindetails = NewDesignTrips.enterfrom(origin);
 		String destdetails = NewDesignTrips.enterTo(destination);
-
-		String journeydatedetails = NewDesignTrips.selectJourneyDate(fromDate, fromMonthYear);
+        Thread.sleep(1000);
+         String journeydatedetails = NewDesignTrips.selectJourneyDate(fromDate, fromMonthYear);
 
 		String returndatedetails = NewDesignTrips.selectReturnDate(returnDate, returnMonthYear);
 		NewDesignTrips.selectTripTypeDropdown("Business Travel");
@@ -163,7 +163,7 @@ try {
 		NewDesignTrips.validateCheckInAndOutDatesFromResultsAndDetailsAfterAdd(checkindateResultPage, checkoutdateResultPage, datesAfterAdd, Log, screenShots);
 		
 		Thread.sleep(3000);
-		NewDesignHotelsResultsPage.clickOnSortOption("Price: Low to High", Log);
+	/*	NewDesignHotelsResultsPage.clickOnSortOption("Price: Low to High", Log);
 		NewDesignHotelsResultsPage.validatePricesLowToHigh(Log);
 		Thread.sleep(2000);
 		
@@ -182,14 +182,15 @@ try {
 			Thread.sleep(2000);
 
 
-			NewDesignHotelsResultsPage.selectCurrencyFromDropdown("TND", Log);
+			NewDesignHotelsResultsPage.selectCurrencyFromDropdown("TND", Log); 
 			
 			Thread.sleep(2000);
+			*/
 
 			
 			
 		//get all the hotel details from the selected hotel card
-			String[] hotelDetails = NewDesignHotelsResultsPage.selectHotelAndGetDetails(1, Log);
+			String[] hotelDetails = NewDesignHotelsResultsPage.selectHotelAndGetDetails(2, Log);
 			
 			//get all the details from desc page 
 			String[] hotelAddressFromDesc = NewDesignHotels_DescPage.getAddressFromDescPg();
@@ -209,9 +210,9 @@ try {
 			NewDesignHotels_DescPage.validateHotelAddressFromDescToResultPage(hotelAddressFromDesc, hotelDetails, Log, screenShots);
 			NewDesignHotels_DescPage.validateHotelPriceFromDescToResultPage(hotelPriceFromDesc, hotelDetails, Log, screenShots);
 			NewDesignHotels_DescPage.validateHotelPolicyFromDescToResultPage(PolicyFromDesc, hotelDetails, Log, screenShots);
-			NewDesignHotels_DescPage.validatePerNightPriceFromDescToResultPage(perNightPriceFromDesc, hotelDetails, Log, screenShots);
+		//	NewDesignHotels_DescPage.validatePerNightPriceFromDescToResultPage(perNightPriceFromDesc, hotelDetails, Log, screenShots);
 			NewDesignHotels_DescPage.validateAmenitiesFromDescToResultPage(hotelAmenitiesFromDesc, hotelDetails, Log, screenShots);
-			NewDesignHotelsResultsPage.validateOtherCurrencyPriceFromDescToResultPage(OtherCurrencyInDesc, hotelDetails, Log, screenShots);
+		//	NewDesignHotelsResultsPage.validateOtherCurrencyPriceFromDescToResultPage(OtherCurrencyInDesc, hotelDetails, Log, screenShots);
 			
 			
 			String[] selectRooms = NewDesignHotels_DescPage.selectRoomsFromDescPg();

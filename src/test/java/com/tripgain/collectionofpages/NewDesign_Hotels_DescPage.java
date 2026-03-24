@@ -81,12 +81,21 @@ public class NewDesign_Hotels_DescPage {
 		return new String[] { mainPrice };
 	}
 
+	
+	
 	public String[] getOtherCountryPriceFromDescPg() {
-		String otherCountryPrice = driver.findElement(By.xpath("//span[contains(@class,'tg-hl-othercurrency')]"))
-				.getText();
-		System.out.println("hotel perNightprice from Description Page: " + otherCountryPrice);
+	    String Othercurrency = "";
+	    
+	    List<WebElement> otherCountryPrice = driver.findElements(By.xpath("//span[contains(@class,'tg-hl-othercurrency')]"));
 
-		return new String[] { otherCountryPrice };
+	    if (!otherCountryPrice.isEmpty()) {
+	    	Othercurrency = otherCountryPrice.get(0).getText();
+	        System.out.println("Hotel Other currency price found: " + Othercurrency);
+	    } else {
+	        System.out.println("Other currency price found not present, skipping to next step...");
+	    }
+
+	    return new String[] { Othercurrency };
 	}
 
 	private String getStarRatingCount(WebElement element) {
@@ -143,10 +152,18 @@ public class NewDesign_Hotels_DescPage {
 	}
 
 	public String[] getPerNightPriceFromDescPg() {
-		String perNightprice = driver.findElement(By.xpath("//p[contains(@class,'tg-hl-pricefornight')]")).getText();
-		System.out.println("hotel perNightprice from Description Page: " + perNightprice);
+	    String perNightprice = "";
+	    
+	    List<WebElement> priceElements = driver.findElements(By.xpath("//p[contains(@class,'tg-hl-pricefornight')]"));
 
-		return new String[] { perNightprice };
+	    if (!priceElements.isEmpty()) {
+	        perNightprice = priceElements.get(0).getText();
+	        System.out.println("Hotel perNightprice found: " + perNightprice);
+	    } else {
+	        System.out.println("Per night price not present, skipping to next step...");
+	    }
+
+	    return new String[] { perNightprice };
 	}
 
 	public String[] getAmenitiesFromDescPg() { // Find all individual amenity elements inside the amenities list

@@ -9,18 +9,18 @@
 <table>
 <tr><th>Test</th><th># Passed</th><th># Skipped</th><th># Retried</th><th># Failed</th><th>Time (ms)</th><th>Included Groups</th><th>Excluded Groups</th></tr>
 <tr><th colspan="8">Suite</th></tr>
-<tr><td><a href="#t0">test1</a></td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">10</td><td></td><td></td></tr>
-<tr class="stripe"><td><a href="#t1">test3</a></td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">10</td><td></td><td></td></tr>
-<tr><td><a href="#t2">test4</a></td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">10</td><td></td><td></td></tr>
-<tr class="stripe"><td><a href="#t3">test</a></td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num attn">1</td><td class="num">49,146</td><td></td><td></td></tr>
-<tr><th>Total</th><th class="num">0</th><th class="num">0</th><th class="num">0</th><th class="num attn">1</th><th class="num">49,176</th><th colspan="2"></th></tr>
+<tr><td><a href="#t0">test1</a></td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">16</td><td></td><td></td></tr>
+<tr class="stripe"><td><a href="#t1">test3</a></td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">18</td><td></td><td></td></tr>
+<tr><td><a href="#t2">test4</a></td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num">18</td><td></td><td></td></tr>
+<tr class="stripe"><td><a href="#t3">test</a></td><td class="num">0</td><td class="num">0</td><td class="num">0</td><td class="num attn">1</td><td class="num">191,350</td><td></td><td></td></tr>
+<tr><th>Total</th><th class="num">0</th><th class="num">0</th><th class="num">0</th><th class="num attn">1</th><th class="num">191,402</th><th colspan="2"></th></tr>
 </table>
-<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">Suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">test1 &#8212; failed (configuration methods)</th></tr><tr class="failedeven"><td rowspan="1">NewDesign_Trips.TCNDTR_1_CreateTripsForHotels</td><td><a href="#m0">afterSuite</a></td><td rowspan="1">1773838122353</td><td rowspan="1">6</td></tr></tbody>
+<table id='summary'><thead><tr><th>Class</th><th>Method</th><th>Start</th><th>Time (ms)</th></tr></thead><tbody><tr><th colspan="4">Suite</th></tr></tbody><tbody id="t0"><tr><th colspan="4">test1 &#8212; failed (configuration methods)</th></tr><tr class="failedeven"><td rowspan="1">NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses</td><td><a href="#m0">afterSuite</a></td><td rowspan="1">1774356607230</td><td rowspan="1">6</td></tr></tbody>
 <tbody id="t1"><tr><th colspan="4" class="invisible"/></tr></tbody>
 <tbody id="t2"><tr><th colspan="4" class="invisible"/></tr></tbody>
-<tbody id="t3"><tr><th colspan="4">test &#8212; failed</th></tr><tr class="failedeven"><td rowspan="1">NewDesign_Trips.TCNDTR_1_CreateTripsForHotels</td><td><a href="#m1">myTest</a></td><td rowspan="1">1773838077357</td><td rowspan="1">44159</td></tr></tbody>
+<tbody id="t3"><tr><th colspan="4">test &#8212; failed</th></tr><tr class="failedeven"><td rowspan="1">NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses</td><td><a href="#m1">myTest</a></td><td rowspan="1">1774356422979</td><td rowspan="1">182416</td></tr></tbody>
 </table>
-<h2>test1</h2><h3 id="m0">NewDesign_Trips.TCNDTR_1_CreateTripsForHotels#afterSuite</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.StackOverflowError
+<h2>test1</h2><h3 id="m0">NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses#afterSuite</h3><table class="result"><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.StackOverflowError
 	at com.tripgain.common.ExtantManager.getReportFilePath(ExtantManager.java:81)
 	at com.tripgain.common.ExtantManager.getReportFilePath(ExtantManager.java:81)
 	at com.tripgain.common.ExtantManager.getReportFilePath(ExtantManager.java:81)
@@ -1046,16 +1046,13 @@
 	at com.tripgain.common.ExtantManager.getReportFilePath(ExtantManager.java:81)
 	at com.tripgain.common.ExtantManager.getReportFilePath(ExtantManager.java:81)
 </div></td></tr></table><p class="totop"><a href="#summary">back to summary</a></p>
-<h2>test3</h2><h2>test4</h2><h2>test</h2><h3 id="m1">NewDesign_Trips.TCNDTR_1_CreateTripsForHotels#myTest</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>{Origin=Hyderabad, Destination=vijayawada, UserName=testtraveller98@tripgain.com, TripName=AutoStart1, TestRun=, URL=https://neo.tripgain.com/login, Password=@AM@TGA1$29TN}</td></tr><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.AssertionError: Exception occurred: org.openqa.selenium.NoSuchElementException: no such element: Unable to locate element: {&quot;method&quot;:&quot;xpath&quot;,&quot;selector&quot;:&quot;(//div[contains(@id,&apos;hotel-search-header-id&apos;)]//div[@class=&apos; tg-typography tg-typography_subtitle-6 ms-1 fw-600 tg-typography_default&apos;])[1]&quot;}
-  (Session info: chrome=120.0.6099.110)
-For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+<h2>test3</h2><h2>test4</h2><h2>test</h2><h3 id="m1">NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses#myTest</h3><table class="result"><tr class="param"><th>Parameter #1</th></tr><tr class="param stripe"><td>{Origin=Bangalore, HotelOrigin=mumbai, Destination=delhi, UserName=testtraveller98@tripgain.com, BusDestination=delhi, TripName=Auto_Buses_Hotels1, TestRun=, BusOrigin=hyderabad, URL=https://neo.tripgain.com/login, Password=@AM@TGA1$29TN}</td></tr><tr><th>Exception</th></tr><tr><td><div class="stacktrace">java.lang.AssertionError: Exception occurred: org.openqa.selenium.TimeoutException: Expected condition failed: waiting for visibility of element located by By.xpath: //div[@role=&apos;option&apos;] (tried for 10 second(s) with 500 milliseconds interval)
 Build info: version: &apos;4.18.1&apos;, revision: &apos;b1d3319b48&apos;
 System info: os.name: &apos;Windows 11&apos;, os.arch: &apos;amd64&apos;, os.version: &apos;10.0&apos;, java.version: &apos;21.0.7&apos;
 Driver info: org.openqa.selenium.chrome.ChromeDriver
-Command: [5f533f3f908d76e58695a23e6ea21c58, findElement {using=xpath, value=(//div[contains(@id,&apos;hotel-search-header-id&apos;)]//div[@class=&apos; tg-typography tg-typography_subtitle-6 ms-1 fw-600 tg-typography_default&apos;])[1]}]
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 120.0.6099.110, chrome: {chromedriverVersion: 120.0.6099.109 (3419140ab66..., userDataDir: C:\Users\LENOVO\AppData\Loc...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:61054}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:61054/devtoo..., se:cdpVersion: 120.0.6099.110, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: 5f533f3f908d76e58695a23e6ea21c58
-	at NewDesign_Trips.TCNDTR_1_CreateTripsForHotels.myTest(TCNDTR_1_CreateTripsForHotels.java:285)
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 120.0.6099.110, chrome: {chromedriverVersion: 120.0.6099.109 (3419140ab66..., userDataDir: C:\Users\LENOVO\AppData\Loc...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:56934}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:56934/devtoo..., se:cdpVersion: 120.0.6099.110, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: fbbbc6cd845470e12935fe68f60e62c3
+	at NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses.myTest(TCNDTR_3_CreateTripsForHotelsAndBuses.java:618)
 	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
 	at java.base/java.util.concurrent.FutureTask.run(FutureTask.java:317)
 	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)

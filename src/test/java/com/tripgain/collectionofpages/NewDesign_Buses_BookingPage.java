@@ -293,36 +293,36 @@ public class NewDesign_Buses_BookingPage {
 		}
 	}
 
-	public void validateDepartureTimeFromBoardingToBookingPage(String[] boardingPointDetails,
-			String[] departureTimeFromBookingPage, Log log, ScreenShots screenshots) {
+	public void validateDepartureTimeFromListingToBookingPage(String[] busDetailsFromListing,
+	        String[] departureTimeFromBookingPage, Log log, ScreenShots screenshots) {
 
-		if (boardingPointDetails == null || boardingPointDetails.length < 2
-				|| boardingPointDetails[1].trim().isEmpty()) {
-			log.ReportEvent("FAIL", "Boarding point time is null or empty.");
-			screenshots.takeScreenShot1();
-			Assert.fail("Boarding point time is missing.");
-			return;
-		}
+	    if (busDetailsFromListing == null || busDetailsFromListing.length < 1
+	            || busDetailsFromListing[0].trim().isEmpty()) {
+	        log.ReportEvent("FAIL", "Departure time from listing page is null or empty.");
+	        screenshots.takeScreenShot1();
+	        Assert.fail("Departure time from listing page is missing.");
+	        return;
+	    }
 
-		if (departureTimeFromBookingPage == null || departureTimeFromBookingPage.length == 0
-				|| departureTimeFromBookingPage[0].trim().isEmpty()) {
-			log.ReportEvent("FAIL", "Departure time from booking page is null or empty.");
-			screenshots.takeScreenShot1();
-			Assert.fail("Departure time from booking page is missing.");
-			return;
-		}
+	    if (departureTimeFromBookingPage == null || departureTimeFromBookingPage.length == 0
+	            || departureTimeFromBookingPage[0].trim().isEmpty()) {
+	        log.ReportEvent("FAIL", "Departure time from booking page is null or empty.");
+	        screenshots.takeScreenShot1();
+	        Assert.fail("Departure time from booking page is missing.");
+	        return;
+	    }
 
-		String selectedBoardingTime = boardingPointDetails[1].trim();
-		String bookingPageDepartureTime = departureTimeFromBookingPage[0].trim();
+	    String listingDeparture = busDetailsFromListing[0].trim();
+	    String bookingDeparture = departureTimeFromBookingPage[0].trim();
 
-		if (!selectedBoardingTime.equalsIgnoreCase(bookingPageDepartureTime)) {
-			log.ReportEvent("FAIL", "Departure time mismatch from boarding to booking! Boarding: '"
-					+ selectedBoardingTime + "', Booking Page: '" + bookingPageDepartureTime + "'");
-			screenshots.takeScreenShot1();
-			Assert.fail("Departure time mismatch");
-		} else {
-			log.ReportEvent("PASS", "Departure time matches from boarding to booking page: " + selectedBoardingTime);
-		}
+	    if (!listingDeparture.equalsIgnoreCase(bookingDeparture)) {
+	        log.ReportEvent("FAIL", "Departure time mismatch from listing to booking page! Listing: '"
+	                + listingDeparture + "', Booking: '" + bookingDeparture + "'");
+	        screenshots.takeScreenShot1();
+	        Assert.fail("Departure time mismatch");
+	    } else {
+	        log.ReportEvent("PASS", "Departure time matches from listing to booking page: " + listingDeparture);
+	    }
 	}
 
 	public void validateArrivalTimeFromListingToBookingPage(String[] busDetailsFromListing,
@@ -1321,8 +1321,8 @@ public class NewDesign_Buses_BookingPage {
 			driver.findElement(By.xpath("//button[text()='Yes, Submit']")).click();
 			log.ReportEvent("INFO", "Successfully clicked on submit trip button");
 
-			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[text()='Trip Flow']")));
+//			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+//			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[text()='Trip Flow']")));
 
 		} catch (Exception e) {
 			log.ReportEvent("FAIL", "Failed to submit trip or load 'Trip Flow' page: " + e.getMessage());
@@ -1332,12 +1332,12 @@ public class NewDesign_Buses_BookingPage {
 
 	// Validate data in trip requests after submit trip
 
-	public List<String> getDataInTripReqAfterClickOnSubmit(String[] approverIdArray, Log log, ScreenShots screenshots) {
+/*	public List<String> getDataInTripReqAfterClickOnSubmit(String[] approverIdArray, Log log, ScreenShots screenshots) {
 
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
 		// Wait until "Approval Requests" screen is visible
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[text()='Approval Requests']")));
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[text()='Awaiting Approval']")));
 
 		// Get the first Approver ID from array
 		String approverId = approverIdArray[0];
@@ -1408,8 +1408,82 @@ public class NewDesign_Buses_BookingPage {
 		tripData.add(tripId); // index 5
 
 		return tripData;
-	}
+	}*/
+	
+	
+	
+	public List<String> getDataInTripReqAfterClickOnSubmit(String[] tripIdFromNextPage, Log log, ScreenShots screenshots) {
 
+	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
+
+	    // Wait until "Awaiting Approval" screen is visible
+	    wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[text()='Awaiting Approval']")));
+
+	    try {
+	        // Find the search field
+	        WebElement searchField = wait
+	                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@class='tg-input']")));
+
+	        // Use the String passed from the script call
+	        searchField.clear();
+	        searchField.sendKeys(tripIdFromNextPage); 
+	        Thread.sleep(3000);
+
+	        log.ReportEvent("INFO", "Entered Trip ID in search field: " + tripIdFromNextPage);
+	        System.out.println("Entered Trip ID in search field: " + tripIdFromNextPage);
+
+	        // Click the search button
+	        WebElement searchButton = driver.findElement(By.xpath("//button[contains(@class,'tg-icon-btn_small')]"));
+	        searchButton.click();
+
+	        log.ReportEvent("INFO", "Clicked on search button for Trip ID: " + tripIdFromNextPage);
+
+	    } catch (Exception e) {
+	        log.ReportEvent("FAIL", "Failed to search for Trip ID: " + tripIdFromNextPage);
+	        screenshots.takeScreenShot1();
+	        Assert.fail("Failed to enter Trip ID or click search button: " + tripIdFromNextPage);
+	    }
+
+	    List<String> tripData = new ArrayList<>();
+	    
+	    // Scrape data (XPaths exactly as you requested)
+	    String tripName = driver.findElement(By.xpath(
+	            "(//div[contains(@class,' tg-typography tg-typography_subtitle-5 fw-600 tg-typography_default')])[1]"))
+	            .getText();
+
+	    WebElement fromToElement = driver.findElement(By.xpath(
+	            "(//div[contains(@class,' tg-typography tg-typography_subtitle-7  tg-typography_secondary')])[1]"));
+	    String fromToText = fromToElement.getText();
+	    String TripFromLoc = fromToText.split(" - ")[0]; 
+	    String TripToLoc = fromToText.split(" - ")[1]; 
+
+	    String TripDates = driver.findElement(By.xpath(
+	            "//div[contains(@class,' tg-typography tg-typography_subtitle-6 xs-fs-12 tg-typography_secondary-dark')]"))
+	            .getText();
+
+	    List<WebElement> serviceElements = driver.findElements(By.xpath(
+	            "(//div[contains(@class,'trip_card__container')])[1]//div[contains(@class,'tg-label tg-label_white tg-label_md undefined gap-1')]"));
+	    List<String> servicesList = new ArrayList<>();
+	    for (WebElement serviceElement : serviceElements) {
+	        servicesList.add(serviceElement.getText().trim());
+	    }
+	    String Services = String.join(", ", servicesList);
+
+	    String tripId = driver.findElement(By.xpath(
+	            "(//div[contains(@class,' tg-typography tg-typography_subtitle-7 cursor-pointer fw-500 tg-typography_text-info')])[1]"))
+	            .getText();
+
+	    // Store data in the specific order
+	    tripData.add(tripName);    // 0
+	    tripData.add(TripFromLoc);  // 1
+	    tripData.add(TripToLoc);    // 2
+	    tripData.add(TripDates);    // 3
+	    tripData.add(Services);     // 4
+	    tripData.add(tripId);       // 5
+
+	    return tripData;
+	}
+	
 	// validation methods
 	public void validateTripNameAfterSubmit(String enteredTripName, List<String> tripDataAfterSubmit, Log log,
 			ScreenShots screenshots) {

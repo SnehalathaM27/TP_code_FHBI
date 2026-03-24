@@ -294,7 +294,10 @@ public class NewDesign_Trips {
 
 		} else {
 			while (!currentMonthYear.equals(MonthandYear)) {
-				driver.findElement(By.xpath("(//button[contains(@class,'nav-arrow')])[2]")).click();
+				By nextButton = By.xpath("(//button[contains(@class,'nav-arrow')])[2]");
+				WebElement nextBtn = wait.until(ExpectedConditions.elementToBeClickable(nextButton));
+				js.executeScript("arguments[0].click();", nextBtn);	
+				
 				wait.until(ExpectedConditions.textToBe(monthYearHeader, MonthandYear));
 				currentMonthYear = driver.findElement(monthYearHeader).getText();
 			}
@@ -790,7 +793,7 @@ public class NewDesign_Trips {
 
 	public String[] getLocNAmeFromTripHotelResultsPg() {
 		String TRipLocNm = driver.findElement(By.xpath(
-				"(//div[contains(@id,'hotel-search-header-id')]//div[@class=' tg-typography tg-typography_subtitle-6 ms-1 fw-600 tg-typography_default'])[1]"))
+				"//div[contains(@class,'search-header-loc')]"))
 				.getText();
 		System.out.println("location name from results page: " + TRipLocNm);
 		return new String[] { TRipLocNm };
@@ -1215,24 +1218,24 @@ public class NewDesign_Trips {
 		}
 	}
 
-	@FindBy(xpath = "//div[text()='From']/following-sibling::div//input")
-	private WebElement enterBusLocation;
+	@FindBy(xpath = "//label[normalize-space()='From']/ancestor::div[contains(@class,'app-async-select')]//input")
+	private WebElement enterBusFromLocation;
 
 	public String enterLocationForBusesOndetailsPg(String location) throws TimeoutException {
+		enterBusFromLocation.clear();
+		enterBusFromLocation.sendKeys(location);
+
 		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-
-		wait.until(ExpectedConditions.elementToBeClickable(enterBusLocation)).click();
-		enterBusLocation.clear();
-		enterBusLocation.sendKeys(location);
-
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@role='option']")));
 
 		selectCitytoo(location);
 
-		return location;
+		return location; // return the input location
 	}
 
-	@FindBy(xpath = "//div[text()='To']/following-sibling::div//input")
+	
+
+	@FindBy(xpath = "//label[normalize-space()='To']/ancestor::div[contains(@class,'app-async-select')]//input")
 	private WebElement enterBusToLocation;
 
 	public String enterToLocationForBusesOndetailsPg(String location) throws TimeoutException {
@@ -1749,5 +1752,8 @@ public class NewDesign_Trips {
 	public void clcikOnPastDatedBooking() {
 		driver.findElement(By.xpath("(//span[@class='tg-checkbox-box primary'])[1]")).click();
 	}
+	//---------------------------
+	
+	//console log
 
 }

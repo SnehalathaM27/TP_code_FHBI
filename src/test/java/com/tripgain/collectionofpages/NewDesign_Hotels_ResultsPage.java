@@ -396,6 +396,7 @@ public class NewDesign_Hotels_ResultsPage {
 			// Extract details
 			String hotelName = getText(card, ".//*[contains(@class,'tg-hl-hotel-name')]");
 			String starRating = extractStarRatingFromClass(card);
+			Thread.sleep(1500);
 			String address = getText(card, ".//*[contains(@class,'tg-hl-address')]");
 			String distance = getText(card, ".//*[contains(@class,'tg-hl-distance')]");
 			String rating = getText(card, ".//*[contains(@class,'tg-hl-rating')]");

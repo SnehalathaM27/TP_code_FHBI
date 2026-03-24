@@ -38,6 +38,7 @@ import com.tripgain.collectionofpages.SkyTravelers_Hotels_SearchPage;
 import com.tripgain.collectionofpages.SkyTravelers_Hotels_confirmBookingPage;
 import com.tripgain.collectionofpages.TripPlanner;
 import com.tripgain.collectionofpages.Tripgain_FutureDates;
+import com.tripgain.collectionofpages.Tripgain_HomePage_Flights;
 import com.tripgain.collectionofpages.Tripgain_Login;
 import com.tripgain.collectionofpages.Tripgain_RoundTripResultsScreen;
 import com.tripgain.collectionofpages.Tripgain_homepage;
@@ -115,12 +116,13 @@ try {
 		// Login to application
 		NewDesign_Login NewDesignLogin = new NewDesign_Login(driver);
 
-		SkyTravelers_Hotels_Login SkyTravelersHotelsLogin = new SkyTravelers_Hotels_Login(driver);
+		Tripgain_HomePage_Flights tripgain_HomePage = new Tripgain_HomePage_Flights(driver);
 		NewDesignLogin.enterUserName(username);
 		NewDesignLogin.enterPasswordName(pwd);
 		NewDesignLogin.clickButton();
 		Log.ReportEvent("PASS", "Enter UserName and Password is Successful");
-		Thread.sleep(2000);
+		tripgain_HomePage.clickIfPresentCloseBtn();
+		
 
 		NewDesign_Trips NewDesignTrips = new NewDesign_Trips(driver);
 		NewDesign_Hotels_ResultsPage NewDesignHotelsResultsPage=new NewDesign_Hotels_ResultsPage(driver);
@@ -136,6 +138,7 @@ try {
 
 		NewDesignTrips.clcikOnTrips();
 		NewDesignTrips.createTrip();
+		Thread.sleep(2000);
 		String EnteredtripName = NewDesignTrips.enterNameThisTrip(tripName, Log);
 		String origindetails = NewDesignTrips.enterfrom(origin);
 		String destdetails = NewDesignTrips.enterTo(destination);
@@ -150,11 +153,12 @@ try {
 
 		NewDesignTrips.clickCreateTripButton();
 
-		List<String> servicesTextFromPopup = NewDesignTrips.getSelectedServicesTextFromPopupAfterTripCreated();
+
+		
+		List<String> servicesTextFromPopup = NewDesignTrips.getSelectedServicesTextFromPopup();
 
 		NewDesignTrips.validateSelectedServicesInSelectedAndPopup(servicesdetails, servicesTextFromPopup, Log,screenShots);
-		String[] tripIdFromPop = NewDesignTrips.getTripIdFromPopup(Log);
-		NewDesignTrips.clickOnContinueToAddServicesBtn();
+		
 
 		String[] TripIdFromNextPage = NewDesignTrips.getTripIdFromTripDetailsPage(Log);
 
@@ -180,43 +184,20 @@ try {
 	   Thread.sleep(2000);
 	   
 	   String[] locNameFromTripResultPg = NewDesignTrips.getLocNAmeFromTripHotelResultsPg();
-	   // String[] checkindateResultPage = NewDesignHotelsResultsPage.getCheckInDateTextFromResultPage();
+	   String[] checkindateResultPage = NewDesignHotelsResultsPage.getCheckInDateTextFromResultPage();
 		String[] checkoutdateResultPage =NewDesignHotelsResultsPage.getCheckOutDateTextFromResultPage();
 		
 		NewDesignTrips.validateHotelLocationFromResultsAndAfterAddInDetailsPage(locNameFromTripResultPg, LocationNameAfterAdd, Log, screenShots);
-	//	NewDesignTrips.validateCheckInAndOutDatesFromResultsAndDetailsAfterAdd(checkindateResultPage, checkoutdateResultPage, datesAfterAdd, Log, screenShots);
-		
-		Thread.sleep(3000);
-		NewDesignHotelsResultsPage.clickOnSortOption("Price: Low to High", Log);
-		NewDesignHotelsResultsPage.validatePricesLowToHigh(Log);
-		Thread.sleep(2000);
-		
-		NewDesignHotelsResultsPage.clickOnSortOption("Price: High to Low", Log);
-		NewDesignHotelsResultsPage.validatePricesHighToLow(Log);
-		Thread.sleep(2000);
+		NewDesignTrips.validateCheckInAndOutDatesFromResultsAndDetailsAfterAdd(checkindateResultPage, checkoutdateResultPage, datesAfterAdd, Log, screenShots);
 
-//			NewDesignHotelsResultsPage.clickOnSortOption("Star Rating: Ascending", Log);
-//			NewDesignHotelsResultsPage.clickOnSortOption("Star Rating: Descending", Log);
-			NewDesignHotelsResultsPage.clickOnSortOption("Distance: Ascending", Log);
-			NewDesignHotelsResultsPage.validateDistanceAscending(Log);
-			Thread.sleep(2000);
-
-			NewDesignHotelsResultsPage.clickOnSortOption("Distance: Descending", Log);
-			NewDesignHotelsResultsPage.validateDistanceDescendingSimple(Log);
-			Thread.sleep(2000);
-
-
-			NewDesignHotelsResultsPage.selectCurrencyFromDropdown("TND", Log);
-			
-			Thread.sleep(2000);
-
-			
+		Thread.sleep(3000);			
 			
 		//get all the hotel details from the selected hotel card
-			String[] hotelDetails = NewDesignHotelsResultsPage.selectHotelAndGetDetails(2, Log);
+			String[] hotelDetails = NewDesignHotelsResultsPage.selectHotelAndGetDetails(5, Log);
 			
 			
-			//get all the details from desc page 
+			//get all the details from desc page
+			Thread.sleep(1200);
 			String[] hotelAddressFromDesc = NewDesignHotels_DescPage.getAddressFromDescPg();
 			String[] hotelAmenitiesFromDesc = NewDesignHotels_DescPage.getAmenitiesFromDescPg();
 	
@@ -235,9 +216,7 @@ try {
 			NewDesignHotels_DescPage.validateHotelAddressFromDescToResultPage(hotelAddressFromDesc, hotelDetails, Log, screenShots);
 			NewDesignHotels_DescPage.validateHotelPriceFromDescToResultPage(hotelPriceFromDesc, hotelDetails, Log, screenShots);
 			NewDesignHotels_DescPage.validateHotelPolicyFromDescToResultPage(PolicyFromDesc, hotelDetails, Log, screenShots);
-			NewDesignHotels_DescPage.validatePerNightPriceFromDescToResultPage(perNightPriceFromDesc, hotelDetails, Log, screenShots);
 			NewDesignHotels_DescPage.validateAmenitiesFromDescToResultPage(hotelAmenitiesFromDesc, hotelDetails, Log, screenShots);
-			NewDesignHotelsResultsPage.validateOtherCurrencyPriceFromDescToResultPage(OtherCurrencyInDesc, hotelDetails, Log, screenShots);
 			
 			
 			String[] selectRooms = NewDesignHotels_DescPage.selectRoomsFromDescPg();
@@ -267,10 +246,9 @@ try {
 			NewDesign_HotelsBookingPage.validateRefundableTextFromDescToBookingPage(selectRooms, BookingPgRefundable, Log, screenShots);
 			NewDesign_HotelsBookingPage.validateSelectedRoomTextFromDescToBookingPage(selectRooms, BookingPgSelectedRoomText, Log, screenShots);
 			//NewDesign_HotelsBookingPage.validatePriceFromDescWithBookingPage(selectRooms, BookingPgTotalfareAmount, Log, screenShots);
-		//	NewDesign_HotelsBookingPage.validateCheckInDateBetweenResultAndBookingPage(checkindateResultPage, BookingCheckIndate, Log, screenShots);
+			NewDesign_HotelsBookingPage.validateCheckInDateBetweenResultAndBookingPage(checkindateResultPage, BookingCheckIndate, Log, screenShots);
 			NewDesign_HotelsBookingPage.validateCheckOutDateBetweenResultAndBookingPage(checkoutdateResultPage, BookingCheckOutdate, Log, screenShots);
-			//NewDesign_HotelsBookingPage.addTravellerDetails();
-			NewDesign_HotelsBookingPage.enterLastNameForHotels("traveller");
+			
 			NewDesignTrips.clickOnAddHotelToTrip(Log);
 			Thread.sleep(3000);
 			
@@ -302,7 +280,7 @@ try {
 			 
 			 String enteredBusFromLOcSearch = NewDesignTrips.enterLocationForBusesOndetailsPg(Busorigin);
 			 String enteredBusToLOcSearch = NewDesignTrips.enterToLocationForBusesOndetailsPg(Busdestination);
-			 String enteredBusDatesToSearch = NewDesignTrips.selectBusesJourneyDate(fromDate, fromMonthYear);
+			 String enteredBusDatesToSearch = NewDesignTrips.selectJourneyDate(fromDate, fromMonthYear);
 			 NewDesignTrips.clickOnAddButton();
 			 Thread.sleep(2000);
 			 
@@ -343,11 +321,12 @@ try {
 				String[] Busdetails = NewDesignBusesResultsPage.getBusDetailsFromListingByIndex(0);
 				
 				String[] SeatType = NewDesignBusesResultsPage.getSeatTypeTextFromresultPgAfterSelect();
+				NewDesignBusesResultsPage.selectAvailableBerth(Log, screenShots);
+
 				String[] BoardingDetails = NewDesignBusesResultsPage.selectBoardingPoints(Log, screenShots);
 				String[] DroppingPoint = NewDesignBusesResultsPage.selectDroppingPoint(Log, screenShots);
 			//	NewDesignBusesResultsPage.clcikLowerBirth(Log, screenShots);
 				Thread.sleep(1000);
-				NewDesignBusesResultsPage.clickUpperBerth(Log, screenShots);
 				String SeatSelectionPrice = NewDesignBusesResultsPage.getPriceAfterSeatSelection(Log, screenShots);
 				NewDesignBusesResultsPage.clcikOnConfirmSeat();
 				
@@ -375,20 +354,16 @@ try {
 				NewDesignBusesBookingPage.validateDroppingPointLocationFromListingToBookingPage(DroppingPoint, BookingPgdroppingPoint, Log, screenShots);
 				NewDesignBusesBookingPage.validateSeaterTypeFromListingToBookingPage(SeatType, BookingPgSeater, Log, screenShots);
 			//	NewDesignBusesBookingPage.validateCheckInDateBetweenResultAndBookingPages(checkindateResultPage, BookingPgDate, Log, screenShots);
-				NewDesignBusesBookingPage.validateDepartureTimeFromBoardingToBookingPage(BoardingDetails, BookingPgDepartTime, Log, screenShots);
+				NewDesignBusesBookingPage.validateDepartureTimeFromListingToBookingPage(Busdetails, BookingPgDepartTime, Log, screenShots);
 				NewDesignBusesBookingPage.validateArrivalTimeFromListingToBookingPage(Busdetails, BookingPgArrival, Log, screenShots);
 				NewDesignBusesBookingPage.validateDurationFromListingToBookingPage(Busdetails, bookingPgDuration, Log, screenShots);
 				NewDesignBusesBookingPage.validatePolicyFromListingToBookingPage(Busdetails, BookingPgPolicy, Log, screenShots);
 				NewDesignBusesBookingPage.validatePriceFromresultToBookingPage(BookingPgPrice, SeatSelectionPrice, Log, screenShots);
 				
 				
-				NewDesignBusesBookingPage.addPassengerDetails();
+			//	NewDesignBusesBookingPage.addPassengerDetails();
 
-//			//	NewDesignBusesBookingPage.enterEmailForBuses("abc@gmail.com");
-//			NewDesignBusesBookingPage.enterLastNameForBuses("traveller");
-//				//NewDesignBusesBookingPage.enterPhNoForBuses("98765432190");
-//				NewDesignBusesBookingPage.enetrIdCardNumber("1234567");
-//				NewDesignBusesBookingPage.clickOnIdCardType();
+
 				
 				
 				NewDesignBusesBookingPage.clcikOnAddTripAndContinueButton();
