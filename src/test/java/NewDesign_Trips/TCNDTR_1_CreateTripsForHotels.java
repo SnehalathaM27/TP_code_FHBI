@@ -272,7 +272,7 @@ try {
 			
 			
 			
-			
+		
 		// Function to Logout from Application
 		// tripgainhomepage.logOutFromApplication(Log, screenShots);
 		driver.quit();

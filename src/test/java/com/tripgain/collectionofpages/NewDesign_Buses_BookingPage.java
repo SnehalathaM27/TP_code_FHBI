@@ -1412,41 +1412,40 @@ public class NewDesign_Buses_BookingPage {
 	
 	
 	
-	public List<String> getDataInTripReqAfterClickOnSubmit(String[] tripIdFromNextPage, Log log, ScreenShots screenshots) {
+	public List<String> getDataInTripReqAfterClickOnSubmit(String[] tripIdArray, Log log, ScreenShots screenshots) {
 
 	    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(20));
 
-	    // Wait until "Awaiting Approval" screen is visible
+	    // 1. Wait until "Awaiting Approval" screen is visible
 	    wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[text()='Awaiting Approval']")));
+
+	    // 2. Extract the ID from the array safely
+	    if (tripIdArray == null || tripIdArray.length == 0) {
+	        log.ReportEvent("FAIL", "Trip ID array is empty or null");
+	        Assert.fail("Trip ID array is empty or null");
+	    }
+	    String tripIdToSearch = tripIdArray[0]; // Accessing the actual String value
 
 	    try {
 	        // Find the search field
 	        WebElement searchField = wait
 	                .until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//input[@class='tg-input']")));
 
-	        // Use the String passed from the script call
 	        searchField.clear();
-	        searchField.sendKeys(tripIdFromNextPage); 
+	        searchField.sendKeys(tripIdToSearch); 
 	        Thread.sleep(3000);
 
-	        log.ReportEvent("INFO", "Entered Trip ID in search field: " + tripIdFromNextPage);
-	        System.out.println("Entered Trip ID in search field: " + tripIdFromNextPage);
-
-	        // Click the search button
-	        WebElement searchButton = driver.findElement(By.xpath("//button[contains(@class,'tg-icon-btn_small')]"));
-	        searchButton.click();
-
-	        log.ReportEvent("INFO", "Clicked on search button for Trip ID: " + tripIdFromNextPage);
-
+	        log.ReportEvent("INFO", "Entered Trip ID in search field: " + tripIdToSearch);
+	        System.out.println("Entered Trip ID in search field: " + tripIdToSearch);
 	    } catch (Exception e) {
-	        log.ReportEvent("FAIL", "Failed to search for Trip ID: " + tripIdFromNextPage);
+	        log.ReportEvent("FAIL", "Failed to search for Trip ID: " + tripIdToSearch);
 	        screenshots.takeScreenShot1();
-	        Assert.fail("Failed to enter Trip ID or click search button: " + tripIdFromNextPage);
+	        Assert.fail("Failed to enter Trip ID or click search button: " + tripIdToSearch);
 	    }
 
 	    List<String> tripData = new ArrayList<>();
 	    
-	    // Scrape data (XPaths exactly as you requested)
+	    // 3. Scrape data
 	    String tripName = driver.findElement(By.xpath(
 	            "(//div[contains(@class,' tg-typography tg-typography_subtitle-5 fw-600 tg-typography_default')])[1]"))
 	            .getText();
@@ -1454,8 +1453,10 @@ public class NewDesign_Buses_BookingPage {
 	    WebElement fromToElement = driver.findElement(By.xpath(
 	            "(//div[contains(@class,' tg-typography tg-typography_subtitle-7  tg-typography_secondary')])[1]"));
 	    String fromToText = fromToElement.getText();
-	    String TripFromLoc = fromToText.split(" - ")[0]; 
-	    String TripToLoc = fromToText.split(" - ")[1]; 
+	    
+	    // Split logic for From/To
+	    String TripFromLoc = fromToText.contains("-") ? fromToText.split(" - ")[0] : fromToText; 
+	    String TripToLoc = fromToText.contains("-") ? fromToText.split(" - ")[1] : ""; 
 
 	    String TripDates = driver.findElement(By.xpath(
 	            "//div[contains(@class,' tg-typography tg-typography_subtitle-6 xs-fs-12 tg-typography_secondary-dark')]"))
@@ -1469,17 +1470,15 @@ public class NewDesign_Buses_BookingPage {
 	    }
 	    String Services = String.join(", ", servicesList);
 
-	    String tripId = driver.findElement(By.xpath(
-	            "(//div[contains(@class,' tg-typography tg-typography_subtitle-7 cursor-pointer fw-500 tg-typography_text-info')])[1]"))
-	            .getText();
+	   // String tripIdResult = driver.findElement(By.xpath("(//div[contains(@class,' tg-typography tg-typography_subtitle-7 cursor-pointer fw-500 tg-typography_text-info')])[1]")).getText();
 
-	    // Store data in the specific order
-	    tripData.add(tripName);    // 0
-	    tripData.add(TripFromLoc);  // 1
-	    tripData.add(TripToLoc);    // 2
-	    tripData.add(TripDates);    // 3
-	    tripData.add(Services);     // 4
-	    tripData.add(tripId);       // 5
+	    // 4. Store data in the specific order
+	    tripData.add(tripName);      // Index 0
+	    tripData.add(TripFromLoc);   // Index 1
+	    tripData.add(TripToLoc);     // Index 2
+	    tripData.add(TripDates);     // Index 3
+	    tripData.add(Services);      // Index 4
+	   // tripData.add(tripIdResult);  // Index 5
 
 	    return tripData;
 	}

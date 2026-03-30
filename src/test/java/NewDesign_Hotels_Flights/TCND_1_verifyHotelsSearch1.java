@@ -104,13 +104,13 @@ public class TCND_1_verifyHotelsSearch1 extends BaseClass {
 	         NewDesign_Login NewDesignLogin= new NewDesign_Login(driver);
 			Tripgain_HomePage_Flights tripgain_HomePage= new Tripgain_HomePage_Flights(driver);
 
-	        NewDesignLogin.enterUserName(username);
-	        NewDesignLogin.enterPasswordName(pwd);
-	        NewDesignLogin.clickButton(); 
-	        Log.ReportEvent("PASS", "Enter UserName and Password is Successful");
-			Thread.sleep(2000);
+			
+			NewDesignLogin.enterUserName(username);
+			NewDesignLogin.enterPasswordName(pwd);
+			NewDesignLogin.clickButton();
+			Log.ReportEvent("PASS", "Enter UserName and Password is Successful");
 			tripgain_HomePage.clickIfPresentCloseBtn();
-
+			
 
 	  NewDesignLogin.clickOnTravel();
 	  
@@ -131,8 +131,8 @@ public class TCND_1_verifyHotelsSearch1 extends BaseClass {
 
 			NewDesign_HotelsSearchPage.selectDate(fromDate, fromMonthYear, Log);
 			NewDesign_HotelsSearchPage.selectReturnDate(returnDate, returnMonthYear, Log);
-			// NewDesign_HotelsSearchPage.fillRoomDetails("3", "2,3,1", "1,2,0", "5;7,8;",
-			// Log);
+			
+		 NewDesign_HotelsSearchPage.configureHotelBookingRooms("3", "2,3,2", "2,1,1", "5;7,8;9", driver);
 
 			NewDesign_HotelsSearchPage.clickOnSearchHotelBut();
 			Thread.sleep(8000);
@@ -284,7 +284,6 @@ public class TCND_1_verifyHotelsSearch1 extends BaseClass {
 
 			NewDesign_Awaiting_ApprovalScreen.clickApprovalDetailsButtonInViewtrip();
 			String[] ApproverNames = NewDesign_Awaiting_ApprovalScreen.getApproverNameInAwaitingScreen(Log);
-			NewDesign_Awaiting_ApprovalScreen.getApproverTimeInAwaitingScreen(Log);
 
 			// -------------------logout---------------------------------------------------------
 			NewDesign_Awaiting_ApprovalScreen.clickOnLogout();
@@ -294,6 +293,9 @@ public class TCND_1_verifyHotelsSearch1 extends BaseClass {
 			NewDesignLogin.enterUserName(username1);
 			NewDesignLogin.enterPasswordName(pwd1);
 			NewDesignLogin.clickButton();
+			
+			tripgain_HomePage.clickIfPresentCloseBtn();
+
 
 			NewDesign_Emulate_Process.clcikOnAdmin();
 			NewDesign_Emulate_Process.clickOnSearchByThroughUser(searchby);
@@ -361,6 +363,8 @@ public class TCND_1_verifyHotelsSearch1 extends BaseClass {
 			Thread.sleep(2000);
 			NewDesignTrips.waitUntilDivDisplayed(driver);
 
+			 NewDesignTrips.selectStatusFromDropdownUnderAwaitingscreen("All");
+
 			NewDesignTrips.clickOnsearchTripsInAwaitingApprovalPg(ApproveridFromAwaitingScreen, Log, screenShots);
 			Thread.sleep(2000);
 			String[] travellerStatus = NewDesignTrips.getStatusInAwaitingApprovalForHotels(Log);
@@ -412,6 +416,8 @@ public class TCND_1_verifyHotelsSearch1 extends BaseClass {
 			NewDesignTrips.clickOnAwaitingApproval();
 			Thread.sleep(2000);
 			NewDesignTrips.waitUntilDivDisplayed(driver);
+			 NewDesignTrips.selectStatusFromDropdownUnderAwaitingscreen("All");
+
 
 			NewDesignTrips.clickOnsearchTripsInAwaitingApprovalPg(ApproveridFromAwaitingScreen, Log, screenShots);
 			Thread.sleep(2000);
@@ -460,9 +466,11 @@ public class TCND_1_verifyHotelsSearch1 extends BaseClass {
 		Log = new Log(driver, test);
 		screenShots = new ScreenShots(driver, test);
 
-			}
+		// Add this simple JavaScript injection for API logging
+	//	injectApiLogger();
+	}
 
-
+	
 
 	@AfterMethod
 	public void tearDown() {

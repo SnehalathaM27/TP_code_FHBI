@@ -4,14 +4,14 @@
   <test thread-count="7" parallel="tests" name="test(failed)">
     <parameter name="browser" value="chrome"/>
     <classes>
-      <class name="NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses">
+      <class name="NewDesign_Hotels_Flights.TCND_1_verifyHotelsSearch1">
         <methods>
-          <include name="myTest" invocation-numbers="0"/>
-          <include name="launchApplication"/>
           <include name="afterSuite"/>
+          <include name="launchApplication"/>
           <include name="tearDown"/>
+          <include name="myTest" invocation-numbers="0"/>
         </methods>
-      </class> <!-- NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses -->
+      </class> <!-- NewDesign_Hotels_Flights.TCND_1_verifyHotelsSearch1 -->
     </classes>
   </test> <!-- test(failed) -->
 </suite> <!-- Failed suite [Suite] -->

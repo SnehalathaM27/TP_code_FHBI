@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.ElementClickInterceptedException;
@@ -329,231 +330,156 @@ public class NewDesignHotelsSearchPage {
 		    }
 		}
 		
-		
-				//Method to add room, adt and child
-		public void fillRoomDetails(String roomCountStr, String adultCountStr, String childCountStr, String childAgesStr, Log Log) {
-		    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-		    JavascriptExecutor js = (JavascriptExecutor) driver;
-		    int roomCount = Integer.parseInt(roomCountStr.trim());
-		    String[] adultArray = adultCountStr.split(",");
-		    String[] childArray = (childCountStr != null && !childCountStr.isEmpty()) ? childCountStr.split(",") : null;
-		    String[] roomChildAges = (childAgesStr != null && !childAgesStr.isEmpty()) ? childAgesStr.split(";") : null;
-
-		    try {
-		        // Try multiple approaches to click the expand icon
-		        boolean dropdownOpened = false;
-
-		        // Approach 1: JavaScript click with scroll into center view
-		        try {
-		            WebElement expandIcon = wait.until(ExpectedConditions.elementToBeClickable(
-		                    By.xpath("//*[@data-testid='ExpandMoreIcon']")));
-		            js.executeScript("arguments[0].scrollIntoView({block: 'center'});", expandIcon);
-		            Thread.sleep(500);
-		            js.executeScript("arguments[0].click();", expandIcon);
-		            dropdownOpened = true;
-		        } catch (Exception e) {
-		            Log.ReportEvent("WARN", "JavaScript click failed: " + e.getMessage());
-		        }
-
-		        // Approach 2: Selenium click if JS click failed
-		        if (!dropdownOpened) {
-		            try {
-		                WebElement expandIcon = wait.until(ExpectedConditions.elementToBeClickable(
-		                        By.xpath("//*[@data-testid='ExpandMoreIcon']")));
-		                js.executeScript("arguments[0].scrollIntoView({block: 'center'});", expandIcon);
-		                Thread.sleep(500);
-		                expandIcon.click();
-		                dropdownOpened = true;
-		            } catch (Exception e) {
-		                Log.ReportEvent("WARN", "Selenium click failed: " + e.getMessage());
-		            }
-		        }
-
-		        // Approach 3: Try clicking parent element if previous clicks failed
-		        if (!dropdownOpened) {
-		            try {
-		                WebElement parentElement = wait.until(ExpectedConditions.elementToBeClickable(
-		                        By.xpath("//*[@data-testid='ExpandMoreIcon']/..")));
-		                js.executeScript("arguments[0].scrollIntoView({block: 'center'});", parentElement);
-		                Thread.sleep(500);
-		                js.executeScript("arguments[0].click();", parentElement);
-		                Log.ReportEvent("INFO", "Clicked parent element of expand icon");
-		                dropdownOpened = true;
-		            } catch (Exception e) {
-		                Log.ReportEvent("WARN", "Parent click failed: " + e.getMessage());
-		            }
-		        }
-
-		        if (!dropdownOpened) {
-		            Log.ReportEvent("ERROR", "Could not open room dropdown");
-		            return;
-		        }
-
-		        Thread.sleep(3000); // Wait for dropdown UI to load
-
-		        // Get current room count
-		        WebElement roomCountElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-		                By.xpath("//div[@class='room-plusminus']/span[@class='roomlength']")));
-		        int currentRooms = Integer.parseInt(roomCountElement.getText());
-
-		        // Add rooms if needed
-		        if (roomCount > currentRooms) {
-		            WebElement addRoomButton = wait.until(ExpectedConditions.elementToBeClickable(
-		                    By.xpath("//div[@class='room-plusminus']/*[3]")));
-
-		            Actions actions = new Actions(driver);
-
-		            for (int i = currentRooms; i < roomCount; i++) {
-		                js.executeScript("arguments[0].scrollIntoView({block: 'center'});", addRoomButton);
-		                Thread.sleep(300);
-
-		                try {
-		                    actions.moveToElement(addRoomButton).pause(Duration.ofMillis(300)).click().perform();
-		                    Log.ReportEvent("INFO", "Clicked using Actions for room: " + (i + 1));
-		                } catch (Exception e) {
-		                    Log.ReportEvent("WARN", "Actions click failed: " + e.getMessage());
-		                }
-
-		                Thread.sleep(1000);
-		            }
-		        }
-
-		        // Process each room
-		        for (int roomIndex = 0; roomIndex < roomCount; roomIndex++) {
-		            int roomNumber = roomIndex + 1;
-		            //Log.ReportEvent("INFO", "Processing Room " + roomNumber);
-
-		            // Set adults for this room
-		            int adultsNeeded = Integer.parseInt(adultArray[roomIndex].trim());
-		            setAdultsForRoom(roomNumber, adultsNeeded, Log);
-
-		            // Set children and ages for this room
-		            if (childArray != null && roomIndex < childArray.length) {
-		                int childrenNeeded = Integer.parseInt(childArray[roomIndex].trim());
-		                String[] childAgesForRoom = null;
-
-		                if (roomChildAges != null && roomIndex < roomChildAges.length) {
-		                    childAgesForRoom = roomChildAges[roomIndex].split(",");
-		                }
-
-		                setChildrenForRoom(roomNumber, childrenNeeded, childAgesForRoom, Log);
-		            }
-		        }
-
-		        // Click Done button
-		        WebElement doneButton = wait.until(ExpectedConditions.elementToBeClickable(
-		                By.xpath("//button[contains(text(), 'Done')]")));
-		        js.executeScript("arguments[0].scrollIntoView({block: 'center'});", doneButton);
-		        Thread.sleep(500);
-		        js.executeScript("arguments[0].click();", doneButton);
-		        Log.ReportEvent("INFO", "Clicked Done button successfully");
-
-		    } catch (Exception e) {
-		        Log.ReportEvent("ERROR", "Failed to fill room details: " + e.getMessage());
-		    }
-		}
-
-		private void setAdultsForRoom(int roomNumber, int adultsNeeded, Log Log) {
-		    try {
-		        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-		        JavascriptExecutor js = (JavascriptExecutor) driver;
-		        Actions actions = new Actions(driver);
-
-		        // Get current adult count - first adultvalue span in the room
-		        WebElement adultCountElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-		            By.xpath("(//div[contains(@class,'rooms-list')]//div[contains(@class,'stepper-buttons')][" + roomNumber + "]//span[@class='adultvalue'])[1]")));
-
-		        int currentAdults = Integer.parseInt(adultCountElement.getText().trim());
-		        int clicksNeeded = adultsNeeded - currentAdults;
-
-		        if (clicksNeeded == 0) {
-		            Log.ReportEvent("INFO", "Room " + roomNumber + " already has " + adultsNeeded + " adults");
-		            return;
-		        }
-
-		        // XPath for adult plus or minus button
-		        String buttonXPath = clicksNeeded > 0 ? 
-		            "(//div[contains(@class,'rooms-list')]//div[contains(@class,'stepper-buttons')][" + roomNumber + "]//div[contains(@class,'plusminus')]//svg[2])[1]" : // Plus button
-		            "(//div[contains(@class,'rooms-list')]//div[contains(@class,'stepper-buttons')][" + roomNumber + "]//div[contains(@class,'plusminus')]//svg[1])[1]"; // Minus button
-
-		        for (int i = 0; i < Math.abs(clicksNeeded); i++) {
-		            WebElement button = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(buttonXPath)));
-		            js.executeScript("arguments[0].scrollIntoView({block: 'center'});", button);
-		            actions.moveToElement(button).pause(Duration.ofMillis(300)).click().perform();
-		            Thread.sleep(500);
-		        }
-
-		        Log.ReportEvent("INFO", "Room " + roomNumber + ": Set adults to " + adultsNeeded);
-
-		    } catch (Exception e) {
-		        Log.ReportEvent("ERROR", "Failed to set adults for room " + roomNumber + ": " + e.getMessage());
-		    }
-		}
-
-		private void setChildrenForRoom(int roomNumber, int childrenNeeded, String[] childAges, Log Log) {
-		    try {
-		        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-		        JavascriptExecutor js = (JavascriptExecutor) driver;
-		        Actions actions = new Actions(driver);
-
-		        // Get current child count - second adultvalue span in the room (for children)
-		        WebElement childCountElement = wait.until(ExpectedConditions.visibilityOfElementLocated(
-		            By.xpath("(//div[contains(@class,'rooms-list')]//div[contains(@class,'stepper-buttons')][" + roomNumber + "]//span[@class='adultvalue'])[2]")));
-
-		        int currentChildren = Integer.parseInt(childCountElement.getText().trim());
-		        int clicksNeeded = childrenNeeded - currentChildren;
-
-		        if (clicksNeeded <= 0) {
-		            Log.ReportEvent("INFO", "Room " + roomNumber + " already has " + childrenNeeded + " children");
-		            return;
-		        }
-
-		        // XPath for child plus button (second plusminus div, second SVG)
-		        String buttonXPath = "(//div[contains(@class,'rooms-list')]//div[contains(@class,'stepper-buttons')][" + roomNumber + "]//div[contains(@class,'plusminus')]//svg[2])[2]";
-
-		        for (int i = 0; i < clicksNeeded; i++) {
-		            WebElement addButton = wait.until(ExpectedConditions.elementToBeClickable(By.xpath(buttonXPath)));
-		            js.executeScript("arguments[0].scrollIntoView({block: 'center'});", addButton);
-		            actions.moveToElement(addButton).pause(Duration.ofMillis(300)).click().perform();
-		            Thread.sleep(1000);
-		            
-		            // Set child age if provided
-		            if (childAges != null && i < childAges.length) {
-		                setChildAge(roomNumber, currentChildren + i + 1, childAges[i], Log);
-		            }
-		        }
-
-		        Log.ReportEvent("INFO", "Room " + roomNumber + ": Set children to " + childrenNeeded);
-
-		    } catch (Exception e) {
-		        Log.ReportEvent("ERROR", "Failed to set children for room " + roomNumber + ": " + e.getMessage());
-		    }
-		}
-
-		private void setChildAge(int roomNumber, int childIndex, String age, Log Log) {
-		    try {
-		        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-		        JavascriptExecutor js = (JavascriptExecutor) driver;
-		        Actions actions = new Actions(driver);
-
-		        // Find the age dropdown for the specific child
-		        // This XPath might need adjustment based on how age dropdowns appear
-		        WebElement ageDropdown = wait.until(ExpectedConditions.elementToBeClickable(
-		            By.xpath("(//div[contains(@class,'rooms-list')]//div[contains(@class,'stepper-buttons')][" + roomNumber + "]//select)[" + childIndex + "]")));
-
-		        // Select the age using Select class
-		        Select select = new Select(ageDropdown);
-		        select.selectByVisibleText(age);
-
-		        Log.ReportEvent("INFO", "Room " + roomNumber + ": Set child " + childIndex + " age to " + age);
-
-		    } catch (Exception e) {
-		        Log.ReportEvent("ERROR", "Failed to set child age for room " + roomNumber + ": " + e.getMessage());
-		    }
-		}
-
+//			public static void configureHotelBookingRooms(String totalRooms, String adultsStr, String childrenStr, String agesStr, WebDriver driver) {
+//		        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+//
+//		        // 1. Open Guest Section
+//		        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[contains(@class,'tg-hl-guests-section')]"))).click();
+//
+//		        // 2. Add Rooms
+//		        int targetRooms = Integer.parseInt(totalRooms);
+//		        WebElement roomCountSpan = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[@class='room-plusminus']/span[@class='roomlength']")));
+//		        int currentRooms = Integer.parseInt(roomCountSpan.getText());
+//
+//		        while (currentRooms < targetRooms) {
+//		            driver.findElement(By.xpath("//div[contains(@class, 'room-plusminus')]/*[3]")).click();
+//		            currentRooms++;
+//		        }
+//
+//		        // 3. Parse comma-separated strings into arrays
+//		        String[] adultsArr = adultsStr.split(",");
+//		        String[] childrenArr = childrenStr.split(",");
+//
+//		        // 4. Loop through each room
+//		        for (int i = 0; i < targetRooms; i++) {
+//		            int roomNum = i + 1;
+//		            int targetAdults = Integer.parseInt(adultsArr[i]);
+//		            int targetChildren = Integer.parseInt(childrenArr[i]);
+//
+//		            // Select Adults (Default is 1, so click + target-1 times)
+//		            String adultPlusXpath = "//span[text()='Rooms']/following-sibling::span[text()='" + roomNum + "']/ancestor::div[contains(@class, 'MuiGrid2-grid-xs-12')]//p[text()='Adults']/ancestor::div[contains(@class, 'stepper-buttons')]//*[local-name()='svg'][2]";
+//		            for (int a = 0; a < (targetAdults - 1); a++) {
+//		                wait.until(ExpectedConditions.elementToBeClickable(By.xpath(adultPlusXpath))).click();
+//		            }
+//
+//		            // Select Children (Default is 0, so click + target times)
+//		            String childPlusXpath = "//span[text()='Rooms']/following-sibling::span[text()='" + roomNum + "']/ancestor::div[contains(@class, 'MuiGrid2-grid-xs-12')]//p[text()='Children']/ancestor::div[contains(@class, 'stepper-buttons')]//*[local-name()='svg'][2]";
+//		            for (int c = 0; c < targetChildren; c++) {
+//		                wait.until(ExpectedConditions.elementToBeClickable(By.xpath(childPlusXpath))).click();
+//		            }
+//		        }
+//
+//		        // 5. Done
+//		        driver.findElement(By.xpath("//button[text()='Done']")).click();
+//		    }
 		
 	
+	
+	
+		    public static void configureHotelBookingRooms(String totalRooms,
+		                                                  String adultsStr,
+		                                                  String childrenStr,
+		                                                  String agesStr,
+		                                                  WebDriver driver) {
+
+		        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(15));
+		        JavascriptExecutor js = (JavascriptExecutor) driver;
+		        Random random = new Random();
+
+		        // 1️⃣ Open Guest Section
+		        WebElement guestSection = wait.until(ExpectedConditions.elementToBeClickable(
+		                By.xpath("//button[contains(@class,'tg-hl-guests-section')]")
+		        ));
+		        js.executeScript("arguments[0].click();", guestSection);
+
+		        // 2️⃣ Add Rooms
+		        int targetRooms = Integer.parseInt(totalRooms);
+		        WebElement roomCountSpan = wait.until(ExpectedConditions.visibilityOfElementLocated(
+		                By.xpath("//span[contains(@class,'roomlength')]")
+		        ));
+
+		        int currentRooms = Integer.parseInt(roomCountSpan.getText());
+		        while (currentRooms < targetRooms) {
+		            WebElement addRoomBtn = wait.until(ExpectedConditions.elementToBeClickable(
+		                    By.xpath("//div[contains(@class,'room-plusminus')]//*[name()='svg'][last()]")
+		            ));
+		            js.executeScript("arguments[0].click();", addRoomBtn);
+		            currentRooms++;
+		            try { Thread.sleep(500); } catch (Exception e) {} 
+		        }
+
+		        String[] adultsArr = adultsStr.split(",");
+		        String[] childrenArr = childrenStr.split(",");
+
+		        // 3️⃣ Loop each room
+		        for (int i = 0; i < targetRooms; i++) {
+		            int roomNum = i + 1;
+		            int targetAdults = Integer.parseInt(adultsArr[i]);
+		            int targetChildren = Integer.parseInt(childrenArr[i]);
+
+		            // 👉 Room container - Scroll into center so Room 2/3 are visible
+		            By roomBy = By.xpath("(//div[contains(@class,'rooms-list')]/div)[" + roomNum + "]");
+		            WebElement room = wait.until(ExpectedConditions.presenceOfElementLocated(roomBy));
+		            js.executeScript("arguments[0].scrollIntoView({block:'center'});", room);
+		            try { Thread.sleep(500); } catch (Exception e) {}
+
+		            // --- ADULTS ---
+		            String adultPlusXpath = "(//div[contains(@class,'rooms-list')]/div)[" + roomNum + "]//p[text()='Adults']/ancestor::div[contains(@class,'stepper-buttons')]//*[name()='svg'][last()]";
+		            for (int a = 1; a < targetAdults; a++) {
+		                wait.until(ExpectedConditions.elementToBeClickable(By.xpath(adultPlusXpath))).click();
+		            }
+
+		            // --- CHILDREN ---
+		            String childPlusXpath = "(//div[contains(@class,'rooms-list')]/div)[" + roomNum + "]//p[text()='Children']/ancestor::div[contains(@class,'stepper-buttons')]//*[name()='svg'][last()]";
+		            for (int c = 0; c < targetChildren; c++) {
+		                wait.until(ExpectedConditions.elementToBeClickable(By.xpath(childPlusXpath))).click();
+		                try { Thread.sleep(400); } catch (Exception e) {} // Give UI time to generate age dropdown
+		            }
+
+		            // --- CHILD AGE DROPDOWNS ---
+		            if (targetChildren > 0) {
+		                // FIXED XPATH: Removed the backslashes and extra quotes
+		                String ageDropdownXpath = "(//div[contains(@class,'rooms-list')]/div)[" + roomNum + "]//input[@name='childAge']/following-sibling::*[local-name()='svg']";
+
+		                // Wait for dropdowns to appear in DOM
+		                wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath(ageDropdownXpath)));
+		                List<WebElement> dropdowns = driver.findElements(By.xpath(ageDropdownXpath));
+
+		                for (int k = 0; k < dropdowns.size(); k++) {
+		                    WebElement dropdownSVG = dropdowns.get(k);
+
+		                    // Scroll specifically to the SVG
+		                    js.executeScript("arguments[0].scrollIntoView({block:'center'});", dropdownSVG);
+		                    try { Thread.sleep(500); } catch (Exception e) {}
+
+		                    // 💥 CLICK ON DROPDOWN: Using MouseEvent to force click the SVG
+		                    js.executeScript("arguments[0].dispatchEvent(new MouseEvent('click', {bubbles: true, cancelable: true, view: window}));", dropdownSVG);
+
+		                    // Wait for the popup menu
+		                    WebElement listbox = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[@role='listbox']")));
+
+		                    // 🎲 Random age (1–11)
+		                    int randomAge = random.nextInt(11) + 1;
+		                    WebElement ageOption = wait.until(ExpectedConditions.elementToBeClickable(
+		                            By.xpath("//li[@role='option' and @data-value='" + randomAge + "']")));
+		                    
+		                    // Click the age value
+		                    js.executeScript("arguments[0].click();", ageOption);
+
+		                    // Wait for menu to close before moving to next child
+		                    wait.until(ExpectedConditions.invisibilityOf(listbox));
+		                    try { Thread.sleep(600); } catch (InterruptedException e) {}
+		                }
+		            }
+		        }
+
+		        // 4️⃣ Click Done
+		        WebElement doneBtn = wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//button[normalize-space()='Done']")));
+		        js.executeScript("arguments[0].click();", doneBtn);
+		    }
+		
+		       
+		
 		
 		
 		 public void clickOnSearchHotelBut() {

@@ -230,8 +230,7 @@
 
 			<!--New design Hotels and buses-->
 
-			<!--class name="NewDesign_Hotels.TCND_1_verifyHotelsSearch1"/-->
-
+             <class name="NewDesign_Hotels_Flights.TCND_1_verifyHotelsSearch1"/>
 			<!--class name="NewDesign_Hotels.TCND_2_GetHotelResponseBody"/-->
 
 			<!--class name="NewDesign_Hotels_Flights.TCNDFL_3_GetOnewayFlightsResponseBody"/>
@@ -243,7 +242,7 @@
 
 			<!--class name="NewDesign_Trips.TCNDTR_1_CreateTripsForHotels"/-->
                <!--class name="NewDesign_Trips.TCNDTR_2_CreateTripsForBuses"/-->
-     <class name="NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses"/>
+     <!--class name="NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses"/-->
 
 			<!--Implementation -->
 

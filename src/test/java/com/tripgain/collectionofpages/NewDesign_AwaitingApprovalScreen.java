@@ -77,16 +77,6 @@ public class NewDesign_AwaitingApprovalScreen {
 	}	
 	
 	public String[] getApproverIdFromAwaitingPgForTrips(Log log, String text) throws InterruptedException {
-
-	    // Click search field
-	    WebElement search = driver.findElement(By.xpath("//input[@placeholder='Search']"));
-	    search.click();
-	    search.clear();
-
-	    // Enter text returned from previous method
-	    search.sendKeys(text);
-	    Thread.sleep(3000);
-
 	    // Capture Approver ID for the first record
 	    String approverId = driver.findElement(
 	        By.xpath("(//div[contains(@class,'trip_card__container')])[1]//div[contains(text(),'Approver ID:')]/div")
@@ -1215,6 +1205,20 @@ public void validateCheckOutDateBetweenBookingAndAwaitingPage(
         Assert.fail("Check-out date mismatch between Booking and Awaiting Pages.");
     } else {
         log.ReportEvent("PASS", "Check-out date matches on both Booking and Awaiting Pages. Date: '" + normalizedAwaitingDate + "'");
+    }
+}
+
+
+public void waitForTripCardToAppearUnderAwaitingScreen() {
+    String tripCardXpath = "(//div[contains(@class,'trip_card__container')])[1]";
+    
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(50));
+    
+    try {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(tripCardXpath)));
+        System.out.println("Trip Card container is now displayed");
+    } catch (Exception e) {
+        Assert.fail("Test Failed: Trip Card did not appear");
     }
 }
 

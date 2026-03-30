@@ -122,7 +122,7 @@ public class NewDesign_EmulateProcess {
 
 		try {
 			WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(70));
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//div[contains(text(),'Welcome')]")));
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(text(),'Welcome')]")));
 
 			System.out.println("Approver screen displayed successfully.");
 		} catch (Exception e) {

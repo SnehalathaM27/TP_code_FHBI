@@ -2,12 +2,16 @@
 <testng-results ignored="0" total="1" passed="0" failed="1" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2026-03-24T18:16:55 IST" name="Suite" finished-at="2026-03-24T18:20:07 IST" duration-ms="191350">
+  <suite started-at="2026-03-27T19:01:12 IST" name="Suite" finished-at="2026-03-27T19:01:36 IST" duration-ms="24602">
     <groups>
     </groups>
-    <test started-at="2026-03-24T18:16:55 IST" name="test1" finished-at="2026-03-24T18:16:55 IST" duration-ms="16">
-      <class name="NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses">
-        <test-method is-config="true" signature="afterSuite()[pri:0, instance:NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses@7530ad9c]" started-at="2026-03-24T18:20:07 IST" name="afterSuite" finished-at="2026-03-24T18:20:07 IST" duration-ms="6" status="FAIL">
+    <test started-at="2026-03-27T19:01:12 IST" name="test4" finished-at="2026-03-27T19:01:12 IST" duration-ms="12">
+    </test> <!-- test4 -->
+    <test started-at="2026-03-27T19:01:12 IST" name="test3" finished-at="2026-03-27T19:01:12 IST" duration-ms="14">
+    </test> <!-- test3 -->
+    <test started-at="2026-03-27T19:01:12 IST" name="test1" finished-at="2026-03-27T19:01:12 IST" duration-ms="11">
+      <class name="NewDesign_Hotels_Flights.TCND_1_verifyHotelsSearch1">
+        <test-method is-config="true" signature="afterSuite()[pri:0, instance:NewDesign_Hotels_Flights.TCND_1_verifyHotelsSearch1@7530ad9c]" started-at="2026-03-27T19:01:36 IST" name="afterSuite" finished-at="2026-03-27T19:01:36 IST" duration-ms="21" status="FAIL">
           <exception class="java.lang.StackOverflowError">
             <full-stacktrace>
               <![CDATA[java.lang.StackOverflowError
@@ -1041,15 +1045,11 @@ at com.tripgain.common.ExtantManager.getReportFilePath(ExtantManager.java:81)
           <reporter-output>
           </reporter-output>
         </test-method> <!-- afterSuite -->
-      </class> <!-- NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses -->
+      </class> <!-- NewDesign_Hotels_Flights.TCND_1_verifyHotelsSearch1 -->
     </test> <!-- test1 -->
-    <test started-at="2026-03-24T18:16:55 IST" name="test3" finished-at="2026-03-24T18:16:55 IST" duration-ms="18">
-    </test> <!-- test3 -->
-    <test started-at="2026-03-24T18:16:55 IST" name="test4" finished-at="2026-03-24T18:16:55 IST" duration-ms="18">
-    </test> <!-- test4 -->
-    <test started-at="2026-03-24T18:16:55 IST" name="test" finished-at="2026-03-24T18:20:07 IST" duration-ms="191350">
-      <class name="NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses">
-        <test-method is-config="true" signature="launchApplication(java.lang.String,java.lang.reflect.Method,[Ljava.lang.Object;)[pri:0, instance:NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses@7530ad9c]" started-at="2026-03-24T18:16:57 IST" name="launchApplication" finished-at="2026-03-24T18:17:02 IST" duration-ms="5880" status="PASS">
+    <test started-at="2026-03-27T19:01:12 IST" name="test" finished-at="2026-03-27T19:01:36 IST" duration-ms="24602">
+      <class name="NewDesign_Hotels_Flights.TCND_1_verifyHotelsSearch1">
+        <test-method is-config="true" signature="launchApplication(java.lang.String,java.lang.reflect.Method,[Ljava.lang.Object;)[pri:0, instance:NewDesign_Hotels_Flights.TCND_1_verifyHotelsSearch1@7530ad9c]" started-at="2026-03-27T19:01:13 IST" name="launchApplication" finished-at="2026-03-27T19:01:20 IST" duration-ms="6612" status="PASS">
           <params>
             <param index="0">
               <value>
@@ -1058,7 +1058,7 @@ at com.tripgain.common.ExtantManager.getReportFilePath(ExtantManager.java:81)
             </param>
             <param index="1">
               <value>
-                <![CDATA[public void NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses.myTest(java.util.Map) throws java.lang.InterruptedException,java.io.IOException,java.text.ParseException,java.util.concurrent.TimeoutException]]>
+                <![CDATA[public void NewDesign_Hotels_Flights.TCND_1_verifyHotelsSearch1.myTest(java.util.Map) throws java.lang.InterruptedException,java.io.IOException,java.text.ParseException,java.util.concurrent.TimeoutException]]>
               </value>
             </param>
             <param index="2">
@@ -1070,32 +1070,36 @@ at com.tripgain.common.ExtantManager.getReportFilePath(ExtantManager.java:81)
           <reporter-output>
           </reporter-output>
         </test-method> <!-- launchApplication -->
-        <test-method signature="myTest(java.util.Map)[pri:0, instance:NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses@7530ad9c]" started-at="2026-03-24T18:17:02 IST" name="myTest" data-provider="sheetBasedData" finished-at="2026-03-24T18:20:05 IST" duration-ms="182416" status="FAIL">
+        <test-method signature="myTest(java.util.Map)[pri:0, instance:NewDesign_Hotels_Flights.TCND_1_verifyHotelsSearch1@7530ad9c]" started-at="2026-03-27T19:01:20 IST" name="myTest" data-provider="sheetBasedData" finished-at="2026-03-27T19:01:34 IST" duration-ms="14703" status="FAIL">
           <params>
             <param index="0">
               <value>
-                <![CDATA[{Origin=Bangalore, HotelOrigin=mumbai, Destination=delhi, UserName=testtraveller98@tripgain.com, BusDestination=delhi, TripName=Auto_Buses_Hotels1, TestRun=, BusOrigin=hyderabad, URL=https://neo.tripgain.com/login, Password=@AM@TGA1$29TN}]]>
+                <![CDATA[{Origin=kengeri, Status=Approve, UserName=testtraveller98@tripgain.com, Status2=Reject, TravellerSearchValue2=testfinance98@tripgain.com, Password1=@AM@TGA1$29TN, HotelIndex=2, TravellerSearchValue=testtraveller98@tripgain.com, UserName1=automation@tga.com, SearchBy=Email, URL=https://neo.tripgain.com/login, Remarks=test, TestRun=, SearchValue=testapprover98@tripgain.com, Password=@AM@TGA1$29TN}]]>
               </value>
             </param>
           </params>
           <exception class="java.lang.AssertionError">
             <message>
-              <![CDATA[Exception occurred: org.openqa.selenium.TimeoutException: Expected condition failed: waiting for visibility of element located by By.xpath: //div[@role='option'] (tried for 10 second(s) with 500 milliseconds interval)
+              <![CDATA[Exception occurred: org.openqa.selenium.JavascriptException: javascript error: arguments[0].click is not a function
+  (Session info: chrome=120.0.6099.110)
 Build info: version: '4.18.1', revision: 'b1d3319b48'
 System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.7'
 Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 120.0.6099.110, chrome: {chromedriverVersion: 120.0.6099.109 (3419140ab66..., userDataDir: C:\Users\LENOVO\AppData\Loc...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:56934}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:56934/devtoo..., se:cdpVersion: 120.0.6099.110, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: fbbbc6cd845470e12935fe68f60e62c3]]>
+Command: [e96753508692600b7a12851fc3fc1d2d, executeScript {args=[{element-6066-11e4-a52e-4f735466cecf=33CBB835FC990BD914B38D1F6AA4452A_element_162}], script=arguments[0].click();}]
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 120.0.6099.110, chrome: {chromedriverVersion: 120.0.6099.109 (3419140ab66..., userDataDir: C:\Users\LENOVO\AppData\Loc...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:51094}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:51094/devtoo..., se:cdpVersion: 120.0.6099.110, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: e96753508692600b7a12851fc3fc1d2d]]>
             </message>
             <full-stacktrace>
-              <![CDATA[java.lang.AssertionError: Exception occurred: org.openqa.selenium.TimeoutException: Expected condition failed: waiting for visibility of element located by By.xpath: //div[@role='option'] (tried for 10 second(s) with 500 milliseconds interval)
+              <![CDATA[java.lang.AssertionError: Exception occurred: org.openqa.selenium.JavascriptException: javascript error: arguments[0].click is not a function
+  (Session info: chrome=120.0.6099.110)
 Build info: version: '4.18.1', revision: 'b1d3319b48'
 System info: os.name: 'Windows 11', os.arch: 'amd64', os.version: '10.0', java.version: '21.0.7'
 Driver info: org.openqa.selenium.chrome.ChromeDriver
-Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 120.0.6099.110, chrome: {chromedriverVersion: 120.0.6099.109 (3419140ab66..., userDataDir: C:\Users\LENOVO\AppData\Loc...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:56934}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:56934/devtoo..., se:cdpVersion: 120.0.6099.110, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
-Session ID: fbbbc6cd845470e12935fe68f60e62c3
+Command: [e96753508692600b7a12851fc3fc1d2d, executeScript {args=[{element-6066-11e4-a52e-4f735466cecf=33CBB835FC990BD914B38D1F6AA4452A_element_162}], script=arguments[0].click();}]
+Capabilities {acceptInsecureCerts: false, browserName: chrome, browserVersion: 120.0.6099.110, chrome: {chromedriverVersion: 120.0.6099.109 (3419140ab66..., userDataDir: C:\Users\LENOVO\AppData\Loc...}, fedcm:accounts: true, goog:chromeOptions: {debuggerAddress: localhost:51094}, networkConnectionEnabled: false, pageLoadStrategy: normal, platformName: windows, proxy: Proxy(), se:cdp: ws://localhost:51094/devtoo..., se:cdpVersion: 120.0.6099.110, setWindowRect: true, strictFileInteractability: false, timeouts: {implicit: 0, pageLoad: 300000, script: 30000}, unhandledPromptBehavior: dismiss and notify, webauthn:extension:credBlob: true, webauthn:extension:largeBlob: true, webauthn:extension:minPinLength: true, webauthn:extension:prf: true, webauthn:virtualAuthenticators: true}
+Session ID: e96753508692600b7a12851fc3fc1d2d
 at org.testng.Assert.fail(Assert.java:111)
-at NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses.myTest(TCNDTR_3_CreateTripsForHotelsAndBuses.java:618)
+at NewDesign_Hotels_Flights.TCND_1_verifyHotelsSearch1.myTest(TCND_1_verifyHotelsSearch1.java:439)
 at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
 at java.base/java.lang.reflect.Method.invoke(Method.java:580)
 at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
@@ -1122,11 +1126,11 @@ at java.base/java.lang.Thread.run(Thread.java:1583)
           <reporter-output>
           </reporter-output>
         </test-method> <!-- myTest -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses@7530ad9c]" started-at="2026-03-24T18:20:05 IST" name="tearDown" finished-at="2026-03-24T18:20:07 IST" duration-ms="1812" status="PASS">
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:NewDesign_Hotels_Flights.TCND_1_verifyHotelsSearch1@7530ad9c]" started-at="2026-03-27T19:01:34 IST" name="tearDown" finished-at="2026-03-27T19:01:36 IST" duration-ms="1932" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-      </class> <!-- NewDesign_Trips.TCNDTR_3_CreateTripsForHotelsAndBuses -->
+      </class> <!-- NewDesign_Hotels_Flights.TCND_1_verifyHotelsSearch1 -->
     </test> <!-- test -->
   </suite> <!-- Suite -->
 </testng-results>

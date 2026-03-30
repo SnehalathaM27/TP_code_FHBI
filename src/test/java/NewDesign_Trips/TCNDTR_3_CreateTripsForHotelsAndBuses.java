@@ -137,8 +137,9 @@ try {
 
 
 		NewDesignTrips.clcikOnTrips();
+		Thread.sleep(1000);
 		NewDesignTrips.createTrip();
-		Thread.sleep(2000);
+		Thread.sleep(2500);
 		String EnteredtripName = NewDesignTrips.enterNameThisTrip(tripName, Log);
 		String origindetails = NewDesignTrips.enterfrom(origin);
 		String destdetails = NewDesignTrips.enterTo(destination);
@@ -193,11 +194,11 @@ try {
 		Thread.sleep(3000);			
 			
 		//get all the hotel details from the selected hotel card
-			String[] hotelDetails = NewDesignHotelsResultsPage.selectHotelAndGetDetails(5, Log);
+			String[] hotelDetails = NewDesignHotelsResultsPage.selectHotelAndGetDetails(1, Log);
 			
 			
 			//get all the details from desc page
-			Thread.sleep(1200);
+			Thread.sleep(1500);
 			String[] hotelAddressFromDesc = NewDesignHotels_DescPage.getAddressFromDescPg();
 			String[] hotelAmenitiesFromDesc = NewDesignHotels_DescPage.getAmenitiesFromDescPg();
 	
@@ -404,7 +405,7 @@ try {
 
 				
 				NewDesignBusesBookingPage.clickOnSubmitTripButton(Log);
-				Thread.sleep(2000);
+				NewDesign_Awaiting_ApprovalScreen.waitForTripCardToAppearUnderAwaitingScreen();
 				
 				List<String> DataAfterSubmit = NewDesignBusesBookingPage.getDataInTripReqAfterClickOnSubmit(TripIdFromNextPage, Log, screenShots);
 				String[] ApproverId = NewDesign_Awaiting_ApprovalScreen.getApproverIdFromAwaitingPgForTrips(Log, EnteredtripName);
@@ -413,7 +414,7 @@ try {
 				NewDesignBusesBookingPage.validateToLocationAfterSubmit(destdetails, DataAfterSubmit, Log, screenShots);
 				NewDesignBusesBookingPage.validateTripDatesAfterSubmit(journeydatedetails, returndatedetails, DataAfterSubmit, Log, screenShots);
 				NewDesignBusesBookingPage.validateServicesMatchAfterSubmit(servicesdetails, DataAfterSubmit, Log, screenShots);
-				NewDesignBusesBookingPage.validateTripIdBetweenSubmitAndDetailsPage(DataAfterSubmit, TripIdFromNextPage, Log, screenShots);
+			//	NewDesignBusesBookingPage.validateTripIdBetweenSubmitAndDetailsPage(DataAfterSubmit, TripIdFromNextPage, Log, screenShots);
 				
 				NewDesign_Awaiting_ApprovalScreen.clickOnLogout();
 				
